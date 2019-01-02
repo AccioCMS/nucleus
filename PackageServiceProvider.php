@@ -215,9 +215,9 @@ class PackageServiceProvider extends ServiceProvider
          * Merge configurations
          * Config::get('accio.test')
          */
-        $this->mergeConfigFrom(
-            __DIR__.'/config/app.php', 'accio'
-        );
+//        $this->mergeConfigFrom(
+//            __DIR__.'/config/app.php', 'accio'
+//        );
 
         /**
          * Register aliases
