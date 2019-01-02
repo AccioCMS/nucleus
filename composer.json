@@ -1,9 +1,9 @@
 {
-    "name": "acciocms/core",
+    "name": "acciocms/nucleus",
     "type": "library",
-    "description": "The core of Accio",
+    "description": "The core of Accio functionality",
     "homepage": "http://www.manaferra.com",
-    "keywords": ["accio","cms","core"],
+    "keywords": ["accio","cms","nucleus", "laravel"],
     "license": "MIT",
     "type": "project",
     "authors": [
