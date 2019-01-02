@@ -22,7 +22,7 @@
 
     "autoload": {
         "files": [
-            "src/support/helpers.php"
+            "src/Support/helpers.php"
         ],
         "psr-4": {
             "Accio\\": "src/"
