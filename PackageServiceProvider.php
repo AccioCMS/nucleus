@@ -2,18 +2,26 @@
 
 namespace Accio;
 
-use Accio\App\Commands\Deploy\ActivateNewReleaseAfter;
-use Accio\App\Commands\Deploy\ActivateNewReleaseBefore;
-use Accio\App\Commands\Deploy\PurgeOldReleaseAfter;
-use Accio\App\Commands\Deploy\PurgeOldReleaseBefore;
-use Accio\App\Commands\Deploy\CopyUploads;
-use Accio\App\Commands\Deploy\CreateSymlinks;
-use Accio\App\Commands\Deploy\Cronjobs;
-use Accio\App\Commands\Deploy\Database;
-use Accio\App\Commands\Deploy\EnvFile;
-use Accio\App\Commands\PluginUpdate;
-use Accio\App\Commands\SetWritePermissions;
-use Accio\App\Services\Routes;
+use Accio\Console\Commands\Deploy\ActivateNewReleaseAfter;
+use Accio\Console\Commands\Deploy\ActivateNewReleaseBefore;
+use Accio\Console\Commands\Deploy\PurgeOldReleaseAfter;
+use Accio\Console\Commands\Deploy\PurgeOldReleaseBefore;
+use Accio\Console\Commands\Deploy\CopyUploads;
+use Accio\Console\Commands\Deploy\CreateSymlinks;
+use Accio\Console\Commands\Deploy\Cronjobs;
+use Accio\Console\Commands\Deploy\Database;
+use Accio\Console\Commands\Deploy\EnvFile;
+use Accio\Console\Commands\PluginUpdate;
+use Accio\Console\Commands\SetWritePermissions;
+use Accio\Console\Commands\CheckRequirements;
+use Accio\Console\Commands\DBDumper;
+use Accio\Console\Commands\MakeDummy;
+use Accio\Console\Commands\AccioInstall;
+use Accio\Console\Commands\AccioUninstall;
+use Accio\Console\Commands\MakeTheme;
+use Accio\Console\Commands\MakeUser;
+use Accio\Console\Commands\PluginInstall;
+use Accio\Routing\Routes;
 use App\Models\Plugin;
 use App\Models\Theme;
 use Illuminate\Routing\UrlGenerator;
@@ -22,18 +30,9 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Accio\App\Commands\CheckRequirements;
-use Accio\App\Commands\DBDumper;
-use Accio\App\Commands\MakeDummy;
-use Accio\App\Commands\AccioInstall;
-use Accio\App\Commands\AccioUninstall;
-use Accio\App\Commands\MakeTheme;
-use Accio\App\Commands\MakeUser;
-use Accio\App\Commands\PluginInstall;
 
 class PackageServiceProvider extends ServiceProvider
 {
-
     /**
      * List Package Service Providers
      * Example: 'Accio\App\Providers\ClassNameServiceProvider',
@@ -84,11 +83,11 @@ class PackageServiceProvider extends ServiceProvider
      * @var array
      */
     protected $aliases = [
-      'AccioQuery' => 'Accio\App\Services\AccioQuery',
-      'Pagination' => 'Accio\App\Services\Pagination',
-      'Routes' => 'Accio\App\Services\Routes',
-      'Search' => 'Accio\App\Services\Search',
-      'Meta' => 'Accio\App\Services\Meta',
+      'AccioQuery' => 'Accio\Database\AccioQuery',
+      'Pagination' => 'Accio\Support\Pagination',
+      'Routes' => 'Accio\Routing\Routes',
+      'Search' => 'Accio\Search\Search',
+      'Meta' => 'Accio\Meta\Meta',
     ];
 
     /**
