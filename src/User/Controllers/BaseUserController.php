@@ -36,7 +36,7 @@ class BaseUserController extends MainController
             return view('errors.permissions');
         }
 
-        return view('content');
+        return view('index');
     }
 
     /**
@@ -394,6 +394,6 @@ class BaseUserController extends MainController
         if(!User::hasAccess('User', 'read')) {
             return view('errors.permissions', compact('lang', 'view', 'adminPrefix'));
         }
-        return view('content');
+        return view('index');
     }
 }

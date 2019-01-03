@@ -13,7 +13,7 @@ class BasePluginController extends MainController
      */
     public function pluginView()
     {
-        return view('content');
+        return view('index');
     }
 
 

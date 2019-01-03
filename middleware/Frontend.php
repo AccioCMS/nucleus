@@ -33,7 +33,11 @@ class Frontend
 
             // Validate language
             if (! Language::checkBySlug(\Request::route('lang'))) {
-                return response()->view(Theme::view('errors/404'), ['message' => "This language does not exists!"], 404);
+                return response()->view(
+                    Theme::view('errors/404'),
+                    ['message' => "This language does not exists!"],
+                    404
+                );
             }
         }
 

@@ -508,7 +508,7 @@ class BaseCategoryController extends MainController
         if(!User::hasAccess('Categories', 'read')) {
             return $this->noPermission();
         }
-        return view('content');
+        return view('index');
     }
 
     /**

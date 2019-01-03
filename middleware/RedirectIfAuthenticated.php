@@ -17,7 +17,6 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-
         // backend url
         if (isInAdmin()()) {
             $redirectURL = route("backend.base.index");

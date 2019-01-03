@@ -1,7 +1,4 @@
 <?php
-/**
- * Shortcuts to manage manual pagination
- */
 
 namespace Accio\Support;
 

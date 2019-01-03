@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Accio\Routing\MainController;
 
-
 class BaseLoginController extends MainController
 {
     /*
@@ -52,7 +51,7 @@ class BaseLoginController extends MainController
      */
     public function showLoginForm()
     {
-        return view('accio::auth.login');
+        return view('index');
     }
 
     /**

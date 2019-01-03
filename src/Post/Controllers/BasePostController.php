@@ -157,7 +157,7 @@ class BasePostController extends MainController
             return view('errors.permissions');
         }
 
-        return view('content');
+        return view('index');
     }
 
     /**
@@ -176,7 +176,7 @@ class BasePostController extends MainController
             $message = "You can't edit this post because you don't own it!";
             return view('errors.permissions', compact('message'));
         }
-        return view('content');
+        return view('index');
     }
 
     /**
@@ -592,7 +592,7 @@ class BasePostController extends MainController
             return view('errors.permissions');
         }
 
-        return view('content');
+        return view('index');
     }
 
     /**

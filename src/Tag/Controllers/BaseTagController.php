@@ -263,7 +263,7 @@ class BaseTagController extends MainController
         if(!User::hasAccess('Tags', 'read')) {
             return $this->noPermission();
         }
-        return view('content');
+        return view('index');
     }
 
     /**

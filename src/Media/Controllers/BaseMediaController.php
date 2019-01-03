@@ -77,7 +77,7 @@ class BaseMediaController extends MainController
         if (! User::hasAccess('Media', 'create')) {
             return view('errors.permissions', compact('view', 'term', 'pagination'));
         }
-        return view('content');
+        return view('index');
     }
 
     /**

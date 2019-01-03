@@ -3,6 +3,7 @@
 namespace Accio\Routing;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -22,7 +23,6 @@ class MainController extends Controller
         if (App::routesAreCached()) {
             $this->middleware('application');
             $this->middleware('backend');
-
         }
     }
 
@@ -42,7 +42,7 @@ class MainController extends Controller
         if (! User::hasAccess($className, $key)) {
             return view('errors.permissions', compact('lang', 'view'));
         }
-        return view('content');
+        return view('index');
     }
 
     /**
@@ -103,7 +103,7 @@ class MainController extends Controller
             }
         }
 
-        return view('content');
+        return view('index');
     }
 
     /**

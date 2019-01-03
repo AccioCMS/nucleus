@@ -29,16 +29,15 @@ class Routes
      * @var array
      */
     private $middleware = [
-      'backend' => [
-        'application',
-        'backend'
-      ],
-      'frontend' => [
-        'application',
-        'frontend'
-      ]
+        'backend' => [
+            'application',
+            'backend'
+        ],
+        'frontend' => [
+            'application',
+            'frontend'
+        ]
     ];
-
 
     /**
      * Define Package Backend routes
@@ -49,13 +48,15 @@ class Routes
      */
     public function mapBackendRoutes()
     {
-        $directory = __DIR__.'/../../routes/backend';
+        $directory = __DIR__.'/../../routes';
+
         if(is_dir($directory)) {
             $routeFiles = File::files($directory);
             \Route::group(
                 [
-                'middleware' => $this->middleware['backend'],
-                ], function () use ($routeFiles) {
+                    'middleware' => $this->middleware['backend'],
+                ],
+                function () use ($routeFiles) {
                     foreach ($routeFiles as $file) {
                         include $file;
                     }
