@@ -1,6 +1,6 @@
 <?php
 
-namespace Accio\Auth;
+namespace Accio\Auth\Controllers;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Accio\Auth;
+namespace Accio\Auth\Controllers;
 
 use Accio\Routing\MainController;
 use App\Models\User;
