@@ -1,15 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
-import { CommonModule } from '@angular/common';
-
-import { AuthModule } from "../Auth/Resources/auth.module";
-import { HeaderComponent } from "./Header/header.component";
-
-import { DashboardComponent } from "./App/Dashboard/daashboard.component";
-import { LoginComponent } from "../Auth/Resources/Views/login/login.component";
-import { NucleusComponent } from "./App/nucleus.component";
-
-//Fuse
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule, MatIconModule } from '@angular/material';
@@ -20,30 +10,32 @@ import { FuseModule } from './@fuse/fuse.module';
 import { FuseSharedModule } from './@fuse/shared.module';
 import { FuseProgressBarModule, FuseSidebarModule } from './@fuse/components';
 
-import { fuseConfig } from './app-fuse/fuse-config';
-
 import { LayoutModule } from './app-fuse/layout/layout.module';
 import { SampleModule } from './app-fuse/main/sample/sample.module';
+import { AuthModule } from "../Auth/Resources/auth.module";
+import { VerticalLayout1Module } from './app-fuse/layout/vertical/layout-1/layout-1.module';
 
-import { AppComponent } from './app-fuse/app.component';
+import { DashboardComponent } from "./App/Dashboard/daashboard.component";
+import { LoginComponent } from "../Auth/Resources/Views/login/login.component";
+import { NucleusComponent } from "./App/nucleus.component";
+
+import { fuseConfig } from './app-fuse/fuse-config';
 
 const nucleusRoutes: Routes = [
-    { path: 'admin', component: NucleusComponent, children: [
-        {path: '', component: DashboardComponent},
-        // { path: 'login', loadChildren: () => AuthModule }
+    { path: 'admin/login', component: LoginComponent },
+    { path: 'auth', loadChildren: () => AuthModule },
+    { path: 'test', component: NucleusComponent, children: [
+        { path: '', component: DashboardComponent },
+        { path: 'fuse', loadChildren: () => SampleModule },
     ] },
-    {path: 'admin/login', component: LoginComponent }, 
 ];
 
 @NgModule({
     declarations: [
-        HeaderComponent,
         NucleusComponent,
-        DashboardComponent,
-        //AppComponent
+        DashboardComponent
     ],
     imports: [
-        CommonModule,
         AuthModule,
         RouterModule.forChild(nucleusRoutes),
 
@@ -66,8 +58,8 @@ const nucleusRoutes: Routes = [
 
         // App modules
         LayoutModule,
-        SampleModule
-
+        SampleModule,
+        VerticalLayout1Module
     ],
     exports: [
         AuthModule,

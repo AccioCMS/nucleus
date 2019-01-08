@@ -1,14 +1,28 @@
 import { NgModule } from '@angular/core';
-import {LoginComponent} from "./Views/login/login.component";
+import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
+
+import { LoginComponent } from "./Views/login/login.component";
+import { ForgotPasswordComponent } from "./Views/forgot-password/forgot-password.component";
+import { ResetPasswordComponent } from "./Views/reset-password/reset-password.component";
 
 import { AuthRoutingModule } from './auth-routing.module';
 
+import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
+
 @NgModule({
   declarations: [
-      LoginComponent,
+    LoginComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
-    AuthRoutingModule
+    AuthRoutingModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    FuseSharedModule
   ]
 })
 export class AuthModule {}
