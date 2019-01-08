@@ -12,8 +12,9 @@ import { FuseProgressBarModule, FuseSidebarModule } from './@fuse/components';
 
 import { LayoutModule } from './app-fuse/layout/layout.module';
 import { SampleModule } from './app-fuse/main/sample/sample.module';
-import { AuthModule } from "../Auth/Resources/auth.module";
 import { VerticalLayout1Module } from './app-fuse/layout/vertical/layout-1/layout-1.module';
+import { AuthModule } from "../Auth/Resources/auth.module";
+import { UserModule } from './../User/Resources/user.module';
 
 import { DashboardComponent } from "./App/Dashboard/daashboard.component";
 import { LoginComponent } from "../Auth/Resources/Views/login/login.component";
@@ -27,6 +28,7 @@ const nucleusRoutes: Routes = [
     { path: 'test', component: NucleusComponent, children: [
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
+        { path: 'users', loadChildren: () => UserModule },
     ] },
 ];
 
@@ -36,7 +38,6 @@ const nucleusRoutes: Routes = [
         DashboardComponent
     ],
     imports: [
-        AuthModule,
         RouterModule.forChild(nucleusRoutes),
 
         //Fuse imports
@@ -59,7 +60,10 @@ const nucleusRoutes: Routes = [
         // App modules
         LayoutModule,
         SampleModule,
-        VerticalLayout1Module
+        VerticalLayout1Module,
+
+        AuthModule,
+        UserModule,
     ],
     exports: [
         AuthModule,

@@ -6,7 +6,16 @@ export const locale = {
             'SAMPLE'        : {
                 'TITLE': 'Örnek',
                 'BADGE': '15'
-            }
+            },
+            'USERS'        : {
+                'TITLE': 'Kullanıcılar'
+            },
+            'POST_TYPES': 'Post Types',
+            'ARTICLES':{
+                'TITLE': 'Articles'
+            },
+            'PLUGINS' : 'Plugins',
+            'CUSTOM' : 'Custom',
         }
     }
 };

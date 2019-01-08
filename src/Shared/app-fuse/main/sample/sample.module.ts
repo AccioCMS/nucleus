@@ -8,7 +8,7 @@ import { SampleComponent } from './sample.component';
 
 const routes = [
     {
-        path     : 'fuse',
+        path     : '',
         component: SampleComponent
     }
 ];
