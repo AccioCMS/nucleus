@@ -84,6 +84,7 @@ $typography: mat-typography-config(
 @import "../../Auth/Resources/Views/login/login.theme";
 @import "../../Auth/Resources/Views/forgot-password/forgot-password.theme";
 @import "../../Auth/Resources/Views/reset-password/reset-password.theme";
+@import "../../Shared/App/nucleus.theme.scss";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
@@ -95,6 +96,7 @@ $typography: mat-typography-config(
     @include login-theme($theme);
     @include forgot-password-theme($theme);
     @include reset-password-theme($theme);
+    @include nucleus-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------

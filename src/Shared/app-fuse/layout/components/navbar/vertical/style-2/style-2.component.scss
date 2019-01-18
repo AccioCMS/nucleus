@@ -1,6 +1,25 @@
 @import "../../../../../../@fuse/scss/fuse";
 
 fuse-sidebar {
+    .accio-sidebar-nav{
+        background-color: #fff !important;
+
+        a{
+            &.nav-link{
+                color: #000 !important;
+            }
+
+            &.active{
+                color: #fff !important;
+            }
+        }
+
+        span{
+            &.hint-text{
+                color: #000 !important;
+            }
+        }
+    }
 
     &.navbar-fuse-sidebar {
         overflow: hidden;
