@@ -3,6 +3,9 @@
 /**
  * Project Settings Routes
  */
+Route::get('test/settings/{any}', function(){
+	return view('index');
+});
 
 Route::group(
     ['middleware' => ['auth:admin'], 'as' => 'backend.settings.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {

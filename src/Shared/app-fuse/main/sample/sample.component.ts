@@ -15,6 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class SampleComponent implements OnInit
 {
     exampleForm: FormGroup;
+    breadcrumbs = ['My Files', 'Documents'];
     /**
      * Constructor
      *
@@ -23,13 +24,11 @@ export class SampleComponent implements OnInit
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _formBuilder: FormBuilder
-    )
-    {
+    ){
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
     }
 
-    ngOnInit(): void
-    {
+    ngOnInit(): void{
         this.exampleForm = this._formBuilder.group({
             company   : [
                 {
@@ -46,5 +45,14 @@ export class SampleComponent implements OnInit
             postalCode: ['', [Validators.required, Validators.maxLength(5)]],
             country   : ['', Validators.required]
         });
-  }
+    }
+
+    onSave(){
+        console.log("Data saved");
+    }
+
+    onCancel(){
+        console.log('Cancel...')
+    }
+
 }

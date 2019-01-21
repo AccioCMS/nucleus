@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatButtonModule, MatIconModule } from '@angular/material';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 
@@ -30,6 +29,7 @@ import { LoginComponent } from "../Auth/Resources/Views/login/login.component";
 import { NucleusComponent } from "./App/nucleus.component";
 
 import { fuseConfig } from './app-fuse/fuse-config';
+import { SharedModule } from './shared.module';
 
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
@@ -42,6 +42,7 @@ const nucleusRoutes: Routes = [
         { path: 'language', loadChildren: () => LanguageModule },
         { path: 'menu', loadChildren: () => MenuModule },
         { path: 'post-type', loadChildren: () => PostTypeModule },
+        { path: 'post', loadChildren: () => PostModule },
         { path: 'settings', loadChildren: () => SettingsModule },
     ] },
 ];
@@ -52,6 +53,7 @@ const nucleusRoutes: Routes = [
         DashboardComponent
     ],
     imports: [
+        SharedModule,
         RouterModule.forChild(nucleusRoutes),
 
         //Fuse imports
@@ -60,10 +62,6 @@ const nucleusRoutes: Routes = [
 
         // Material moment date module
         MatMomentDateModule,
-
-        // Material
-        MatButtonModule,
-        MatIconModule,
 
         // Fuse modules
         FuseModule.forRoot(fuseConfig),
