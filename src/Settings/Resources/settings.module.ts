@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
 
 import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { SettingsRoutingModule } from './settings-routing.module';
+
+import { SharedModule } from "../../Shared/shared.module";
+
+import { GeneralSettingsComponent } from './Views/general/general-settings.component';
 
 @NgModule({
   declarations: [
+    GeneralSettingsComponent
   ],
   imports: [
-    
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
+    SettingsRoutingModule,
+    SharedModule,
 
     TranslateModule,
     FuseSharedModule,
