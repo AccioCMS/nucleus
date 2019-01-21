@@ -6,6 +6,9 @@ import { FuseSharedModule } from '../../../@fuse/shared.module';
 
 import { SampleComponent } from './sample.component';
 
+import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatStepperModule } from '@angular/material';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 const routes = [
     {
         path     : '',
@@ -22,7 +25,17 @@ const routes = [
 
         TranslateModule,
 
-        FuseSharedModule
+        FuseSharedModule,
+
+        //Material
+        MatButtonModule, 
+        MatCheckboxModule, 
+        MatFormFieldModule, 
+        MatIconModule, 
+        MatInputModule,
+        MatSelectModule,
+        MatStepperModule,
+        MatExpansionModule
     ],
     exports     : [
         SampleComponent

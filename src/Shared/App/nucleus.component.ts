@@ -18,6 +18,7 @@ import { locale as navigationTurkish } from '../app-fuse/navigation/i18n/tr';
 @Component({
     selector: 'app-nucleus',
     templateUrl: './nucleus.component.html',
+    styleUrls  : ['./nucleus.component.scss']
 })
 export class NucleusComponent { 
     fuseConfig: any;

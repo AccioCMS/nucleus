@@ -3,6 +3,25 @@
 $backgorund-color : #1669d0;
 
 fuse-sidebar {
+    .accio-sidebar-nav{
+        background-color: #fff !important;
+
+        a{
+            &.nav-link{
+                color: #000 !important;
+            }
+
+            &.active{
+                color: #fff !important;
+            }
+        }
+
+        span{
+            &.hint-text{
+                color: #000 !important;
+            }
+        }
+    }
 
     box-shadow: unset !important;
     &.navbar-fuse-sidebar {
