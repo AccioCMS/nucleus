@@ -1,7 +1,10 @@
 @import "../../../../../../@fuse/scss/fuse";
 
+$backgorund-color : #1669d0;
+
 fuse-sidebar {
 
+    box-shadow: unset !important;
     &.navbar-fuse-sidebar {
         overflow: hidden;
 
@@ -71,13 +74,15 @@ navbar {
         height: 100%;
 
         .navbar-header {
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 64px;
-            min-height: 64px;
+            height: 40px;
+            min-height: 40px;
             padding: 0 16px 0 24px;
             transition: padding 200ms ease;
+            background-color: $backgorund-color !important;
             @include mat-elevation(1);
 
             .logo {
