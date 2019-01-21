@@ -9,6 +9,8 @@ import { SampleComponent } from './sample.component';
 import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatStepperModule } from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
 
+import { NucleusTemplateHeaderComponent } from "../../../App/template-header/template-header.component";
+
 const routes = [
     {
         path     : '',
@@ -18,7 +20,8 @@ const routes = [
 
 @NgModule({
     declarations: [
-        SampleComponent
+        SampleComponent,
+        NucleusTemplateHeaderComponent
     ],
     imports     : [
         RouterModule.forChild(routes),

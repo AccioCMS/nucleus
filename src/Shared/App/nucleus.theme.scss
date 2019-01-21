@@ -1,38 +1,60 @@
 @mixin nucleus-theme($theme) {
     $accio-container-background: #fff;
-    $accio-container-border-color: #989797;
+    $accio-container-border-color: #e0e0e0;
     $accio-container-border-radius: 5px;
 
-    .accio-container{
-        overflow: hidden;
-        width: 100%;
-
-        .content-center{
-            width: 1160px;
-            margin: 0 auto;
+    app-nucleus{
+        .page-layout{
+            @media screen and (max-width: 1024px) {
+                padding: 20px;
+            }
         }
-    }
 
-    .accio-container-1160{
-        width: 1160px;
-        margin-bottom: 20px;
-    }
-    
-    .accio-container-850{
-        float: left;
-        width: 850px;
-        margin-right: 10px;
-    }
-    
-    .accio-container-300{
-        float: left;
-        width: 300px;
-    }
-    
-    .accio-content{
-        background-color: $accio-container-background;
-        margin-bottom: 20px;
-        border: 1px solid $accio-container-border-color;
-        border-radius: $accio-container-border-radius;
+        .accio-container{
+            overflow: hidden;
+            width: 100%;
+            margin-bottom: 20px;
+
+            .content-center{
+                width: 1160px;
+                margin: 0 auto;
+            }
+
+            h2{
+                &.panel-title{
+                    color: #aeadad;
+                    margin-bottom: 5px;
+                    text-transform: uppercase;
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .accio-container-1160{
+            width: 1160px;
+            margin-bottom: 20px;
+        }
+        
+        .accio-container-850{
+            float: left;
+            width: 850px;
+            margin-right: 10px;
+        }
+        
+        .accio-container-300{
+            float: left;
+            width: 300px;
+        }
+        
+        .accio-content{
+            background-color: $accio-container-background;
+            margin-bottom: 20px;
+            border: 1px solid $accio-container-border-color;
+            border-radius: $accio-container-border-radius;
+        }
+
+        .expansion-panel-seperator{
+            margin-bottom: 20px;
+        }
     }
 }
