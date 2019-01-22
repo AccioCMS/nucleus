@@ -1,21 +1,24 @@
 @import '../../../../Shared/@fuse/scss/fuse';
 
 
-
-
-mat-icon {
-    float: right;
-}
-
 .filter {
     height: 50px;
-    background-color: #dcdcdc;
+    background-color: #F5F5F5;
 
     mat-chip  {
         margin: 0;
         margin-top: 1% !important;
         left: 1%;
+
+        color: black !important;
+        background-color: unset !important;
+        border: dotted .5px !important;
+        font-weight: 100 ;
     }
+}
+
+.table-header-icons {
+    float: right !important;
 }
 
 .content{
@@ -25,7 +28,11 @@ mat-icon {
 
     mat-card {
         width: 100%;
+
     }
+
+
+
 
 
     table {
@@ -45,6 +52,10 @@ mat-icon {
         .mat-column-buttons {
             flex: 0 1 80px;
         }
+
+        .mat-column-buttons > button{
+            //float: right;
+        }jjj
 
         .mat-row {
             position: relative;
