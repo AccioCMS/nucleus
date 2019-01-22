@@ -1,18 +1,47 @@
 @import "../../scss/fuse";
 
 $icon-color : #fff;
+$text-color : #fff;
+$background-color : #3C82D8;
 :host {
 
     .fuse-search-bar {
         //display: flex;
         //flex: 0 1 auto;
         //min-width: 90%;
-        margin-top: 1%;
+        //margin-top: 1%;
         height: 80%;
+        position: relative !important;
+        top: 10% !important;
+        height: 80% !important;
         font-size: 13px;
+
+
+        background-color: $background-color !important;
 
         @include media-breakpoint('xs') {
             height: 56px;
+        }
+
+        input {
+            background-color: $background-color;
+            position: relative !important;
+            bottom: 15% !important;
+            height: 100% !important;
+        }
+
+
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: $text-color;
+            opacity: 1; /* Firefox */
+        }
+
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            olor: $text-color;
+        }
+
+        ::-ms-input-placeholder { /* Microsoft Edge */
+            olor: $text-color;
         }
 
         &.expanded {
