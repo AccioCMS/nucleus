@@ -1,0 +1,79 @@
+<div class="page-layout blank" fusePerfectScrollbar>
+    <div class="accio-container">
+        <div class="content-center">
+            <div class="accio-container-250 mr-8" fuseperfectscrollbar="">
+                <div class="settings-sidebar sidebar" name="mail-main-sidebar" position="left" lockedOpen="gt-md">
+                    <div class="content" fusePerfectScrollbar [@animate]="{value:'*',params:{y:'50px'}}">
+                    
+                        <div class="nav material2">
+                    
+                            <div class="nav-subheader">APPS</div>
+                    
+                            <div class="nav-item" >
+                                <a class="nav-link" matRipple [routerLink]="'general'"
+                                    [routerLinkActive]="['active', 'settings-nav-active']">
+                                    <mat-icon class="nav-link-icon">settings</mat-icon>
+                                    <span>General</span>
+                                </a>
+                            </div>
+
+                            <div class="nav-item" >
+                                <a class="nav-link" matRipple [routerLink]="'post-type'"
+                                    [routerLinkActive]="['active', 'settings-nav-active']">
+                                    <mat-icon class="nav-link-icon">label</mat-icon>
+                                    <span>Post Types</span>
+                                </a>
+                            </div>
+
+                            <div class="nav-item" >
+                                <a class="nav-link" matRipple [routerLink]="'language'"
+                                    [routerLinkActive]="['active', 'settings-nav-active']">
+                                    <mat-icon class="nav-link-icon">language</mat-icon>
+                                    <span>Languages</span>
+                                </a>
+                            </div>
+
+                            <div class="nav-item">
+                                <a class="nav-link" matRipple [routerLink]="'analytics'"
+                                    [routerLinkActive]="['active', 'settings-nav-active']">
+                                    <mat-icon class="nav-link-icon">insert_chart</mat-icon>
+                                    <span>Analytics</span>
+                                </a>
+                            </div>
+
+                            <div class="nav-subheader">PLUGINS</div>
+
+                            <div class="nav-item" >
+                                <a class="nav-link" matRipple [routerLink]="'starred'"
+                                    [routerLinkActive]="['active', 'settings-nav-active']">
+                                    <mat-icon class="mat-icon ng-tns-c42-1200 material-icons nav-link-icon amber-fg mat-icon-no-color ng-star-inserted">star</mat-icon>
+                                    <span>Starred</span>
+                                </a>
+                            </div>
+
+                            <div class="nav-item" >
+                                <a class="nav-link" matRipple [routerLink]="'important'"
+                                    [routerLinkActive]="['active', 'settings-nav-active']">
+                                    <mat-icon class="mat-icon ng-tns-c42-1200 material-icons nav-link-icon red-fg mat-icon-no-color ng-star-inserted">label</mat-icon>
+                                    <span>Important</span>
+                                </a>
+                            </div>
+                    
+                        </div>
+                    
+                    </div>
+                </div>
+                
+            </div> 
+            <div class="accio-container-900 mr-0" fuseperfectscrollbar="">
+                <div class="accio-content center p-24 pb-56 pr-sm-24 ps ps--active-y ">
+
+                    <router-outlet></router-outlet>   
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+
+ 

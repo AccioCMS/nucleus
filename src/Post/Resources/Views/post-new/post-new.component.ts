@@ -20,6 +20,12 @@ export class NewPostComponent
     tags = ['Movie', 'Fun', 'Sport'];
     statuses = ['Published', 'Draft'];
 
+    public options: Object = {
+        toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 
+            'clearFormatting', 'insertTable', 'html', 'align', 'insertLink', 'insertImage'],
+        toolbarButtonsXS: ['undo', 'redo' , '-', 'bold', 'italic', 'underline']
+    }
+
     /**
      * Constructor
      *
@@ -33,7 +39,10 @@ export class NewPostComponent
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
         this.postForm = this._formBuilder.group({
             title : ['', Validators.required],
-            content   : ['Test Froala', Validators.required],
+            content   : [
+                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
+                Validators.required
+            ],
             postCategory: [''],
             postTag: [''],
         });

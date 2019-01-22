@@ -5,7 +5,7 @@
 
     app-nucleus{
         .page-layout{
-            @media screen and (max-width: 1024px) {
+            @media screen and (max-width: 1470px) {
                 padding: 20px;
             }
         }
@@ -47,6 +47,16 @@
             width: 300px;
         }
 
+        .accio-container-250{
+            float: left;
+            width: 250px;
+        }
+
+        .accio-container-900{
+            float: left;
+            width: 900px;
+        }
+
         .item-title-container{
             width: 850px;
             margin-bottom: 5px;
@@ -57,10 +67,66 @@
             margin-bottom: 20px;
             border: 1px solid $accio-container-border-color;
             border-radius: $accio-container-border-radius;
+            box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
         }
 
         .expansion-panel-seperator{
             margin-bottom: 20px;
+        }
+
+        button{
+            &.btn-accio-confirm{
+                background-color: #2887EF !important;
+            }
+        }
+
+        @media only screen and (max-width: 1470px) {
+            .accio-container{
+                .content-center{
+                    width: 100%;
+                }
+            }
+
+            .accio-container-1160 {
+                width: 100%;
+            }
+
+            .accio-container-850{
+                width: 100%;
+                float: none;
+            }
+
+            .accio-container-300{
+                width: 100%;
+                float: none;
+            }
+
+            .accio-container-250{
+                width: 100%;
+            }
+            .accio-container-900{
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 1200px) {
+            .accio-container{
+                .content-center{
+                    width: 100%;
+                }
+            }
+
+            .accio-content{
+                padding-left: 12px !important;
+                padding-right: 15px !important;
+            }
+        }
+
+
+        i{
+            &.fa{
+                font-family: FontAwesome !important;
+            }
         }
     }
 }

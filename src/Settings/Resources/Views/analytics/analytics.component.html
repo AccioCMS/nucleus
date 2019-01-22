@@ -1,0 +1,18 @@
+<div>
+    <form fxLayout="column" fxLayoutAlign="start"
+        fxFlex="1 0 auto" name="exampleForm" [formGroup]="exampleForm">
+        <div class="h2 mb-24">Analytics Settings</div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="firstName" required>
+                <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                <mat-error>First Name is required!</mat-error>
+            </mat-form-field>
+
+        </div>
+        
+    </form>
+</div>
