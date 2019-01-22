@@ -6,12 +6,12 @@
         <div class="content-center">
             <div class="center p-24 pb-56 pr-sm-92 ps ps--active-y accio-container-1160" fuseperfectscrollbar="">
 
-                <mat-card>Users and Permissions <span center></span><mat-icon>arrow_downward</mat-icon>  </mat-card>
+                <mat-card>Users and Permissions <span center></span><mat-icon class = "table-header-icons">arrow_downward</mat-icon>  </mat-card>
                 <!--<mat-card>-->
                 <div class = "filter" >
                     <mat-chip-list>
 
-                        <mat-chip color="primary" selected><mat-icon>add</mat-icon>  Add filter</mat-chip>
+                        <mat-chip color="primary" selected><mat-icon >add</mat-icon>  Add filter</mat-chip>
 
                     </mat-chip-list>
 
@@ -89,9 +89,13 @@
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-
                     </table>
+
+
+                        <mat-paginator [length]="100"
+                                       [pageSize]="10"
+                                       >
+                        </mat-paginator>
                     </mat-card>
 
                 </div>

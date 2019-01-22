@@ -16,9 +16,13 @@ toolbar {
     .mat-toolbar {
         position: relative;
         //background: inherit !important;
-        color: inherit !important;
+        color: $text-color !important;
         background-color: $backgorund-color !important;
         height: 40px !important;
+    }
+
+    mat-icon {
+        color: #fff !important;
     }
 
     .avatar {
@@ -40,9 +44,9 @@ toolbar {
     .language-button,
     .chat-panel-toggle-button,
     .quick-panel-toggle-button {
+
         min-width: 40px;
         height: 40px;
-
         @include media-breakpoint('xs') {
             height: 40px;
 
