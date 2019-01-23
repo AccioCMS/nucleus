@@ -99,14 +99,10 @@ const nucleusRoutes: Routes = [
 
     exports: [
         AuthModule,
-<<<<<<< HEAD
         RouterModule,
-=======
-        RouterModule
     ],
     providers: [
         AuthGuard
->>>>>>> 0288a6760d4a6c6883e2dbbf7aa188d3cb91df03
     ]
 })
 export class MainModule { }

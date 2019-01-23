@@ -87,7 +87,7 @@ export class UserCreateComponent
             phone: [''],
             street: [''],
             country: [''],
-            about   : ['Test Froala', Validators.required],
+            about   : ['Froala', Validators.required],
         });
     }
 
