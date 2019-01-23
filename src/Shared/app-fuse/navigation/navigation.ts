@@ -28,6 +28,22 @@ export const navigation: FuseNavigation[] = [
                 type     : 'item',
                 icon     : 'account_box',
                 url      : '/test/users'
+            },
+            {
+                id       : 'users',
+                title    : 'Users',
+                translate: 'NAV.POST.ADD',
+                type     : 'item',
+                icon     : 'account_box',
+                url      : '/test/post/add'
+            },
+            {
+                id       : 'users',
+                title    : 'Users',
+                translate: 'NAV.SETTINGS',
+                type     : 'item',
+                icon     : 'account_box',
+                url      : '/test/settings/general'
             }
         ]
     },

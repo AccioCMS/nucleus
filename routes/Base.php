@@ -3,7 +3,7 @@
  * Base Admin routes
  */
 Route::group(
-    ['middleware' => ['auth:admin'], 'as' => 'backend.base.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+    ['middleware' => ['auth:api'], 'as' => 'backend.base.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
 
         /**
          * GET

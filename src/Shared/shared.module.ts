@@ -6,6 +6,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
 
 import { NucleusTemplateHeaderComponent } from './App/template-header/template-header.component';
+import { StoreModule } from "@ngrx/store";
+import { sharedReducer } from './Store/shared.reducers';
 
 @NgModule({
     declarations: [
@@ -23,7 +25,9 @@ import { NucleusTemplateHeaderComponent } from './App/template-header/template-h
         MatStepperModule,
         MatExpansionModule,
         MatDividerModule,
-        MatTabsModule
+        MatTabsModule,
+
+        StoreModule.forFeature('shared', sharedReducer),
     ],
     exports: [
         NucleusTemplateHeaderComponent,

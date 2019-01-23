@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import * as _ from 'lodash';
 
 import { FuseNavigationItem } from '../../types';
+import { Store } from '@ngrx/store';
 
 @Injectable({
     providedIn: 'root'
@@ -26,7 +27,9 @@ export class FuseNavigationService
     /**
      * Constructor
      */
-    constructor()
+    constructor(
+        private store: Store<any>
+    )
     {
         // Set the defaults
         this.onItemCollapsed = new Subject();
@@ -217,7 +220,14 @@ export class FuseNavigationService
             return;
         }
 
-        return this.getNavigation(this._currentNavigationKey);
+        let getNavigation = [];
+        this.store.select(state => state).subscribe(
+            data => (
+                getNavigation = data['shared']['applicationMenuLinks']
+            )
+        );
+        
+        return getNavigation;
     }
 
     /**
