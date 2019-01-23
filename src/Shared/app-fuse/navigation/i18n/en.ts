@@ -16,6 +16,10 @@ export const locale = {
             },
             'PLUGINS' : 'Plugins',
             'CUSTOM' : 'Custom',
+            'SETTINGS' : 'Settings',
+            'POST'        : {
+                'ADD': 'Add Post'
+            },
         }
     }
 };

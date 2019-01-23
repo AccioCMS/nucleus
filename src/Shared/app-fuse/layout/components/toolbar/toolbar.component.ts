@@ -30,6 +30,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     navigation: any;
     selectedLanguage: any;
     userStatusOptions: any[];
+    authUser: object;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -79,18 +80,12 @@ export class ToolbarComponent implements OnInit, OnDestroy
             }
         ];
 
-        this.languages = [
-            {
-                id   : 'en',
-                title: 'English',
-                flag : 'us'
-            },
-            {
-                id   : 'tr',
-                title: 'Turkish',
-                flag : 'tr'
-            }
-        ];
+        this.store.select(state => state).subscribe(
+            data => (
+                this.languages = data['shared']['languages'],
+                this.authUser = data['auth']['authUser']
+            )
+        );
 
         this.navigation = navigation;
 

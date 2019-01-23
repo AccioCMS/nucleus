@@ -50,11 +50,8 @@ class BaseGeneralController extends MainController
         $user->avatar = $user->avatar(200, 200, true);
 
         // Get Labels
-        $labels = Language::getlabels();
+        //$labels = Language::getlabels();
         $pluginsConfigs = Plugin::configs();
-
-        // logout link
-        $logoutLink = route('backend.base.logoutUser');
 
         // Logo
         $projectLogo =  Settings::logo();
@@ -68,7 +65,6 @@ class BaseGeneralController extends MainController
         $settings['logo'] = $projectLogoURL;
 
         // User data object
-        //todo qetu eshte nje bug se query nuk bahet me keyby
         $postTypeSlugs = PostType::all()->toArray();
         $postTypeSlugs = array_pluck($postTypeSlugs, "slug");
 
@@ -88,9 +84,7 @@ class BaseGeneralController extends MainController
             'applicationMenuLinks' => $applicationMenuLinks,
             'cmsMenus' => $cmsMenus,
             'auth' => $user,
-            'labels' => $labels,
             'pluginsConfigs' => $pluginsConfigs,
-            'logoutLink' => $logoutLink,
             'global_data' => $globalData,
         ];
     }

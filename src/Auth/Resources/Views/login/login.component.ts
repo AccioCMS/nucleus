@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private store: Store<fromAuth.State>,
-        private router:Router
+        private router: Router
     )
     {
         // Configure the layout

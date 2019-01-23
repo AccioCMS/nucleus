@@ -7,6 +7,7 @@ import { locale as turkish } from './i18n/tr';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import 'rxjs/Rx';
 
 @Component({
     selector   : 'post-new',
@@ -52,7 +53,14 @@ export class NewPostComponent
 
     onSave(){
         console.log('Save clicked');
-        this.httpClient.get('https://reqres.in/api/users?page=2').subscribe();
+
+        this.httpClient.get('/admin/get-base-data')
+            .map(
+                (data) => {
+                    console.log(data);
+                }
+            )
+            .subscribe();
     }
 
     onCancel(){

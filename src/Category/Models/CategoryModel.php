@@ -25,17 +25,21 @@ use Illuminate\Support\Facades\Route;
 use Accio\App\Traits;
 use Accio\Support\Facades\Meta;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Accio\Category\Traits\CategoryTrait;
+use Accio\Support\BootEventsTrait;
+use Accio\Support\CollectionTrait;
+use Accio\Support\TranslatableTrait;
 
 class CategoryModel extends Model
 {
 
     use
         Cachable,
-        Traits\CategoryTrait,
-        Traits\TranslatableTrait,
+        CategoryTrait,
+        TranslatableTrait,
         LogsActivity,
-        Traits\BootEventsTrait,
-        Traits\CollectionTrait;
+        BootEventsTrait,
+        CollectionTrait;
 
     /**
      * Fields that can be filled in CRUD.
