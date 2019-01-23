@@ -14,10 +14,10 @@ import { NucleusTemplateHeaderComponent } from './App/template-header/template-h
     imports: [
         CommonModule,
         //Material
-        MatButtonModule, 
-        MatCheckboxModule, 
-        MatFormFieldModule, 
-        MatIconModule, 
+        MatButtonModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         MatSelectModule,
         MatStepperModule,
@@ -28,10 +28,10 @@ import { NucleusTemplateHeaderComponent } from './App/template-header/template-h
         NucleusTemplateHeaderComponent,
 
         //Material
-        MatButtonModule, 
-        MatCheckboxModule, 
-        MatFormFieldModule, 
-        MatIconModule, 
+        MatButtonModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         MatSelectModule,
         MatStepperModule,

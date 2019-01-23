@@ -31,6 +31,9 @@ import { NucleusComponent } from "./App/nucleus.component";
 import { fuseConfig } from './app-fuse/fuse-config';
 import { SharedModule } from './shared.module';
 
+import { HttpClientModule} from "@angular/common/http";
+import { BrowserModule } from '@angular/platform-browser';
+
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
@@ -84,11 +87,16 @@ const nucleusRoutes: Routes = [
         PostModule,
         PostTypeModule,
         SettingsModule,
-        TagModule
+        TagModule,
+        BrowserModule,
+        HttpClientModule
+
+
     ],
+
     exports: [
         AuthModule,
-        RouterModule
+        RouterModule,
     ]
 })
 export class MainModule { }

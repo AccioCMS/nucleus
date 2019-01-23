@@ -15,6 +15,7 @@ import { fuseAnimations } from '../../../../Shared/@fuse/animations';
 
 import { Observable, Subject } from 'rxjs';
 
+import { FormBuilder, FormGroup, Validators ,FormControl} from '@angular/forms';
 
 export interface Users {
     checkbox : number;
@@ -39,14 +40,14 @@ const ELEMENT_DATA: Users[] = [
 ];
 
 @Component({
-    selector   : 'user-list',
-    templateUrl: './user-list.component.html',
-    styleUrls  : ['./user-list.component.scss'],
+    selector   : 'user-create',
+    templateUrl: './user-create.component.html',
+    styleUrls  : ['./user-create.component.scss'],
     animations   : fuseAnimations,
     providers: [UsersService]
 })
 
-export class UserListComponent
+export class UserCreateComponent
 {
     /**
      * Constructor
@@ -55,17 +56,39 @@ export class UserListComponent
      */
     public users = [];
 
+    breadcrumbs = ['Users', 'New User'];
+
 
     displayedColumns: string[] = ['checkbox','name', 'email', 'phone', 'jobtitle','buttons'];
     // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
-    dataSource =   ELEMENT_DATA
+    dataSource =   ELEMENT_DATA;
+    usersForm: FormGroup;
+
+
+
+    roles = new FormControl();
+
+    rolesList: string[] = ['Admin', 'Edit', 'Onion', 'Author', 'Testim Group'];
 
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _userService : UsersService
+        private _userService : UsersService,
+        private _formBuilder: FormBuilder
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        this.usersForm = this._formBuilder.group({
+            email: ['', Validators.required],
+            lastname: [''],
+            firstName: [''],
+            password: ['', Validators.required],
+            conf_password: [''],
+            phone: [''],
+            street: [''],
+            country: [''],
+            about   : ['Test Froala', Validators.required],
+        });
     }
 
 
@@ -73,6 +96,22 @@ export class UserListComponent
         return Array.from(val);
     }
 
+
+    onSave(){
+        console.log('Save clicked');
+    }
+
+    onCancel(){
+        console.log('Cancel clicked');
+    }
+
+
+}
+
+
+export class SelectMultipleExample {
+    toppings = new FormControl();
+    toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 }
 
 

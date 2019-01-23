@@ -7,6 +7,11 @@
 Route::get('test/post/{any}', function(){
 	return view('index');
 });
+
+Route::get('test/users/{any}', function(){
+    return view('index');
+});
+
 Route::group(
     ['middleware' => ['auth:admin'],  'as' => 'backend.post.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
         /**
