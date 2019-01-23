@@ -14,7 +14,7 @@ Route::get('test/users/update/{any}', function(){
 
 Route::any('/api/user/store', '\App\Http\Controllers\Backend\UserController@store')->name('store');
 
-Route::any('/api/user/get/{lang}/{id}','\App\Http\Controllers\Backend\UserController@detailsJSON')->name('detailsJSON');
+Route::any('/api/user/get/{id}','\App\Http\Controllers\Backend\UserController@detailsJSONWithouLang')->name('detailsJSONWithouLang');
 Route::group(
     ['middleware' => ['auth:api'], 'as' => 'backend.user.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
         /**

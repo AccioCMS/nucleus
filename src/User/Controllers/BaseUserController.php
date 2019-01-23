@@ -310,6 +310,33 @@ class BaseUserController extends MainController
         return $final;
     }
 
+
+    public function detailsJSONWithouLang($id)
+    {
+
+
+        // check if user has permissions to access this link
+//        if(\Illuminate\Support\Facades\Auth::user()->userID != $id) {
+//            if (!User::hasAccess('User', 'read')) {
+//                return $this->noPermission();
+//            }
+//        }
+
+
+
+        $user = App\Models\User::with('roles', 'profileImage')->find($id);
+        $final = [
+            'details' => $user,
+            'allGroups' => UserGroup::all()
+        ];
+
+//        return $id;
+
+        // Fire event
+        $final['events'] = Event::fire('user:pre_update', [$final]);
+        return $final;
+    }
+
     /**
      * Reset users password.
      *
