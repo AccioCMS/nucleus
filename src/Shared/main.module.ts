@@ -31,7 +31,11 @@ import { NucleusComponent } from "./App/nucleus.component";
 import { fuseConfig } from './app-fuse/fuse-config';
 import { SharedModule } from './shared.module';
 
+import { HttpClientModule} from "@angular/common/http";
+import { BrowserModule } from '@angular/platform-browser';
+
 import { AuthGuard } from "../Auth/Resources/auth-guard.service";
+
 
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
@@ -86,11 +90,16 @@ const nucleusRoutes: Routes = [
         PostModule,
         PostTypeModule,
         SettingsModule,
-        TagModule
+        TagModule,
+        BrowserModule,
+        HttpClientModule
+
+
     ],
+
     exports: [
         AuthModule,
-        RouterModule
+        RouterModule,
     ],
     providers: [
         AuthGuard

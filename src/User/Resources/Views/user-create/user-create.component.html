@@ -1,0 +1,110 @@
+<div class="page-layout blank" fusePerfectScrollbar>
+
+    <nucleus-template-header
+        (saveClicked)="onSave()"
+        (cancelClicked)="onCancel()"
+        [breadcrumbs]="breadcrumbs"
+    >
+    </nucleus-template-header>
+    <div class="accio-container">
+        <div class="content-center">
+            <div class="center p-24 pb-56 pr-sm-92 ps ps--active-y accio-container-1160" fuseperfectscrollbar="">
+                <div class="content">
+
+                    <mat-card class="accio-container-850">
+
+                    <form class="form" name="usersForm" [formGroup]="usersForm">
+
+                        <table class="full-width" cellspacing="0">
+                            <tr>
+                                <td><mat-form-field fxFlex="100" class="pr-4">
+                                    <input matInput formControlName="firstName" placeholder="Name">
+                                </mat-form-field></td>
+                            </tr>
+
+                            <tr>
+                                <td><mat-form-field fxFlex="100" class="pr-4">
+                                    <input matInput formControlName="lastname" placeholder="Lastname">
+                                </mat-form-field></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <mat-form-field class="example-full-width">
+                                        <input formControlName="email" matInput placeholder="Email" >
+                                        <mat-error>
+                                            Please enter a valid email address
+                                        </mat-error>
+                                        <mat-error >
+                                            Email is <strong>required</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><mat-form-field fxFlex="100" class="pr-4">
+                                    <input type="password" matInput formControlName="password" placeholder="Password">
+                                    <mat-error >
+                                        Password is <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field></td>
+                            </tr>
+
+
+                            <tr>
+                                <td><mat-form-field fxFlex="100" class="pr-4">
+                                    <input type="password" matInput formControlName="conf_password" placeholder="Confirm Password">
+                                </mat-form-field>
+
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td><mat-form-field fxFlex="100" class="pr-4">
+                                    <input matInput formControlName="phone" placeholder="Phone">
+                                </mat-form-field></td>
+                            </tr>
+
+
+                            <tr>
+                                <td><mat-form-field fxFlex="100" class="pr-4">
+                                    <input matInput formControlName="street" placeholder="Street">
+                                </mat-form-field></td>
+                            </tr>
+
+
+                            <tr>
+                                <td><mat-form-field fxFlex="100" class="pr-4">
+                                    <input matInput formControlName="country" placeholder="Country">
+                                </mat-form-field></td>
+                            </tr>
+
+                            <tr>
+                                <td> <mat-form-field>
+                                    <mat-select placeholder="Groups" [formControl]="roles" multiple>
+                                        <mat-option *ngFor="let role of rolesList" [value]="role">{{role}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field></td>
+                            </tr>
+
+
+                        </table>
+
+                    </form>
+
+
+                    </mat-card>
+
+                    <mat-card class="accio-container-300">
+                        <div [froalaEditor] formControlName="about"></div>
+                    </mat-card>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

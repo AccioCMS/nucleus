@@ -11,10 +11,9 @@ $background-color : #3C82D8;
         //min-width: 90%;
         //margin-top: 1%;
         height: 80%;
-        position: relative !important;
+        position: relative !important ;
         top: 10% !important;
-        height: 80% !important;
-        font-size: 13px;
+        font-size: 13px !important;
 
 
         background-color: $background-color !important;
@@ -28,20 +27,26 @@ $background-color : #3C82D8;
             position: relative !important;
             bottom: 15% !important;
             height: 100% !important;
+            width: 90% !important;
         }
 
+        label {
+            position: relative !important;
+            bottom: 15% !important;
+            height: 100% !important;
+        }
 
-        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        ::placeholder { /* Chrome, Firefox, Opera, Safari */
             color: $text-color;
-            opacity: 1; /* Firefox */
+            //opacity: 1; /* Firefox */
         }
 
-        :-ms-input-placeholder { /* Internet Explorer 10-11 */
-            olor: $text-color;
+        :-ms-input-placeholder { /* Internet Explorer*/
+            color: $text-color;
         }
 
         ::-ms-input-placeholder { /* Microsoft Edge */
-            olor: $text-color;
+            color: $text-color;
         }
 
         &.expanded {

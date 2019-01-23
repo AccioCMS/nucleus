@@ -26,8 +26,9 @@ toolbar {
     }
 
     .avatar {
-        width: 30px !important;
-        height: 30px !important;
+        min-width: 25px !important;
+        height: 25px !important;
+        width: 30%;
     }
 
     .logo {
@@ -39,7 +40,7 @@ toolbar {
         }
     }
 
-    .user-button,
+    //.user-button,
     fuse-search-bar,
     .language-button,
     .chat-panel-toggle-button,
@@ -49,9 +50,13 @@ toolbar {
         height: 40px;
         @include media-breakpoint('xs') {
             height: 40px;
-
-
         }
+    }
+
+    .user-button {
+        min-width: 30px;
+        width: 30px;
+        height: 30px;
     }
 
     .navbar-toggle-button {

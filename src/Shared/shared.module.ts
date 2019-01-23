@@ -16,10 +16,10 @@ import { sharedReducer } from './Store/shared.reducers';
     imports: [
         CommonModule,
         //Material
-        MatButtonModule, 
-        MatCheckboxModule, 
-        MatFormFieldModule, 
-        MatIconModule, 
+        MatButtonModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         MatSelectModule,
         MatStepperModule,
@@ -33,10 +33,10 @@ import { sharedReducer } from './Store/shared.reducers';
         NucleusTemplateHeaderComponent,
 
         //Material
-        MatButtonModule, 
-        MatCheckboxModule, 
-        MatFormFieldModule, 
-        MatIconModule, 
+        MatButtonModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatIconModule,
         MatInputModule,
         MatSelectModule,
         MatStepperModule,
