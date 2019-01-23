@@ -16,7 +16,7 @@ use Accio\Media\Models\Traits\MediaTrait;
 class MediaModel extends Model
 {
     use
-        Cachable,
+        //Cachable,
         MediaTrait,
         LogsActivity,
         BootEventsTrait,

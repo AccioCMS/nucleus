@@ -15,6 +15,13 @@ import { navigation } from '../app-fuse/navigation/navigation';
 import { locale as navigationEnglish } from '../app-fuse/navigation/i18n/en';
 import { locale as navigationTurkish } from '../app-fuse/navigation/i18n/tr';
 
+import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import * as SharedActions from '../Store/shared.actions';
+import * as AuthActions from '../../Auth/Resources/Store/auth.actions';
+
+import { Router } from '@angular/router';
+
 @Component({
     selector: 'app-nucleus',
     templateUrl: './nucleus.component.html',
@@ -47,7 +54,10 @@ export class NucleusComponent {
         private _fuseSplashScreenService: FuseSplashScreenService,
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _translateService: TranslateService,
-        private _platform: Platform
+        private _platform: Platform,
+        private httpClient: HttpClient,
+        private store: Store<any>,
+        private router: Router
     )
     {
         // Get default navigation
@@ -112,6 +122,47 @@ export class NucleusComponent {
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        //Check Session data
+        //Add base data to ngRx
+        let token = null;
+        this.store.select(state => state).subscribe(
+            data => (
+                token = data['auth']['token']
+            )
+        );
+
+        let checkSession = false;
+        this.httpClient.get('/test/auth')
+            .map(
+                (data) => {
+                    if(data['status'] == true){
+                        checkSession = true;
+                        this.store.dispatch(new AuthActions.Signin(data['accessToken']));
+                        
+                        let langauges = [];
+                        this.httpClient.get('/admin/get-base-data')
+                            .map(
+                                (data) => {
+                                    this.store.dispatch(new SharedActions.SetLanguages(data['languages']));
+                                    this.store.dispatch(new SharedActions.SetGlobalData(data['global_data']));
+                                    this.store.dispatch(new SharedActions.SetCmsMenus(data['cmsMenus']));
+                                    this.store.dispatch(new SharedActions.SetPluginConfigs(data['pluginsConfigs']));
+
+                                    this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
+                                    this.store.dispatch(new AuthActions.Signin(data['accessToken']));
+                                }
+                            )
+                            .subscribe();
+                    }else{
+                        this.router.navigate(['/admin/login']);
+                    }
+                }
+            )
+            .subscribe();
+        
+        
+        
     }
 
     // -----------------------------------------------------------------------------------------------------

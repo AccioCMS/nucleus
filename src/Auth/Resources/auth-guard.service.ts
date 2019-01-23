@@ -6,12 +6,14 @@ import {take, map} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class AuthGuard implements CanActivate{
     constructor(
         private store: Store<fromAuth.State>,
-        private router: Router
+        private router: Router,
+        private httpClient: HttpClient
     ){}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
@@ -20,10 +22,21 @@ export class AuthGuard implements CanActivate{
             take(1),
             map((authState: fromAuth.State) => {
                 if(!authState.authenticated){
-                    this.router.navigate(['/admin/login']);
+                    this.httpClient.get('/test/auth')
+                    .map(
+                        (data) => {
+                            if(data['status'] == true){
+                                return true;
+                            }else{
+                                this.router.navigate(['/admin/login']);
+                                return false;
+                            }
+                        }
+                    )
+
+                    
                 }
-               
-                return authState.authenticated;
+                return true;
             })
         );
     }

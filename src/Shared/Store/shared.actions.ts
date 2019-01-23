@@ -27,7 +27,7 @@ export class SetCmsMenus implements Action {
 export class SetLanguages implements Action {
     readonly type = SET_LANGUAGES;
 
-    constructor(public payload: object){}
+    constructor(public payload: any){}
 }
 
 export class SetPluginConfigs implements Action {
