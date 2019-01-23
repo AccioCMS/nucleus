@@ -31,6 +31,8 @@ import { NucleusComponent } from "./App/nucleus.component";
 import { fuseConfig } from './app-fuse/fuse-config';
 import { SharedModule } from './shared.module';
 
+import { AuthGuard } from "../Auth/Resources/auth-guard.service";
+
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
@@ -89,6 +91,9 @@ const nucleusRoutes: Routes = [
     exports: [
         AuthModule,
         RouterModule
+    ],
+    providers: [
+        AuthGuard
     ]
 })
 export class MainModule { }

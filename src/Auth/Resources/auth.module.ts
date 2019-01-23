@@ -9,6 +9,12 @@ import { AuthRoutingModule } from './auth-routing.module';
 
 import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
 
+import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from "@ngrx/store";
+
+import { authReducer } from './Store/auth.reducers';
+
+
 @NgModule({
   declarations: [
     LoginComponent,
@@ -17,12 +23,18 @@ import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
   ],
   imports: [
     AuthRoutingModule,
+
+    //Material
     MatButtonModule,
     MatCheckboxModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    FuseSharedModule
+
+    FuseSharedModule,
+    HttpClientModule,
+
+    StoreModule.forFeature('auth', authReducer),
   ]
 })
 export class AuthModule {}

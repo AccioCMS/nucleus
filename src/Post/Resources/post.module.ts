@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 import { PostRoutingModule } from './post-routing.module';
 import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
@@ -9,8 +11,7 @@ import { PostListComponent } from './Views/post-list/post-list.component';
 import { NewPostComponent } from './Views/post-new/post-new.component';
 
 import { SharedModule } from "../../Shared/shared.module";
-
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { AuthInterceptor } from '../../Auth/Resources/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,9 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
     FroalaEditorModule.forRoot(), 
     FroalaViewModule.forRoot(),
+  ],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
   ]
 })
 export class PostModule {}
