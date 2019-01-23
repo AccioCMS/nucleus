@@ -68,7 +68,7 @@ export class UserCreateComponent
 
     roles = new FormControl();
 
-    rolesList: string[] = ['Admin', 'Edit', 'Onion', 'Author', 'Testim Group'];
+    rolesList: string[] = ['Admin', 'Editor', 'Author', 'Testim Group'];
 
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
