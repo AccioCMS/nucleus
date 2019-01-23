@@ -10,6 +10,8 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class AuthGuard implements CanActivate{
+    check = false;
+
     constructor(
         private store: Store<fromAuth.State>,
         private router: Router,
@@ -17,11 +19,23 @@ export class AuthGuard implements CanActivate{
     ){}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+        // this.getPrice()
+        //     .then(
+        //         (response) => {
+        //             console.log('res', response);
+        //         }
+        //     );
+        // console.log(this.check);    
+
+        // console.log('Then');
+            
         return this.store.select('auth')
         .pipe(
             take(1),
             map((authState: fromAuth.State) => {
-                if(!authState.authenticated){
+                if(authState.authenticated){
+                    return true;
+                }else{
                     this.httpClient.get('/test/auth')
                     .map(
                         (data) => {
@@ -33,11 +47,18 @@ export class AuthGuard implements CanActivate{
                             }
                         }
                     )
-
-                    
+                    .subscribe();
                 }
+                
                 return true;
             })
         );
+    }
+
+    async getPrice(): Promise<any> {
+        const response = await this.httpClient.get('/test/auth').toPromise();
+        console.log(response);
+        this.check = response['status'];
+        return response;
     }
 }
