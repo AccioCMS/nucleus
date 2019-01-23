@@ -40,7 +40,7 @@ import { AuthGuard } from "../Auth/Resources/auth-guard.service";
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
-    { path: 'test', component: NucleusComponent, canActivate: [AuthGuard], children: [
+    { path: 'test', component: NucleusComponent/*, canActivate: [AuthGuard]*/, children: [
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
         { path: 'users', loadChildren: () => UserModule },

@@ -19,6 +19,8 @@ import { FormBuilder, FormGroup, Validators ,FormControl} from '@angular/forms';
 import * as AuthActions from "../../../../Auth/Resources/Store/auth.actions";
 import {Router} from "@angular/router";
 
+import { ActivatedRoute } from '@angular/router';
+
 export interface Users {
     checkbox : number;
     name: string;
@@ -42,14 +44,14 @@ const ELEMENT_DATA: Users[] = [
 ];
 
 @Component({
-    selector   : 'user-create',
-    templateUrl: './user-create.component.html',
-    styleUrls  : ['./user-create.component.scss'],
+    selector   : 'user-update',
+    templateUrl: './user-update.component.html',
+    styleUrls  : ['./user-update.component.scss'],
     animations   : fuseAnimations,
     providers: [UsersService]
 })
 
-export class UserCreateComponent
+export class UserUpdateComponent
 {
     /**
      * Constructor
@@ -58,13 +60,16 @@ export class UserCreateComponent
      */
     public users = [];
 
-    breadcrumbs = ['Users', 'New User'];
+    breadcrumbs = ['Users', 'Update User'];
 
 
     displayedColumns: string[] = ['checkbox','name', 'email', 'phone', 'jobtitle','buttons'];
     // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
     dataSource =   ELEMENT_DATA;
     usersForm: FormGroup;
+
+    private sub: any;
+    id: string;
 
 
     roles = new FormControl();
@@ -76,7 +81,9 @@ export class UserCreateComponent
         private _userService : UsersService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
-        private router: Router
+        private router: Router,
+        // private route: ActivatedRoute
+        private route: ActivatedRoute
 
     )
     {
@@ -96,21 +103,31 @@ export class UserCreateComponent
         });
     }
 
+    ngOnInit() {
+        this.id = this.route.snapshot.paramMap.get("id")
+    }
 
     hack(val) {
         return Array.from(val);
     }
 
     onSave(){
-        // this.showErrorMessage = false;
-        let formData = this.usersForm.value;
-        let credentials = {'user' : { email: formData.email, lastName: formData.lastName, firstName: formData.firstName, password: formData.password,
-            phone: formData.phone, street: formData.street, country: formData.country , about: formData.about, groups: formData.groups }};
+        this.getUser();
+    }
 
-        this.httpClient.post('/api/user/store', credentials)
+    getUser() {
+        // this.showErrorMessage = false;
+        // let formData = this.usersForm.value;
+        this.id = this.route.snapshot.paramMap.get('id');
+
+            // this.id = +params['id']; // (+) converts string 'id' to a number
+
+            let credentials = {"lang":1,"id":this.id};
+        // console.log( this.id);
+        this.httpClient.post('/api/user/get/',1 + "/"+this.id)
             .map(
                 (data) => {
-                    console.log(credentials);
+
                     if(data== true){
                         console.log(data +" SUUKSSSESSS");
                         // this.store.dispatch(new AuthActions.Signin(data['access_token']))

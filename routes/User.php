@@ -4,8 +4,19 @@
  * User Routes
  */
 
+Route::get('test/users/{any}', function(){
+    return view('index');
+});
+
+Route::get('test/users/update/{any}', function(){
+    return view('index');
+});
+
+Route::any('/api/user/store', '\App\Http\Controllers\Backend\UserController@store')->name('store');
+
+Route::any('/api/user/get/{lang}/{id}','\App\Http\Controllers\Backend\UserController@detailsJSON')->name('detailsJSON');
 Route::group(
-    ['middleware' => ['auth:admin'], 'as' => 'backend.user.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+    ['middleware' => ['auth:api'], 'as' => 'backend.user.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
         /**
          * GET
          */
@@ -27,6 +38,9 @@ Route::group(
         /**
          * POST
          */
+
+
+
         Route::post('/json/user/store', 'UserController@store')->name('store');
         Route::post('/json/user/storeUpdate', 'UserController@storeUpdate')->name('storeUpdate');
         Route::post('/json/user/bulk-delete', 'UserController@bulkDelete')->name('bulkDelete');

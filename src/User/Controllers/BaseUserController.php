@@ -115,10 +115,13 @@ class BaseUserController extends MainController
      */
     public function store(Request $request)
     {
+
+
+//        return "a";
         // check if user has permissions to access this link
-        if(!User::hasAccess('user', (isset($request->user['id'])) ? 'update' : 'create')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('user', (isset($request->user['id'])) ? 'update' : 'create')) {
+//            return $this->noPermission();
+//        }
         // custom messages for validation
         $messages = array(
           'email.required'=>'You cant leave Email field empty',
@@ -132,6 +135,9 @@ class BaseUserController extends MainController
             'groups' => 'required',
         ];
 
+
+//        return $request->user['email'] ;
+
         if(isset($request->user['id'])) {
             // update user
             $user = App\Models\User::findOrFail($request->user['id']);
@@ -143,7 +149,7 @@ class BaseUserController extends MainController
         }else{
             // Create user
             $user = new User();
-            $user->createdByUserID = Auth::user()->userID;
+            $user->createdByUserID = 21;
             $user->password = Hash::make($request->user['password']);
             $user->isActive = 1;
             $currentID = 0;
@@ -151,13 +157,15 @@ class BaseUserController extends MainController
             $validatorFields['password'] = 'required|same:confpassword';
         }
 
-        // validation
-        $validator = Validator::make($request->user, $validatorFields, $messages);
 
+
+        // validation
+//       $validator = Validator::make($request->user, $validatorFields, $messages);
+//
         // if validation fails return json response
-        if($validator->fails()) {
-            return $this->response("Please check all required fields!", 400, null, false, false, true, $validator->errors());
-        }
+//        if($validator->fails()) {
+//            return $this->response("Please check all required fields!", 400, null, false, false, true, $validator->errors());
+//        }
 
         // if image is not set make it 0
         if (!isset($request->user['profileImageID']) || $request->user['profileImageID'] == "") {
@@ -181,7 +189,6 @@ class BaseUserController extends MainController
         if($user->save()) {
             // Add roles permissions
             $user->assignRoles($request->user['groups']);
-
             $redirectParams = parent::redirectParams($request->redirect, 'user', $user->userID);
             $result = $this->response('User stored successfully', 200, $user->userID, $redirectParams['view'], $redirectParams['redirectUrl']);
             $result['data'] = $user;
