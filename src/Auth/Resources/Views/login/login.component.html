@@ -35,6 +35,11 @@
                     </mat-error>
                 </mat-form-field>
 
+                <div class="remember-forgot-password mt-0" fxLayout="row" fxLayout.xs="column"
+                     fxLayoutAlign="space-between center">
+                    <h3 class="login-error m-0" *ngIf="showErrorMessage">These credentials do not match our records.</h3>
+                </div>     
+
                 <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column"
                      fxLayoutAlign="space-between center">
                     <mat-checkbox class="remember-me" aria-label="Remember Me">
@@ -47,7 +52,7 @@
                 </div>
 
                 <button mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
-                        [disabled]="loginForm.invalid">
+                        [disabled]="loginForm.invalid" (click)="onSubmit()">
                     LOGIN
                 </button>
 

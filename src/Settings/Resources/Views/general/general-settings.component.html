@@ -1,160 +1,121 @@
-<div class="page-layout blank" fusePerfectScrollbar>
-    <div class="accio-container">
-        <div class="content-center">
-            <div class="accio-container-300 mr-8" fuseperfectscrollbar="">
-                <div class="settings-sidebar sidebar" name="mail-main-sidebar" position="left" lockedOpen="gt-md">
-                    <div class="content" fusePerfectScrollbar [@animate]="{value:'*',params:{y:'50px'}}">
-                    
-                        <div class="nav material2">
-                    
-                            <div class="nav-subheader">APPS</div>
-                    
-                            <div class="nav-item" >
-                                <a class="nav-link" matRipple [routerLink]="'inbox'"
-                                    [routerLinkActive]="['active', 'accent']">
-                                    <mat-icon class="nav-link-icon" >inbox</mat-icon>
-                                    <span>Inbox</span>
-                                </a>
-                            </div>
+<div>
+    <form fxLayout="column" fxLayoutAlign="start"
+        fxFlex="1 0 auto" name="exampleForm" [formGroup]="exampleForm">
+        <div class="h2 mb-24">Site Settings</div>
 
-                            <div class="nav-item" >
-                                <a class="nav-link" matRipple [routerLink]="'sent'"
-                                    [routerLinkActive]="['active', 'accent']">
-                                    <mat-icon class="nav-link-icon" >send</mat-icon>
-                                    <span>Sent</span>
-                                </a>
-                            </div>
-
-                            <div class="nav-subheader">PLUGINS</div>
-
-                            <div class="nav-item" >
-                                <a class="nav-link" matRipple [routerLink]="'starred'"
-                                    [routerLinkActive]="['active', 'accent']">
-                                    <mat-icon class="mat-icon ng-tns-c42-1200 material-icons nav-link-icon amber-fg mat-icon-no-color ng-star-inserted" >star</mat-icon>
-                                    <span>Starred</span>
-                                </a>
-                            </div>
-
-                            <div class="nav-item" >
-                                <a class="nav-link" matRipple [routerLink]="'important'"
-                                    [routerLinkActive]="['active', 'accent']">
-                                    <mat-icon class="mat-icon ng-tns-c42-1200 material-icons nav-link-icon red-fg mat-icon-no-color ng-star-inserted" >label</mat-icon>
-                                    <span>Important</span>
-                                </a>
-                            </div>
-                    
-                        </div>
-                    
-                    </div>
-                </div>
-                
-            </div> 
-            <div class="accio-container-850 mr-0" fuseperfectscrollbar="">
-                <div class="accio-content center p-24 pb-56 pr-sm-92 ps ps--active-y ">
-                    <h2>Drafts</h2>
-
-                    <form fxLayout="column" fxLayoutAlign="start"
-                        fxFlex="1 0 auto" name="exampleForm" [formGroup]="exampleForm">
-      
-                      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-      
-                          <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                              <mat-label>First name</mat-label>
-                              <input matInput formControlName="firstName" required>
-                              <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                              <mat-error>First Name is required!</mat-error>
-                          </mat-form-field>
-      
-                          <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-                              <mat-label>Last name</mat-label>
-                              <input matInput formControlName="lastName" required>
-                              <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                              <mat-error>Last Name is required!</mat-error>
-                          </mat-form-field>
-      
-                      </div>
-      
-                      <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
-      
-                          <mat-form-field appearance="outline" fxFlex="100">
-                              <mat-label>Address</mat-label>
-                              <textarea matInput formControlName="address" required>
-                                  1600 Amphitheatre Pkwy
-                              </textarea>
-                              <mat-error>Address is required!</mat-error>
-                          </mat-form-field>
-      
-                          <mat-form-field appearance="outline" fxFlex="100">
-                              <mat-label>Address 2</mat-label>
-                              <textarea matInput formControlName="address2"></textarea>
-                              <mat-error>Address 2 is required!</mat-error>
-                          </mat-form-field>
-      
-                      </div>
-      
-                      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-      
-                          <mat-form-field appearance="outline" fxFlex="33">
-                              <mat-label>City</mat-label>
-                              <input matInput formControlName="city" required>
-                              <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
-                              <mat-error>City is required!</mat-error>
-                          </mat-form-field>
-      
-                          <mat-form-field appearance="outline" fxFlex="34" class="px-8">
-                              <mat-label>State</mat-label>
-                              <input matInput formControlName="state" required>
-                              <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
-                              <mat-error>State is required!</mat-error>
-                          </mat-form-field>
-      
-                          <mat-form-field appearance="outline" fxFlex="33">
-                              <mat-label>Postal Code</mat-label>
-                              <input matInput #postalCode value="94043"
-                                     formControlName="postalCode" maxlength="5" required>
-                              <mat-icon matSuffix class="secondary-text">markunread_mailbox</mat-icon>
-                              <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-                              <mat-error>Postal Code is required!</mat-error>
-                          </mat-form-field>
-      
-                      </div>
-      
-                      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-      
-                          <mat-form-field appearance="outline" fxFlex="100">
-                              <mat-label>Country</mat-label>
-                              <mat-select formControlName="country" required>
-                                  <mat-option [value]="'United States of America'">
-                                      United States of America
-                                  </mat-option>
-                                  <mat-option [value]="'United Kingdom'">
-                                      United Kingdom
-                                  </mat-option>
-                                  <mat-option [value]="'Russia'">
-                                      Russia
-                                  </mat-option>
-                                  <mat-option [value]="'China'">
-                                      China
-                                  </mat-option>
-                                  <mat-option [value]="'Japan'">
-                                      Japan
-                                  </mat-option>
-                                  <mat-option [value]="'Turkey'">
-                                      Turkey
-                                  </mat-option>
-                              </mat-select>
-                              <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
-                              <mat-error>Country is required!</mat-error>
-                          </mat-form-field>
-      
-                      </div>
-      
-                    </form>
-                </div>
-            </div> 
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
+            <mat-tab-group fxFlex="100">
+                <mat-tab label="First"> Content 1 </mat-tab>
+                <mat-tab label="Second"> Content 2 </mat-tab>
+                <mat-tab label="Third"> Content 3 </mat-tab>
+            </mat-tab-group>
         </div>
-    </div>
+        
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="firstName" required>
+                <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                <mat-error>First Name is required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                <mat-label>Last name</mat-label>
+                <input matInput formControlName="lastName" required>
+                <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                <mat-error>Last Name is required!</mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Address</mat-label>
+                <textarea matInput formControlName="address" required>
+                    1600 Amphitheatre Pkwy
+                </textarea>
+                <mat-error>Address is required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Address 2</mat-label>
+                <textarea matInput formControlName="address2"></textarea>
+                <mat-error>Address 2 is required!</mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field appearance="outline" fxFlex="33">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" required>
+                <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
+                <mat-error>City is required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="34" class="px-8">
+                <mat-label>State</mat-label>
+                <input matInput formControlName="state" required>
+                <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
+                <mat-error>State is required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex="33">
+                <mat-label>Postal Code</mat-label>
+                <input matInput #postalCode value="94043"
+                        formControlName="postalCode" maxlength="5" required>
+                <mat-icon matSuffix class="secondary-text">markunread_mailbox</mat-icon>
+                <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+                <mat-error>Postal Code is required!</mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field appearance="outline" fxFlex="100">
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="country" required>
+                    <mat-option [value]="'United States of America'">
+                        United States of America
+                    </mat-option>
+                    <mat-option [value]="'United Kingdom'">
+                        United Kingdom
+                    </mat-option>
+                    <mat-option [value]="'Russia'">
+                        Russia
+                    </mat-option>
+                    <mat-option [value]="'China'">
+                        China
+                    </mat-option>
+                    <mat-option [value]="'Japan'">
+                        Japan
+                    </mat-option>
+                    <mat-option [value]="'Turkey'">
+                        Turkey
+                    </mat-option>
+                </mat-select>
+                <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
+                <mat-error>Country is required!</mat-error>
+            </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-accordion fxFlex="100">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon class="pr-sm-32">account_circle</mat-icon> 
+                        Author
+                    </mat-panel-title>
+                    </mat-expansion-panel-header>
+                
+                    <p>Lorem Ipsum</p>
+                </mat-expansion-panel>  
+            </mat-accordion>
+        </div>
+    </form>
 </div>
-
-
- 

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatStepperModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatStepperModule, MatTabsModule } from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
 
@@ -22,7 +22,8 @@ import { NucleusTemplateHeaderComponent } from './App/template-header/template-h
         MatSelectModule,
         MatStepperModule,
         MatExpansionModule,
-        MatDividerModule
+        MatDividerModule,
+        MatTabsModule
     ],
     exports: [
         NucleusTemplateHeaderComponent,
@@ -36,7 +37,8 @@ import { NucleusTemplateHeaderComponent } from './App/template-header/template-h
         MatSelectModule,
         MatStepperModule,
         MatExpansionModule,
-        MatDividerModule
+        MatDividerModule,
+        MatTabsModule
     ]
 })
 export class SharedModule { }

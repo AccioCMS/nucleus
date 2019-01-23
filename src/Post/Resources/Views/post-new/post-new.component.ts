@@ -6,6 +6,7 @@ import { locale as english } from './i18n/en';
 import { locale as turkish } from './i18n/tr';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector   : 'post-new',
@@ -20,6 +21,12 @@ export class NewPostComponent
     tags = ['Movie', 'Fun', 'Sport'];
     statuses = ['Published', 'Draft'];
 
+    public options: Object = {
+        toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 
+            'clearFormatting', 'insertTable', 'html', 'align', 'insertLink', 'insertImage'],
+        toolbarButtonsXS: ['undo', 'redo' , '-', 'bold', 'italic', 'underline']
+    }
+
     /**
      * Constructor
      *
@@ -27,13 +34,17 @@ export class NewPostComponent
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _formBuilder: FormBuilder
+        private _formBuilder: FormBuilder,
+        private httpClient: HttpClient
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
         this.postForm = this._formBuilder.group({
             title : ['', Validators.required],
-            content   : ['Test Froala', Validators.required],
+            content   : [
+                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
+                Validators.required
+            ],
             postCategory: [''],
             postTag: [''],
         });
@@ -41,6 +52,7 @@ export class NewPostComponent
 
     onSave(){
         console.log('Save clicked');
+        this.httpClient.get('https://reqres.in/api/users?page=2').subscribe();
     }
 
     onCancel(){

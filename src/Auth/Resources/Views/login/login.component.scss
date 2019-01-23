@@ -22,6 +22,12 @@ login {
                 text-align: center;
                 @include mat-elevation(16);
 
+                h3{
+                    &.login-error{
+                        color: #f44336;
+                    }
+                }
+
                 @include media-breakpoint('xs') {
                     padding: 24px;
                     width: 100%;

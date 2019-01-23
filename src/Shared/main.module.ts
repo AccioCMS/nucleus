@@ -34,6 +34,9 @@ import { SharedModule } from './shared.module';
 import { HttpClientModule} from "@angular/common/http";
 import { BrowserModule } from '@angular/platform-browser';
 
+import { AuthGuard } from "../Auth/Resources/auth-guard.service";
+
+
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
@@ -96,7 +99,14 @@ const nucleusRoutes: Routes = [
 
     exports: [
         AuthModule,
+<<<<<<< HEAD
         RouterModule,
+=======
+        RouterModule
+    ],
+    providers: [
+        AuthGuard
+>>>>>>> 0288a6760d4a6c6883e2dbbf7aa188d3cb91df03
     ]
 })
 export class MainModule { }

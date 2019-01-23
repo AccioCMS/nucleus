@@ -9,6 +9,11 @@ import { FuseSidebarService } from '../../../../@fuse/components/sidebar/sidebar
 
 import { navigation } from '../../../navigation/navigation';
 
+import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import * as AuthActions from "../../../../../Auth/Resources/Store/auth.actions";
+import { Router } from '@angular/router';
+
 @Component({
     selector     : 'toolbar',
     templateUrl  : './toolbar.component.html',
@@ -39,7 +44,10 @@ export class ToolbarComponent implements OnInit, OnDestroy
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _fuseSidebarService: FuseSidebarService,
-        private _translateService: TranslateService
+        private _translateService: TranslateService,
+        private httpClient: HttpClient,
+        private store: Store<any>,
+        private router:Router
     )
     {
         // Set the defaults
@@ -159,5 +167,21 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         // Use the selected language for translations
         this._translateService.use(lang.id);
+    }
+
+
+    /**
+     * Logout and set auth data to null
+     *
+     */
+    onLogOut(){
+        this.httpClient.get('/api/auth/logout')
+            .map(
+                (data) => {
+                    this.store.dispatch(new AuthActions.Logout())
+                    this.router.navigate(['/admin/login'])
+                }
+            )
+            .subscribe();
     }
 }
