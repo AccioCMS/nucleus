@@ -104,16 +104,6 @@ const initialState: SharedState = {
             id   : 'en',
             title: 'English',
             flag : 'us'
-        },
-        {
-            id   : 'tr',
-            title: 'Turkish',
-            flag : 'tr'
-        },
-        {
-            id   : 'sq',
-            title: 'Albanian',
-            flag : 'al'
         }
     ],
     pluginsConfigs: null,
@@ -136,19 +126,19 @@ export function sharedReducer(state = initialState, action: SharedActions.Shared
         case (SharedActions.SET_CMS_MENUS):
           return {
             ...state,
-            globalData: action.payload
+            cmsMenus: action.payload
           };
           
         case (SharedActions.SET_LANGUAGES):
           return {
             ...state,
-            globalData: action.payload
+            languages: action.payload
           }; 
           
         case (SharedActions.SET_PLUGIN_CONFIGS):
           return {
             ...state,
-            globalData: action.payload
+            pluginsConfigs: action.payload
           };   
         default:
           return state;

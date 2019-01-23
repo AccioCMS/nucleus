@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Accio\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class BaseAuthController extends MainController
 {
@@ -36,7 +37,7 @@ class BaseAuthController extends MainController
                 'message' => 'Unauthorized'
             ]);
 
-        $user = $request->user();
+        $user = Auth::user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         if ($request->remember_me){
@@ -44,6 +45,9 @@ class BaseAuthController extends MainController
         }
 
         $token->save();
+
+        Session::put('accessToken', $tokenResult->accessToken);
+        Session::save();
 
         return response()->json([
             'success' => true,
@@ -62,6 +66,7 @@ class BaseAuthController extends MainController
      */
     public function logout(Request $request)
     {
+        $request->session()->flush();
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'

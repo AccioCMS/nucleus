@@ -18,7 +18,7 @@ class LanguageModel extends Model
     use
         LanguageTrait,
         LogsActivity,
-        Cachable,
+        //Cachable,
         BootEventsTrait,
         CollectionTrait;
 

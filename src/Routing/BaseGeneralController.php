@@ -2,13 +2,14 @@
 
 namespace Accio\Routing;
 
-use Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Language;
 use App\Models\MenuLink;
 use App\Models\Settings;
 use App\Models\Plugin;
 use App\Models\PostType;
+use Illuminate\Support\Facades\Session;
 
 class BaseGeneralController extends MainController
 {
@@ -38,7 +39,7 @@ class BaseGeneralController extends MainController
      * @return array
      * @throws \Exception
      */
-    public function getBaseData()
+    public function getBaseData(Request $request)
     {
         // menu links for the application part
         $applicationMenuLinks = MenuLink::applicationMenuLinks();
@@ -77,8 +78,8 @@ class BaseGeneralController extends MainController
         ];
 
         // all languages
-        $languages = Language::all();
-
+        $languages = Language::select('name as title', 'slug as id')->get();
+        //$request->session()->flush();
         return [
             'languages' => $languages,
             'applicationMenuLinks' => $applicationMenuLinks,
@@ -86,6 +87,7 @@ class BaseGeneralController extends MainController
             'auth' => $user,
             'pluginsConfigs' => $pluginsConfigs,
             'global_data' => $globalData,
+            'accessToken' => session('accessToken')
         ];
     }
 
