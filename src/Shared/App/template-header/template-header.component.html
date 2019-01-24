@@ -2,10 +2,10 @@
     <div class="ng-tns-c51-90" fxlayout="row" fxlayoutalign="start center" style="flex-direction: row; box-sizing: border-box; display: flex; place-content: center flex-start; align-items: center;">
         <div class="logo" fxlayout="row" fxlayoutalign="space-between center" style="flex-direction: row; box-sizing: border-box; display: flex; place-content: center flex-start; align-items: center;">
             <div class="breadcrumb text-truncate h1 ng-trigger ng-trigger-animate" fxlayout="row" fxlayoutalign="start center" style="flex-direction: row; box-sizing: border-box; display: flex; place-content: center flex-start; align-items: center;">
-                <div 
-                    fxlayout="row" 
-                    fxlayoutalign="start center" 
-                    class="ng-tns-c53-92 ng-star-inserted mat-button-wrapper" 
+                <div
+                    fxlayout="row"
+                    fxlayoutalign="start center"
+                    class="ng-tns-c53-92 ng-star-inserted mat-button-wrapper"
                     style="flex-direction: row; box-sizing: border-box; display: flex; place-content: center flex-start; align-items: center;"
                     *ngFor="let breadcrumb of breadcrumbs; let i = index"
                     >
@@ -13,9 +13,9 @@
                         <b *ngIf="(breadcrumbs.length - 1) == i">{{ breadcrumb }}</b>
                         <span *ngIf="(breadcrumbs.length - 1) > i">{{ breadcrumb }}</span>
                     </span>
-                    <mat-icon 
-                        class="separator mat-icon ng-tns-c53-92 material-icons mat-icon-no-color ng-star-inserted" 
-                        role="img" 
+                    <mat-icon
+                        class="separator mat-icon ng-tns-c53-92 material-icons mat-icon-no-color ng-star-inserted"
+                        role="img"
                         aria-hidden="true"
                         *ngIf="(breadcrumbs.length - 1) > i"
                         >chevron_right
@@ -25,16 +25,26 @@
         </div>
 
         <div class="template-toolbar-actions">
-            <span class="saved-text"> 
+            <span class="saved-text" *ngIf="false">
                 <span>SAVED</span>
-                <mat-icon>access_time</mat-icon>    
+                <mat-icon>access_time</mat-icon>
             </span>
-            <button (click)="onCancel()" mat-raised-button class="cancel-button mat-raised-button ng-tns-c39-37 ng-star-inserted" aria-label="CANCEL">
-                CANCEL
+            <button
+                *ngIf="showCancelBtn"
+                (click)="onCancel()"
+                mat-raised-button
+                class="cancel-button mat-raised-button ng-tns-c39-37 ng-star-inserted">
+                <mat-icon *ngIf="cancelBtnData.icon != ''">{{ cancelBtnData.icon }}</mat-icon>
+                {{ cancelBtnData.text }}
             </button>
-            <button (click)="onSave()" mat-raised-button color="accent" class="save-product-button mat-raised-button ng-tns-c39-37 ng-star-inserted btn-accio-confirm" aria-label="SAVE">
-                <mat-icon>save</mat-icon>
-                SAVE
+            <button
+                *ngIf="showSaveBtn"
+                (click)="onSave()"
+                mat-raised-button
+                color="accent"
+                class="save-product-button mat-raised-button ng-tns-c39-37 ng-star-inserted btn-accio-confirm">
+                <mat-icon>{{ saveBtnData.icon }}</mat-icon>
+                {{ saveBtnData.text }}
             </button>
         </div>
     </div>

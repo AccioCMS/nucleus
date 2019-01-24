@@ -139,7 +139,7 @@ export class UserUpdateComponent
             // this.id = +params['id']; // (+) converts string 'id' to a number
 
         // console.log( this.id);
-        this.httpClient.post("/api/user/get/"+this.id+"")
+        this.httpClient.get("/api/user/get/"+this.id+"")
             .map(
                 (data) => {
                     this.email = data['details'].email;

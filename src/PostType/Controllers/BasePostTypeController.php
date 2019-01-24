@@ -102,9 +102,9 @@ class BasePostTypeController extends MainController
     public function delete($lang, $id)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('PostType', 'delete')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('PostType', 'delete')) {
+//            return $this->noPermission();
+//        }
 
         $res = $this->deletePostType($id);
         if($res && is_bool($res)) {

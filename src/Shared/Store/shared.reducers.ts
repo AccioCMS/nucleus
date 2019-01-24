@@ -37,7 +37,7 @@ const initialState: SharedState = {
                     translate: 'NAV.USERS.TITLE',
                     type     : 'item',
                     icon     : 'account_box',
-                    url      : '/test/users'
+                    url      : '/test/users/list'
                 },
                 {
                     id       : 'users',
