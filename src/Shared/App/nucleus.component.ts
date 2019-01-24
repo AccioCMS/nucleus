@@ -27,9 +27,10 @@ import { Router } from '@angular/router';
     templateUrl: './nucleus.component.html',
     styleUrls  : ['./nucleus.component.scss']
 })
-export class NucleusComponent { 
+export class NucleusComponent {
     fuseConfig: any;
     navigation: any;
+    showData: boolean = false;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -124,14 +125,6 @@ export class NucleusComponent {
         this._unsubscribeAll = new Subject();
 
         //Check Session data
-        //Add base data to ngRx
-        let token = null;
-        this.store.select(state => state).subscribe(
-            data => (
-                token = data['auth']['token']
-            )
-        );
-
         let checkSession = false;
         this.httpClient.get('/test/auth')
             .map(
@@ -139,7 +132,7 @@ export class NucleusComponent {
                     if(data['status'] == true){
                         checkSession = true;
                         this.store.dispatch(new AuthActions.Signin(data['accessToken']));
-                        
+
                         let langauges = [];
                         this.httpClient.get('/admin/get-base-data')
                             .map(
@@ -150,7 +143,8 @@ export class NucleusComponent {
                                     this.store.dispatch(new SharedActions.SetPluginConfigs(data['pluginsConfigs']));
 
                                     this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
-                                    this.store.dispatch(new AuthActions.Signin(data['accessToken']));
+
+                                    this.showData = true;
                                 }
                             )
                             .subscribe();
@@ -160,9 +154,6 @@ export class NucleusComponent {
                 }
             )
             .subscribe();
-        
-        
-        
     }
 
     // -----------------------------------------------------------------------------------------------------

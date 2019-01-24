@@ -11,9 +11,13 @@ export class NucleusTemplateHeaderComponent implements OnInit{
     @Output() cancelClicked = new EventEmitter<any>();
 
     @Input('breadcrumbs') breadcrumbs: [];
+    @Input('showSaveBtn') showSaveBtn: [];
+    @Input('saveBtnData') saveBtnData: [];
+    @Input('showCancelBtn') showCancelBtn: [];
+    @Input('cancelBtnData') cancelBtnData: [];
 
     ngOnInit(){
-        
+
     }
 
     onSave(){

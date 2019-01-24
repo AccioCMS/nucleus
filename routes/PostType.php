@@ -3,9 +3,14 @@
 /**
  * Post Types Routes
  */
-
+Route::get('test/post-type/{any}', function(){
+    return view('index');
+});
+Route::get('test/post-type/{any}/{any2}', function(){
+    return view('index');
+});
 Route::group(
-    ['middleware' => ['auth:admin'], 'as' => 'backend.postType.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+    ['middleware' => ['auth:api'], 'as' => 'backend.postType.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
         /**
          * GET
          */

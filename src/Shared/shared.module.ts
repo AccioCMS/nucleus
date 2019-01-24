@@ -4,14 +4,18 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatStepperModule, MatTabsModule } from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { NucleusTemplateHeaderComponent } from './App/template-header/template-header.component';
+import { AccioDialogComponent } from './App/accio-dialog/accio-dialog.component';
+
 import { StoreModule } from "@ngrx/store";
 import { sharedReducer } from './Store/shared.reducers';
 
 @NgModule({
     declarations: [
-        NucleusTemplateHeaderComponent
+        NucleusTemplateHeaderComponent,
+        AccioDialogComponent
     ],
     imports: [
         CommonModule,
@@ -26,6 +30,7 @@ import { sharedReducer } from './Store/shared.reducers';
         MatExpansionModule,
         MatDividerModule,
         MatTabsModule,
+        MatDialogModule,
 
         StoreModule.forFeature('shared', sharedReducer),
     ],
@@ -42,7 +47,11 @@ import { sharedReducer } from './Store/shared.reducers';
         MatStepperModule,
         MatExpansionModule,
         MatDividerModule,
-        MatTabsModule
+        MatTabsModule,
+        MatDialogModule
+    ],
+    entryComponents: [
+        AccioDialogComponent
     ]
 })
 export class SharedModule { }

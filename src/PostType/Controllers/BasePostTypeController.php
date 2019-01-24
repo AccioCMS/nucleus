@@ -102,9 +102,9 @@ class BasePostTypeController extends MainController
     public function delete($lang, $id)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('PostType', 'delete')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('PostType', 'delete')) {
+//            return $this->noPermission();
+//        }
 
         $res = $this->deletePostType($id);
         if($res && is_bool($res)) {
@@ -246,9 +246,9 @@ class BasePostTypeController extends MainController
     public function store(Request $request)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('PostType', 'create')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('PostType', 'create')) {
+//            return $this->noPermission();
+//        }
         // custom messages for validation
         $messages = array(
             'name.required'=>'Post type name is required',
@@ -286,12 +286,12 @@ class BasePostTypeController extends MainController
         }
 
         $postType->name             = $request->name;
-        $postType->isVisible        = $request->isVisible;
-        $postType->fields           = $customFieldsArray;
+        $postType->isVisible        = $request->isVisible ? 1 : 0;
+        $postType->fields           = [];
         $postType->hasCategories    = $request->hasCategories;
         $postType->isCategoryRequired = $request->isCategoryRequired;
         $postType->hasTags          = $request->hasTags;
-        $postType->isTagRequired    = $request->isTagRequired;
+        $postType->isTagRequired    = $request->isTagRequired ? 1 : 0;
         $postType->hasFeaturedImage = $request->hasFeaturedImage;
         $postType->isFeaturedImageRequired = $request->isFeaturedImageRequired;
         $postType->hasFeaturedVideo = $request->hasFeaturedVideo;
@@ -307,7 +307,7 @@ class BasePostTypeController extends MainController
             }
 
             $redirectParams = parent::redirectParams($request->redirect, 'post-type', $postType->postTypeID);
-            return $this->response('Post type stored', 200, $postType->postTypeID, $redirectParams['view'], $redirectParams['redirectUrl']);
+            return $this->response('Post Type stored', 200, $postType->postTypeID, $redirectParams['view'], $redirectParams['redirectUrl']);
         }else{
             return $this->response('Post Type is not stored. Internal sever error', 500);
         }
@@ -324,9 +324,9 @@ class BasePostTypeController extends MainController
     public function detailsJSON($lang, $id)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('PostType', 'read')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('PostType', 'read')) {
+//            return $this->noPermission();
+//        }
         $postType = App\Models\PostType::find($id);
 
         $categories = [];
@@ -378,7 +378,8 @@ class BasePostTypeController extends MainController
      */
     public function getSlug($lang, $slug)
     {
-        return self::generateSlug($slug, 'post_type', 'postTypeID', $lang, 0);
+        $slug = self::generateSlug($slug, 'post_type', 'postTypeID', $lang, 0);
+        return response()->json(['slug' => $slug]);
     }
 
     /**

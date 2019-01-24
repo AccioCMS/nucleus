@@ -1,0 +1,79 @@
+<div class="page-layout blank" fusePerfectScrollbar>
+    <nucleus-template-header
+        (saveClicked)="onSave()"
+        (cancelClicked)="onCancel()"
+        [breadcrumbs]="breadcrumbs"
+        [showSaveBtn]="true"
+        [saveBtnData]="{ text: 'Save', icon: 'save'}"
+        [showCancelBtn]="true"
+        [cancelBtnData]="{ text: 'Cancel', icon: ''}"
+    >
+    </nucleus-template-header>
+
+    <div class="accio-container">
+        <div class="content-center">
+            <div class="accio-container-850" fuseperfectscrollbar="">
+                <div class="accio-content center p-24 pb-56 pr-24 ps ps--active-y p-sm-10 pr-sm-10">
+                    <form fxLayout="column" fxLayoutAlign="start"
+                          fxFlex="1 0 auto" name="postTypeForm" [formGroup]="postTypeForm">
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                            <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+                                <mat-label>Name</mat-label>
+                                <input matInput formControlName="name" required (blur)="createSlug()">
+                                <mat-icon matSuffix class="secondary-text">label</mat-icon>
+                                <mat-error>Name is required!</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-form-field appearance="outline" fxFlex="70" class="pl-4">
+                                <mat-label>Slug</mat-label>
+                                <input matInput formControlName="slug" required disabled>
+                                <mat-error>Slug is required!</mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="isVisible">Visible</mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="hasCategories">Has categories</mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="isCategoryRequired">Is category required</mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="hasTags">Has tags</mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="isTagRequired">Is tag required</mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="hasFeaturedImage">Has Featured image</mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="isFeaturedImageRequired">Is Featured image required
+                            </mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="hasFeaturedVideo">Has Featured video</mat-slide-toggle>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-slide-toggle formControlName="isFeaturedVideoRequired">Is Featured video required</mat-slide-toggle>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
