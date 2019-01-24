@@ -54,6 +54,14 @@ const initialState: SharedState = {
                     type     : 'item',
                     icon     : 'account_box',
                     url      : '/test/settings/general'
+                },
+                {
+                    id       : 'post-types',
+                    title    : 'Post Types',
+                    translate: 'NAV.POST_TYPES',
+                    type     : 'item',
+                    icon     : 'account_box',
+                    url      : '/test/post-type/list'
                 }
             ]
         },
@@ -121,25 +129,25 @@ export function sharedReducer(state = initialState, action: SharedActions.Shared
           return {
             ...state,
             globalData: action.payload
-          }; 
+          };
 
         case (SharedActions.SET_CMS_MENUS):
           return {
             ...state,
             cmsMenus: action.payload
           };
-          
+
         case (SharedActions.SET_LANGUAGES):
           return {
             ...state,
             languages: action.payload
-          }; 
-          
+          };
+
         case (SharedActions.SET_PLUGIN_CONFIGS):
           return {
             ...state,
             pluginsConfigs: action.payload
-          };   
+          };
         default:
           return state;
     }

@@ -337,7 +337,7 @@ class PostTypeModel extends Model
         }
 
         if($createRoutes) {
-            self::createRouteFile($postTypeSlug, $controller);
+            //self::createRouteFile($postTypeSlug, $controller);
         }
 
         self::createVirtualColumnsForSlug($postTypeSlug);

@@ -20,7 +20,7 @@ import { LanguageModule } from '../Language/Resources/language.module';
 import { MediaModule } from '../Media/Resources/media.module';
 import { MenuModule } from '../Menu/Resources/menu.module';
 import { PostModule } from '../Post/Resources/post.module';
-import { PostTypeModule } from '../PostType/Resources/postType.module';
+import { PostTypeModule } from '../PostType/Resources/post-type.module';
 import { SettingsModule } from '../Settings/Resources/settings.module';
 import { TagModule } from '../Tag/Resources/tag.module';
 
@@ -36,11 +36,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AuthGuard } from "../Auth/Resources/auth-guard.service";
 
+import { BaseBataResolver } from './base-data.resolver';
 
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
-    { path: 'test', component: NucleusComponent, canActivate: [AuthGuard], children: [
+    { path: 'test', component: NucleusComponent, canActivate: [AuthGuard], resolve: { items: BaseBataResolver },children: [
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
         { path: 'users', loadChildren: () => UserModule },
@@ -102,7 +103,8 @@ const nucleusRoutes: Routes = [
         RouterModule,
     ],
     providers: [
-        AuthGuard
+        AuthGuard,
+        BaseBataResolver
     ]
 })
 export class MainModule { }
