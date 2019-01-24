@@ -26,7 +26,7 @@ class UserModel extends Authenticatable
         Notifiable,
         Traits\UserTrait,
         TranslatableTrait,
-        //Cachable,
+//        Cachable,
         BootEventsTrait,
         CollectionTrait,
         HasApiTokens;
