@@ -313,15 +313,12 @@ class BaseUserController extends MainController
 
     public function detailsJSONWithouLang($id)
     {
-
-
         // check if user has permissions to access this link
 //        if(\Illuminate\Support\Facades\Auth::user()->userID != $id) {
 //            if (!User::hasAccess('User', 'read')) {
 //                return $this->noPermission();
 //            }
 //        }
-
 
 
         $user = App\Models\User::with('roles', 'profileImage')->find($id);
@@ -335,6 +332,63 @@ class BaseUserController extends MainController
         // Fire event
         $final['events'] = Event::fire('user:pre_update', [$final]);
         return $final;
+    }
+
+    public function storeUpdate(Request $request)
+    {
+        // check if user has permissions to access this link
+//        if(!User::hasAccess('user', 'update')) {
+//            return $this->noPermission();
+//        }
+        // validation
+//        $validator = Validator::make(
+//            $request->all(), [
+//                'password' => 'required|same:confpassword',
+//                'id' => 'required',
+//            ]
+//        );
+
+
+
+        // if validation fails return json response
+//        if ($validator->fails()) {
+//            return $this->response("Please check all required fields!", 400, null, false, false, true, $validator->errors());
+//        }
+//        return $request;
+
+//        return $request->user['id'];
+        $user = App\Models\User::find($request->user['id']);
+//        return $user;
+        $user->email = $request->user['email'];
+        $user->firstName = $request->user['firstName'];
+        $user->lastName = $request->user['lastName'];
+        $user->phone = $request->user['phone'];
+        $user->street = $request->user['street'];
+        $user->country = $request->user['email'];
+//        $user->isActive = $request->user['isActive'];
+
+        $user->save();
+
+
+//        $user = App\Models\User::where('userID', $request->id)->update(
+//            [
+//                'email' => $request['email'],
+//                'firstName' => $request['firstName'],
+//                'lastName' => $request['lastName'],
+//                'phone' => $request['phone'],
+//                'street' => $request['street'],
+//                'country' => $request['country'],
+//                'isActive' => $request['isActive'],
+//            ]
+//        );
+
+        if($user){
+            return 1;
+        }else{
+            return 0;
+        }
+
+
     }
 
     /**

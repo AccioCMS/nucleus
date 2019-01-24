@@ -67,8 +67,7 @@ export class UserListComponent
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
     }
-
-
+j
     hack(val) {
         return Array.from(val);
     }

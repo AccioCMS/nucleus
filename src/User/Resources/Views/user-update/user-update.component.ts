@@ -60,13 +60,14 @@ export class UserUpdateComponent
      * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
      */
     public users = [];
-    public email: string;
-    public firstName: string;
-    public lastName: string;
-    public phone: string;
-    public street: string;
-    public country: string;
-    public about: string
+    public email: string = "";
+    public firstName: string = "";
+    public lastName: string = "";
+    public phone: string = "";
+    public street: string = "";
+    public country: string = "";
+    public about: string = "";
+    public isActive: number = 1;
 
     breadcrumbs = ['Users', 'Update User'];
 
@@ -102,33 +103,58 @@ export class UserUpdateComponent
     ngOnInit() {
         this.id = this.route.snapshot.paramMap.get("id")
         this.getUser();
+
+
         this.usersForm = this._formBuilder.group({
-            email: [this.email+" s", Validators.required],
-            lastName: [''],
-            firstName: [''],
-            password: ['', Validators.required],
-            conf_password: [''],
-            phone: [''],
-            street: [''],
-            country: [''],
-            groups: [''],
-            about   : ['', Validators.required],
+            email: [' ', Validators.required],
+            lastName: [' '],
+            firstName: [' '],
+            password: [' ', Validators.required],
+            conf_password: [' '],
+            phone: [' '],
+            street: [' '],
+            country: [' '],
+            groups: [' '],
+            about   : [' ', Validators.required],
+            isActive :[''],
         });
     }
 
-
-    ngOnChanges() {
-        if (this.usersForm) {
-            this.usersForm.setValue({ email: this.email});
-        }
-    }
+    // ngOnChanges() {
+    //     if (this.usersForm) {
+    //         this.usersForm.setValue({ email: this.email});
+    //     }
+    // }
 
     hack(val) {
         return Array.from(val);
     }
 
     onSave(){
-        this.getUser();
+        this.updateUser();
+    }
+
+    updateUser() {
+        // this.showErrorMessage = false;
+        // let formData = this.usersForm.value;
+        this.id = this.route.snapshot.paramMap.get('id');
+
+        let formData = this.usersForm.value;
+        // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
+        let data = {'user' : {id:  this.id , email: this.usersForm.get('email').value, lastName: formData.lastName, firstName: formData.firstName,
+                phone: formData.phone, street: formData.street, country: formData.country , about: formData.about, groups: formData.groups}};
+        console.log(data);
+        this.httpClient.post("/api/user/storeUpdate/",data)
+            .map(
+                (data) => {
+                    if(data == 1){
+                        this.router.navigate(["/test/users/list/"+this.id+""])
+                    }else{
+                    }
+                }
+            )
+            .subscribe();
+
     }
 
     getUser() {
@@ -136,21 +162,22 @@ export class UserUpdateComponent
         // let formData = this.usersForm.value;
         this.id = this.route.snapshot.paramMap.get('id');
 
-            // this.id = +params['id']; // (+) converts string 'id' to a number
 
-        // console.log( this.id);
-        this.httpClient.post("/api/user/get/"+this.id+"")
+        // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
+
+        this.httpClient.post("/api/user/get/"+this.id)
             .map(
                 (data) => {
-                    this.email = data['details'].email;
+               /*     this.email = data['details'].email;
                     this.firstName = data['details'].firstName;
                     this.lastName = data['details'].lastName;
                     this.phone = data['details'].phone;
                     this.street = data['details'].street;
                     this.country = data['details'].country;
-                    this.about = data['details'].about;
+                    this.about = data['details'].about;*/
+               // console.log(data);
 
-                    if(data== true){
+                    if(data){
                         this.email = data['details'].email;
                         this.firstName = data['details'].firstName;
                         this.lastName = data['details'].lastName;
@@ -158,19 +185,38 @@ export class UserUpdateComponent
                         this.street = data['details'].street;
                         this.country = data['details'].country;
                         this.about = data['details'].about;
+
                     }else{
                         // this.showErrorMessage = true;
                     }
                 }
             )
             .subscribe();
-        console.log('Save clicked');
+        // console.log('Save clicked');
     }
 
     onCancel(){
         console.log('Cancel clicked');
     }
 
+
+}
+
+
+export class UserModel {
+
+    constructor(
+        public email: string,
+        public firstName: string,
+        public lastName: string,
+        public phone: string,
+        public street: string,
+        public country: string,
+        public about: string
+    )
+    {
+
+    }
 
 }
 

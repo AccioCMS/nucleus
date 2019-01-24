@@ -12,11 +12,18 @@ Route::get('test/users/update/{any}', function(){
     return view('index');
 });
 
+
+//Users Routes for angular
+
 Route::any('/api/user/store', '\App\Http\Controllers\Backend\UserController@store')->name('store');
 
 Route::any('/api/user/get/{id}','\App\Http\Controllers\Backend\UserController@detailsJSONWithouLang')->name('detailsJSONWithouLang');
+
+Route::post('/api/user/storeUpdate', '\App\Http\Controllers\Backend\UserController@storeUpdate')->name('storeUpdate');
+
 Route::group(
     ['middleware' => ['auth:api'], 'as' => 'backend.user.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+
         /**
          * GET
          */
@@ -39,10 +46,8 @@ Route::group(
          * POST
          */
 
-
-
         Route::post('/json/user/store', 'UserController@store')->name('store');
-        Route::post('/json/user/storeUpdate', 'UserController@storeUpdate')->name('storeUpdate');
+        Route::post('/json/user/storeUpdate', 'UserController@c')->name('storeUpdate');
         Route::post('/json/user/bulk-delete', 'UserController@bulkDelete')->name('bulkDelete');
         Route::post('/json/user/resetPassword', 'UserController@resetPassword')->name('resetPassword');
         Route::post('/json/user/advanced-search-results', 'UserController@getAdvancedSearchFieldsResults')->name('getAdvancedSearchFieldsResults');

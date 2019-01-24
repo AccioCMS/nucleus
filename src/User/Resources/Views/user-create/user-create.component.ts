@@ -84,14 +84,13 @@ export class UserCreateComponent
 
         this.usersForm = this._formBuilder.group({
             email: ['', Validators.required],
-            lastName: [''],
+            lastname: [''],
             firstName: [''],
             password: ['', Validators.required],
             conf_password: [''],
             phone: [''],
             street: [''],
             country: [''],
-            groups: [''],
             about   : ['', Validators.required],
         });
     }
@@ -104,15 +103,15 @@ export class UserCreateComponent
     onSave(){
         // this.showErrorMessage = false;
         let formData = this.usersForm.value;
-        let credentials = {'user' : { email: formData.email, lastName: formData.lastName, firstName: formData.firstName, password: formData.password,
-            phone: formData.phone, street: formData.street, country: formData.country , about: formData.about, groups: formData.groups }};
+        let credentials = { email: formData.email, lastname: formData.lastname, firstName: formData.firstName, password: formData.password,
+            phone: formData.phone, street: formData.street, country: formData.country , about: formData.about };
 
         this.httpClient.post('/api/user/store', credentials)
             .map(
                 (data) => {
-                    console.log(credentials);
-                    if(data== true){
-                        console.log(data +" SUUKSSSESSS");
+                    // console.log(data);
+                    if(data['success'] == true){
+
                         // this.store.dispatch(new AuthActions.Signin(data['access_token']))
                         this.router.navigate(['/test/fuse'])
                     }else{
