@@ -10,6 +10,10 @@
     >
     </nucleus-template-header>
 
+    <div class="spinner" *ngIf="spinner">
+        <mat-spinner color="accent" [diameter]="60"></mat-spinner>
+    </div>
+
     <div class="accio-container">
         <div class="content-center">
             <div class="accio-container-850" fuseperfectscrollbar="">

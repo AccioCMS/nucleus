@@ -1,14 +1,15 @@
 <div class="page-layout blank" fusePerfectScrollbar>
-    <div class="accio-container">
+    <div class="accio-container" style="margin-top: 70px;">
         <div class="content-center">
             <div class="accio-container-250 mr-8" fuseperfectscrollbar="">
                 <div class="settings-sidebar sidebar" name="mail-main-sidebar" position="left" lockedOpen="gt-md">
-                    <div class="content" fusePerfectScrollbar [@animate]="{value:'*',params:{y:'50px'}}">
-                    
+                    <!--<div class="content" fusePerfectScrollbar [@animate]="{value:'*',params:{y:'50px'}}">-->
+                    <div class="content" fusePerfectScrollbar>
+
                         <div class="nav material2">
-                    
+
                             <div class="nav-subheader">APPS</div>
-                    
+
                             <div class="nav-item" >
                                 <a class="nav-link" matRipple [routerLink]="'general'"
                                     [routerLinkActive]="['active', 'settings-nav-active']">
@@ -26,7 +27,7 @@
                             </div>
 
                             <div class="nav-item" >
-                                <a class="nav-link" matRipple [routerLink]="'language'"
+                                <a class="nav-link" matRipple [routerLink]="'language/list'"
                                     [routerLinkActive]="['active', 'settings-nav-active']">
                                     <mat-icon class="nav-link-icon">language</mat-icon>
                                     <span>Languages</span>
@@ -58,22 +59,19 @@
                                     <span>Important</span>
                                 </a>
                             </div>
-                    
+
                         </div>
-                    
+
                     </div>
                 </div>
-                
-            </div> 
-            <div class="accio-container-900 mr-0" fuseperfectscrollbar="">
-                <div class="accio-content center p-24 pb-56 pr-sm-24 ps ps--active-y ">
 
-                    <router-outlet></router-outlet>   
-                </div>
-            </div> 
+            </div>
+            <div class="accio-container-900 mr-0 settings-content" fuseperfectscrollbar="">
+                <router-outlet></router-outlet>
+            </div>
         </div>
     </div>
 </div>
 
 
- 
+

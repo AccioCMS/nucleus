@@ -162,15 +162,11 @@ export class UserUpdateComponent
         // let formData = this.usersForm.value;
         this.id = this.route.snapshot.paramMap.get('id');
 
-
-<<<<<<< HEAD
         // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
 
-        this.httpClient.post("/api/user/get/"+this.id)
-=======
+        //this.httpClient.post("/api/user/get/"+this.id)
         // console.log( this.id);
         this.httpClient.get("/api/user/get/"+this.id+"")
->>>>>>> f9bf42ea602d487e78ef6cc78129db534bfd82ee
             .map(
                 (data) => {
                /*     this.email = data['details'].email;

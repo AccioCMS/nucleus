@@ -3,9 +3,15 @@
 /**
  * Language Routes
  */
+Route::get('test/settings/language/{any}', function(){
+    return view('index');
+});
+Route::get('test/settings/language/{any}/{any2}', function(){
+    return view('index');
+});
 
 Route::group(
-    ['middleware' => ['auth:admin'], 'as' => 'backend.language.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+    ['middleware' => ['auth:api'], 'as' => 'backend.language.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
         /**
          * GET
          */

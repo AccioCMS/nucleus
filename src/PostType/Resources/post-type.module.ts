@@ -24,11 +24,6 @@ import { PostTypeEditComponent } from './Views/post-type-edit/post-type-edit.com
       PostTypeRoutingModule,
 
       //Material
-      MatButtonModule,
-      MatCheckboxModule,
-      MatFormFieldModule,
-      MatIconModule,
-      MatInputModule,
       MatSlideToggleModule,
       MatSnackBarModule,
       MatGridListModule,

@@ -1,22 +1,37 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
+import { MatGridListModule, MatCardModule, MatChipsModule, MatPaginatorModule, MatTableModule, MatMenuModule, MatSlideToggleModule } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '../../Shared/shared.module';
+
+import { LanguageRoutingModule } from './language-routing.module'
+import { LanguageListComponent } from './Views/language-list/language-list.component';
+import { LanguageCreateComponent } from './Views/language-create/language-create.component';
+import { LanguageEditComponent } from './Views/language-edit/language-edit.component';
 
 @NgModule({
   declarations: [
+      LanguageListComponent,
+      LanguageCreateComponent,
+      LanguageEditComponent
   ],
   imports: [
-    
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
+      SharedModule,
+      LanguageRoutingModule,
 
-    TranslateModule,
-    FuseSharedModule,
+      MatGridListModule,
+      MatCardModule,
+      MatChipsModule,
+      MatPaginatorModule,
+      MatTableModule,
+      MatMenuModule,
+      MatSlideToggleModule,
+      MatSnackBarModule,
+
+      TranslateModule,
+      FuseSharedModule,
   ]
 })
 export class LanguageModule {}

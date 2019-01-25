@@ -35,13 +35,13 @@
             width: 1160px;
             margin-bottom: 20px;
         }
-        
+
         .accio-container-850{
             float: left;
             width: 850px;
             margin-right: 10px;
         }
-        
+
         .accio-container-300{
             float: left;
             width: 300px;
@@ -61,7 +61,7 @@
             width: 850px;
             margin-bottom: 5px;
         }
-        
+
         .accio-content{
             background-color: $accio-container-background;
             margin-bottom: 20px;
@@ -127,6 +127,137 @@
             &.fa{
                 font-family: FontAwesome !important;
             }
+        }
+    }
+
+    .filter {
+        height: 50px;
+        background-color: #F5F5F5;
+
+        mat-chip  {
+            margin: 0;
+            margin-top: 1% !important;
+            left: 1%;
+
+            color: black !important;
+            background-color: unset !important;
+            border: dotted .5px !important;
+            font-weight: 100 ;
+        }
+    }
+
+    .table-header-icons {
+        float: right !important;
+    }
+
+    .content{
+        display: flex;
+        flex: 1 1 auto;
+        width: 100%;
+
+        mat-card {
+            width: 100%;
+
+        }
+
+        table {
+            width: 100%;
+            background: transparent;
+            box-shadow: none;
+
+            .mat-column-checkbox {
+                flex: 0 1 64px;
+                padding-left: 18px;
+            }
+
+            .mat-column-avatar {
+                flex: 0 1 64px;
+            }
+
+            .mat-column-buttons {
+                flex: 0 1 80px;
+            }
+
+            .mat-column-buttons > button{
+                //float: right;
+            }jjj
+
+             .mat-row {
+                 position: relative;
+                 cursor: pointer;
+                 padding: 8px;
+
+                 .mat-cell {
+                     min-width: 0;
+
+                     &.mat-column-detail-button {
+                         flex: 0 1 auto;
+                         padding: 0 24px 0 0;
+
+                         @include media-breakpoint('gt-md') {
+                             display: none;
+                         }
+                     }
+                 }
+             }
+        }
+    }
+
+    #add-contact-button {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        padding: 0;
+        z-index: 99;
+    }
+
+    .actions-column{
+        text-align: right;
+    }
+
+    .actions-column-btn{
+        text-align: right;
+
+        button{
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+    }
+
+
+    settings{
+        .settings-content{
+            nucleus-template-header{
+                position: absolute;
+                width: calc(100% );
+                left: 0px;
+                top: 2px;
+            }
+        }
+    }
+
+    div{
+        &.spinner{
+            position: absolute;
+            z-index: 9;
+            width: 100%;
+            left: 0;
+            height: 100%;
+            top: 0px;
+            background: rgba(0, 0, 0, 0.5);
+
+            mat-spinner{
+                width: 100px;
+                height: 100px;
+                margin: 0 auto;
+                margin-top: 20%;
+            }
+        }
+    }
+
+    mat-spinner{
+        &.center{
+            margin: 0 auto;
         }
     }
 }

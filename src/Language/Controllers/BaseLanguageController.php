@@ -31,9 +31,9 @@ class BaseLanguageController extends MainController
      */
     public function getAll($lang = "")
     {
-        if(!User::hasAccess('Language', 'read')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('Language', 'read')) {
+//            return $this->noPermission();
+//        }
         return ['data' => Language::all()];
     }
 
@@ -62,9 +62,9 @@ class BaseLanguageController extends MainController
      */
     public function delete($lang, $id)
     {
-        if(!User::hasAccess('Language', 'delete')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('Language', 'delete')) {
+//            return $this->noPermission();
+//        }
         $language = Language::find($id);
 
         if($language) {
@@ -79,7 +79,7 @@ class BaseLanguageController extends MainController
                     AccioQuery::deleteColumn($postType->slug, "slug_".$language->slug);
                 }
 
-                $this->deleteDirectory($language->slug);
+                //$this->deleteDirectory($language->slug);
                 return $this->response('The Language was deleted');
             }
         }
@@ -139,9 +139,9 @@ class BaseLanguageController extends MainController
     public function store(Request $request)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Language', (isset($request->id)) ? 'update' : 'create')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('Language', (isset($request->id)) ? 'update' : 'create')) {
+//            return $this->noPermission();
+//        }
         // custom messages for validation
         $messages = array(
             'name.required'=>'Language name is required',
@@ -194,11 +194,12 @@ class BaseLanguageController extends MainController
             }
 
             // create labels
-            if(!isset($request->id)) {
-                $this->createNewLanguageLabels($language->slug);
-            }
+//            if(!isset($request->id)) {
+//                $this->createNewLanguageLabels($language->slug);
+//            }
 
             $redirectParams = parent::redirectParams($request->redirect, 'language', $language->languageID);
+            $result = $this->response('Language is stored', 200, $language->languageID, $redirectParams['view'], $redirectParams['redirectUrl']);
             $result = $this->response('Language is stored', 200, $language->languageID, $redirectParams['view'], $redirectParams['redirectUrl']);
         }else{
             $result = $this->response('Language could not be stored. Internal server error. Please try again later', 500);
@@ -235,9 +236,9 @@ class BaseLanguageController extends MainController
      * */
     public function detailsJSON($lang, $id)
     {
-        if(!User::hasAccess('Language', 'read')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('Language', 'read')) {
+//            return $this->noPermission();
+//        }
 
         $language = Language::find($id);
         $final = array(
