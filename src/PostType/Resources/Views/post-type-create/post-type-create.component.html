@@ -22,61 +22,128 @@
                           fxFlex="1 0 auto" name="postTypeForm" [formGroup]="postTypeForm">
 
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-                            <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+                            <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
                                 <mat-label>Name</mat-label>
                                 <input matInput formControlName="name" required (blur)="createSlug()">
                                 <mat-icon matSuffix class="secondary-text">label</mat-icon>
                                 <mat-error>Name is required!</mat-error>
                             </mat-form-field>
                         </div>
+
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-form-field appearance="outline" fxFlex="70" class="pl-4">
+                            <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
                                 <mat-label>Slug</mat-label>
-                                <input matInput formControlName="slug" required disabled>
+                                <input matInput formControlName="slug" required>
                                 <mat-error>Slug is required!</mat-error>
                             </mat-form-field>
-
-                        </div>
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="isVisible">Visible</mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="hasCategories">Has categories</mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="isCategoryRequired">Is category required</mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="hasTags">Has tags</mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="isTagRequired">Is tag required</mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="hasFeaturedImage">Has Featured image</mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="isFeaturedImageRequired">Is Featured image required
-                            </mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="hasFeaturedVideo">Has Featured video</mat-slide-toggle>
-                        </div>
-
-                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                            <mat-slide-toggle formControlName="isFeaturedVideoRequired">Is Featured video required</mat-slide-toggle>
                         </div>
 
                     </form>
                 </div>
+            </div>
+            <div class="accio-container-300" fuseperfectscrollbar="">
+                <form name="postTypeForm" [formGroup]="postTypeForm">
+
+                    <div class="expansion-panel-seperator">
+                        <mat-accordion>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="pr-sm-32">visibility</mat-icon>
+                                        Visibility
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                    <mat-slide-toggle formControlName="isVisible">Visible</mat-slide-toggle>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+
+                    <div class="expansion-panel-seperator">
+                        <mat-accordion>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="pr-sm-32">notes</mat-icon>
+                                        Categories
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="hasCategories">Has categories</mat-slide-toggle>
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="isCategoryRequired">Is category required</mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="pr-sm-32">notes</mat-icon>
+                                        Tags
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="hasTags">Has tags</mat-slide-toggle>
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="isTagRequired">Is tag required</mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+
+                    <div class="expansion-panel-seperator">
+                        <mat-accordion>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="pr-sm-32">perm_media</mat-icon>
+                                        Image
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="hasFeaturedImage">Has Featured image</mat-slide-toggle>
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="isFeaturedImageRequired">Is Featured image required
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="pr-sm-32">videocam</mat-icon>
+                                        Video
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="hasFeaturedVideo">Has Featured video</mat-slide-toggle>
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                        <mat-slide-toggle formControlName="isFeaturedVideoRequired">Is Featured video required</mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+
+                </form>
+
             </div>
         </div>
     </div>

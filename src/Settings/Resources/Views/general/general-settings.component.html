@@ -1,109 +1,125 @@
-<div class="accio-content center p-24 pb-56 pr-sm-24 ps ps--active-y">
+<nucleus-template-header
+    (saveClicked)="onSave()"
+    (cancelClicked)="onCancel()"
+    [breadcrumbs]="breadcrumbs"
+    [showSaveBtn]="true"
+    [saveBtnData]="{ text: 'Save', icon: 'save'}"
+    [showCancelBtn]="true"
+    [cancelBtnData]="{ text: 'Cancel', icon: ''}"
+>
+</nucleus-template-header>
+<div class="spinner" *ngIf="spinner">
+    <mat-spinner color="accent" [diameter]="60"></mat-spinner>
+</div>
+<div class="accio-content center p-16 pb-56 ps ps--active-y">
     <form fxLayout="column" fxLayoutAlign="start"
-        fxFlex="1 0 auto" name="exampleForm" [formGroup]="exampleForm">
+        fxFlex="1 0 auto" name="settingsForm" [formGroup]="settingsForm">
         <div class="h2 mb-24">Site Settings</div>
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
+        <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
             <mat-tab-group fxFlex="100">
                 <mat-tab label="First"> Content 1 </mat-tab>
                 <mat-tab label="Second"> Content 2 </mat-tab>
                 <mat-tab label="Third"> Content 3 </mat-tab>
             </mat-tab-group>
-        </div>
+        </div>-->
 
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                <mat-label>First name</mat-label>
-                <input matInput formControlName="firstName" required>
+            <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+                <mat-label>Site Title</mat-label>
+                <input matInput formControlName="sitTitle" required>
                 <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                <mat-error>First Name is required!</mat-error>
+                <mat-error>Site Title is required!</mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-                <mat-label>Last name</mat-label>
-                <input matInput formControlName="lastName" required>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+                <mat-label>Admin Email</mat-label>
+                <input matInput formControlName="adminEmail" required>
                 <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                <mat-error>Last Name is required!</mat-error>
-            </mat-form-field>
-
-        </div>
-
-        <div fxLayout="row wrap" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-            <mat-form-field appearance="outline" fxFlex="100">
-                <mat-label>Address</mat-label>
-                <textarea matInput formControlName="address" required>
-                    1600 Amphitheatre Pkwy
-                </textarea>
-                <mat-error>Address is required!</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" fxFlex="100">
-                <mat-label>Address 2</mat-label>
-                <textarea matInput formControlName="address2"></textarea>
-                <mat-error>Address 2 is required!</mat-error>
+                <mat-error>Admin Email is required!</mat-error>
             </mat-form-field>
 
         </div>
 
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-            <mat-form-field appearance="outline" fxFlex="33">
-                <mat-label>City</mat-label>
-                <input matInput formControlName="city" required>
-                <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
-                <mat-error>City is required!</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" fxFlex="34" class="px-8">
-                <mat-label>State</mat-label>
-                <input matInput formControlName="state" required>
-                <mat-icon matSuffix class="secondary-text">location_city</mat-icon>
-                <mat-error>State is required!</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" fxFlex="33">
-                <mat-label>Postal Code</mat-label>
-                <input matInput #postalCode value="94043"
-                        formControlName="postalCode" maxlength="5" required>
-                <mat-icon matSuffix class="secondary-text">markunread_mailbox</mat-icon>
-                <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-                <mat-error>Postal Code is required!</mat-error>
-            </mat-form-field>
-
-        </div>
-
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-            <mat-form-field appearance="outline" fxFlex="100">
-                <mat-label>Country</mat-label>
-                <mat-select formControlName="country" required>
-                    <mat-option [value]="'United States of America'">
-                        United States of America
-                    </mat-option>
-                    <mat-option [value]="'United Kingdom'">
-                        United Kingdom
-                    </mat-option>
-                    <mat-option [value]="'Russia'">
-                        Russia
-                    </mat-option>
-                    <mat-option [value]="'China'">
-                        China
-                    </mat-option>
-                    <mat-option [value]="'Japan'">
-                        Japan
-                    </mat-option>
-                    <mat-option [value]="'Turkey'">
-                        Turkey
+            <mat-form-field fxFlex="70">
+                <mat-select formControlName="defaultUserRole" placeholder="Default User Role">
+                    <mat-option
+                        *ngFor="let userGroup of userGroups"
+                        [value]="userGroup.slug">
+                        {{ userGroup.name }}
                     </mat-option>
                 </mat-select>
-                <mat-icon matSuffix class="secondary-text">outlined_flag</mat-icon>
-                <mat-error>Country is required!</mat-error>
+                <mat-error>User Group is required!</mat-error>
             </mat-form-field>
-
         </div>
+
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field fxFlex="70">
+                <mat-select formControlName="timezone" placeholder="Timezone">
+                    <mat-option
+                        *ngFor="let timezone of timezoneOptions"
+                        [value]="timezone">
+                        {{ timezone }}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Timezone is required!</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field fxFlex="70">
+                <mat-select formControlName="defaultLanguage" placeholder="Default Language">
+                    <mat-option
+                        *ngFor="let language of languages"
+                        [value]="language.name">
+                        {{ language.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Default Language is required!</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field fxFlex="70">
+                <mat-select formControlName="homepageID" placeholder="Home Page">
+                    <mat-option
+                        *ngFor="let page of pages"
+                        [value]="page.postID">
+                        {{ page.title }}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Home Page is required!</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            <mat-form-field fxFlex="70">
+                <mat-select formControlName="activeTheme" placeholder="Active Theme">
+                    <mat-option
+                        *ngFor="let theme of themes"
+                        [value]="theme">
+                        {{ theme }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-slide-toggle formControlName="activateMobileTheme">Activate Mobile Theme</mat-slide-toggle>
+        </div>
+
+        <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-accordion fxFlex="100">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
@@ -116,6 +132,6 @@
                     <p>Lorem Ipsum</p>
                 </mat-expansion-panel>
             </mat-accordion>
-        </div>
+        </div>-->
     </form>
 </div>

@@ -94,16 +94,18 @@ export class PostTypeCreateComponent implements OnInit
 
     createSlug(title, index){
         let name = this.postTypeForm.value.name;
-        this.httpClient.get('/admin/en/json/post-type/check-slug/'+name)
-            .map(
-                (data) => {
-                    this.postTypeForm.patchValue({
-                        slug: data['slug']
-                    });
-                    this.slug  = data['slug'];
-                }
-            )
-            .subscribe();
+        if(name != ''){
+            this.httpClient.get('/admin/en/json/post-type/check-slug/'+name)
+                .map(
+                    (data) => {
+                        this.postTypeForm.patchValue({
+                            slug: data['slug']
+                        });
+                        this.slug  = data['slug'];
+                    }
+                )
+                .subscribe();
+        }
     }
 
     openSnackBar(message: string, action: string) {
