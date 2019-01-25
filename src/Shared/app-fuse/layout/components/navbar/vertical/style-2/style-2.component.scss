@@ -36,7 +36,9 @@ fuse-sidebar {
                     .navbar-header {
                         padding: 0 13px;
 
+
                         .logo {
+
 
                             .logo-text {
                                 opacity: 0;
@@ -107,6 +109,9 @@ navbar {
             .logo {
                 display: flex;
                 align-items: center;
+
+                right: 50% !important;
+                position: relative !important;
 
                 .logo-icon {
                     width: 38px;

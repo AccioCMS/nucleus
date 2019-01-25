@@ -41,11 +41,7 @@ import { BaseBataResolver } from './base-data.resolver';
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
-<<<<<<< HEAD
-    { path: 'test', component: NucleusComponent, canActivate: [AuthGuard], children: [
-=======
     { path: 'test', component: NucleusComponent, canActivate: [AuthGuard], resolve: { items: BaseBataResolver },children: [
->>>>>>> f9bf42ea602d487e78ef6cc78129db534bfd82ee
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
         { path: 'users', loadChildren: () => UserModule },
@@ -98,8 +94,6 @@ const nucleusRoutes: Routes = [
         TagModule,
         BrowserModule,
         HttpClientModule
-
-
     ],
 
     exports: [

@@ -43,13 +43,11 @@
                 </button>
 
             </mat-menu>
-
             <!-- <div class="toolbar-separator"></div> -->
 
             <fuse-search-bar (input)="search($event)"></fuse-search-bar>
 
             <!-- <div class="toolbar-separator"></div> -->
-
             <button mat-button fxHide fxShow.gt-xs
                     class="language-button"
                     [matMenuTriggerFor]="languageMenu">
@@ -65,7 +63,6 @@
                     aria-label="Toggle quick panel">
                 <mat-icon class="secondary-text">apps</mat-icon>
             </button>
-
 
             <button mat-button [matMenuTriggerFor]="userMenu"
                     class="user-button">
