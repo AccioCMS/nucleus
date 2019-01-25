@@ -8,18 +8,22 @@ Route::get('test/users/{any}', function(){
     return view('index');
 });
 
-Route::get('test/users/update/{any}', function(){
+Route::get('test/users/edit/{any}', function(){
     return view('index');
 });
 
 
 //Users Routes for angular
 
+Route::get('{lang}/json/user/get-all', '\App\Http\Controllers\Backend\UserController@getAll')->name('getAll');
+
 Route::any('/api/user/store', '\App\Http\Controllers\Backend\UserController@store')->name('store');
 
 Route::any('/api/user/get/{id}','\App\Http\Controllers\Backend\UserController@detailsJSONWithouLang')->name('detailsJSONWithouLang');
 
-Route::post('/api/user/storeUpdate', '\App\Http\Controllers\Backend\UserController@storeUpdate')->name('storeUpdate');
+Route::any('/api/user/storeUpdate', '\App\Http\Controllers\Backend\UserController@storeUpdate')->name('storeUpdate');
+
+Route::get('/api/json/user/delete/{lang}/{id}', '\App\Http\Controllers\Backend\UserController@delete')->name('delete');
 
 Route::group(
     ['middleware' => ['auth:api'], 'as' => 'backend.user.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {

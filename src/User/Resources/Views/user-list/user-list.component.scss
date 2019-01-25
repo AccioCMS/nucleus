@@ -4,11 +4,14 @@
 .filter {
     height: 50px;
     background-color: #F5F5F5;
+    border-left: 1px solid #c5c5c5;
+    border-right: 1px solid #c5c5c5;
 
     mat-chip  {
         margin: 0;
         margin-top: 1% !important;
         left: 1%;
+
 
         color: black !important;
         background-color: unset !important;

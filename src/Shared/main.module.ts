@@ -94,8 +94,6 @@ const nucleusRoutes: Routes = [
         TagModule,
         BrowserModule,
         HttpClientModule
-
-
     ],
 
     exports: [

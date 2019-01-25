@@ -8,7 +8,7 @@ import { UserUpdateComponent} from "./Views/user-update/user-update.component";
 const userRoutes: Routes = [
     { path: 'list', component: UserListComponent },
     { path: 'add', component: UserCreateComponent },
-    { path: 'update/:id', component: UserUpdateComponent }
+    { path: 'edit/:id', component: UserUpdateComponent }
 ];
 
 @NgModule({

@@ -79,9 +79,9 @@ class BaseUserController extends MainController
     public function getAll($lang = "")
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('User', 'read')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('User', 'read')) {
+//            return $this->noPermission();
+//        }
 
         $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
         $orderType = (isset($_GET['type'])) ? $orderType = $_GET['type'] : 'DESC';
@@ -241,9 +241,9 @@ class BaseUserController extends MainController
     private function deleteUser($id)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('user', 'delete')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('user', 'delete')) {
+//            return $this->noPermission();
+//        }
 
         $user = User::find($id);
         // user can't be deleted if it has related data to him, like posts, categories ect
@@ -365,7 +365,7 @@ class BaseUserController extends MainController
         $user->phone = $request->user['phone'];
         $user->street = $request->user['street'];
         $user->country = $request->user['email'];
-//        $user->isActive = $request->user['isActive'];
+        $user->isActive = $request->user['isActive'];
 
         $user->save();
 
