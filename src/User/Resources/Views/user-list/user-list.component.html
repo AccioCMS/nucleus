@@ -1,7 +1,14 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
-    <span>
-        <h2>{{'USERS.USERS' | translate}}</h2>
-    </span>
+<div class="page-layout blank blank" fusePerfectScrollbar>
+    <nucleus-template-header
+        (saveClicked)="addNew()"
+        (cancelClicked)="onCancel()"
+        [breadcrumbs]="breadcrumbs"
+        [showSaveBtn]="true"
+        [saveBtnData]="{ text: 'Add New', icon: 'note_add'}"
+        [showCancelBtn]="false"
+        [cancelBtnData]="{ text: '', icon: ''}"
+    >
+    </nucleus-template-header>
     <div class="accio-container">
         <div class="content-center">
             <div class="center p-24 pb-56 pr-sm-92 ps ps--active-y accio-container-1160" fuseperfectscrollbar="">

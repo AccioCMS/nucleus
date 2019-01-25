@@ -138,6 +138,11 @@ export class UserListComponent
     }
 
 
+    addNew(){
+        this.router.navigate(['../add/'], {relativeTo: this.route});
+    }
+
+
 
 }
 
