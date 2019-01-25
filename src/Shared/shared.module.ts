@@ -5,6 +5,7 @@ import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, 
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { NucleusTemplateHeaderComponent } from './App/template-header/template-header.component';
 import { AccioDialogComponent } from './App/accio-dialog/accio-dialog.component';
@@ -31,6 +32,7 @@ import { sharedReducer } from './Store/shared.reducers';
         MatDividerModule,
         MatTabsModule,
         MatDialogModule,
+        MatProgressSpinnerModule,
 
         StoreModule.forFeature('shared', sharedReducer),
     ],
@@ -48,7 +50,8 @@ import { sharedReducer } from './Store/shared.reducers';
         MatExpansionModule,
         MatDividerModule,
         MatTabsModule,
-        MatDialogModule
+        MatDialogModule,
+        MatProgressSpinnerModule
     ],
     entryComponents: [
         AccioDialogComponent

@@ -21,6 +21,8 @@ export class PostTypeCreateComponent implements OnInit
     breadcrumbs = ['Post Type', 'Add New'];
     postTypeForm: FormGroup;
     slug = '';
+    spinner: boolean = false;
+
     /**
      * Constructor
      *
@@ -62,6 +64,7 @@ export class PostTypeCreateComponent implements OnInit
 
     onSave(){
         if(this.postTypeForm.valid){
+            this.spinner = true;
             let data = this.postTypeForm.value;
             data.fields = [];
             data.slug = this.slug;
@@ -83,6 +86,10 @@ export class PostTypeCreateComponent implements OnInit
                 control.markAsTouched({ onlySelf: true });
             });
         }
+    }
+
+    onCancel(){
+        this.router.navigate(['../list'], {relativeTo:this.route});
     }
 
     createSlug(title, index){

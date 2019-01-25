@@ -1,20 +1,21 @@
-<div class="page-layout blank" fusePerfectScrollbar>
-    <nucleus-template-header
-        (saveClicked)="addNew()"
-        (cancelClicked)="onCancel()"
-        [breadcrumbs]="breadcrumbs"
-        [showSaveBtn]="true"
-        [saveBtnData]="{ text: 'Add New', icon: 'note_add'}"
-        [showCancelBtn]="false"
-        [cancelBtnData]="{ text: '', icon: ''}"
-    >
-    </nucleus-template-header>
+<nucleus-template-header
+    (saveClicked)="addNew()"
+    (cancelClicked)="onCancel()"
+    [breadcrumbs]="breadcrumbs"
+    [showSaveBtn]="true"
+    [saveBtnData]="{ text: 'Add Language', icon: 'note_add'}"
+    [showCancelBtn]="true"
+    [cancelBtnData]="{ text: '', icon: ''}"
+>
+</nucleus-template-header>
+<div class="accio-container">
+       <div class="center ps ps--active-y " fuseperfectscrollbar="">
 
-    <div class="accio-container">
-        <div class="content-center">
-            <div class="center p-24 pb-56 pr-sm-92 ps ps--active-y accio-container-1160" fuseperfectscrollbar="">
-
-                <mat-card>Post Types <span center></span><mat-icon class = "table-header-icons">arrow_downward</mat-icon>  </mat-card>
+                <mat-card>
+                    Languages
+                    <span center></span>
+                    <mat-icon class = "table-header-icons">arrow_downward</mat-icon>
+                </mat-card>
                 <!--<mat-card>-->
                 <div class = "filter" >
                     <mat-chip-list>
@@ -27,8 +28,9 @@
 
                 <div class="content">
                     <mat-card>
-                        <mat-spinner color="accent" class="center" [diameter]="30" *ngIf="spinner"></mat-spinner>
-                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!spinner">
+                    <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
+
+                        <table mat-table [dataSource]="dataSource" *ngIf="!spinner" class="mat-elevation-z8">
 
                             <!-- Checkbox Column -->
                             <ng-container matColumnDef="select">
@@ -49,7 +51,7 @@
                             <!-- Position Column -->
                             <ng-container matColumnDef="id">
                                 <th mat-header-cell *matHeaderCellDef> ID. </th>
-                                <td mat-cell *matCellDef="let element"> {{element.postTypeID}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.languageID}} </td>
                             </ng-container>
 
                             <!-- Name Column -->
@@ -58,7 +60,13 @@
                                 <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                             </ng-container>
 
-                            <!-- Weight Column -->
+                            <!-- Is Default Column -->
+                            <ng-container matColumnDef="isDefault">
+                                <th mat-header-cell *matHeaderCellDef> Is Default </th>
+                                <td mat-cell *matCellDef="let element"> {{element.isDefault}} </td>
+                            </ng-container>
+
+                            <!-- Slug Column -->
                             <ng-container matColumnDef="slug">
                                 <th mat-header-cell *matHeaderCellDef> Slug </th>
                                 <td mat-cell *matCellDef="let element"> {{element.slug}} </td>
@@ -73,8 +81,8 @@
                                         <mat-icon class="secondary-text">more_vert</mat-icon>
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item (click)="edit(element.postTypeID)">Edit</button>
-                                        <button mat-menu-item (click)="openDialog(element.postTypeID, i)">Delete</button>
+                                        <button mat-menu-item (click)="edit(element.languageID)">Edit</button>
+                                        <button mat-menu-item (click)="openDialog(element.languageID, i)">Delete</button>
                                     </mat-menu>
                                 </td>
                             </ng-container>
@@ -87,10 +95,8 @@
                     </mat-card>
                 </div>
             </div>
-
-        </div>
     </div>
-</div>
+
 
 
 

@@ -51,7 +51,7 @@ const nucleusRoutes: Routes = [
         { path: 'post-type', loadChildren: () => PostTypeModule },
         { path: 'post', loadChildren: () => PostModule },
         { path: 'settings', loadChildren: () => SettingsModule },
-    ] },
+    ] }
 ];
 
 @NgModule({

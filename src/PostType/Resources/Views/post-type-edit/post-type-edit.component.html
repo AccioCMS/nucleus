@@ -14,8 +14,9 @@
         <div class="content-center">
             <div class="accio-container-850" fuseperfectscrollbar="">
                 <div class="accio-content center p-24 pb-56 pr-24 ps ps--active-y p-sm-10 pr-sm-10">
+                    <mat-spinner color="accent" class="center" [diameter]="30" *ngIf="spinner"></mat-spinner>
                     <form fxLayout="column" fxLayoutAlign="start"
-                          fxFlex="1 0 auto" name="postTypeForm" [formGroup]="postTypeForm">
+                          fxFlex="1 0 auto" name="postTypeForm" [formGroup]="postTypeForm" *ngIf="!spinner">
 
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 

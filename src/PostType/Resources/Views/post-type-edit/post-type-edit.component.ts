@@ -22,6 +22,7 @@ export class PostTypeEditComponent implements OnInit
     postTypeForm: FormGroup;
     slug = '';
     id: number;
+    spinner: boolean = true;
 
     /**
      * Constructor
@@ -80,6 +81,7 @@ export class PostTypeEditComponent implements OnInit
                         hasFeaturedVideo  : details['hasFeaturedVideo'] == 1 ? true : false,
                         isFeaturedVideoRequired  : details['isFeaturedVideoRequired'] == 1 ? true : false,
                     });
+                    this.spinner = false;
                 }
             )
             .subscribe();

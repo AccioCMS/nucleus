@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -17,16 +17,16 @@ import {MatSnackBar} from '@angular/material';
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 
 @Component({
-    selector   : 'post-type-list',
-    templateUrl: './post-type-list.component.html',
-    styleUrls  : ['./post-type-list.component.scss']
+    selector   : 'language-list',
+    templateUrl: './language-list.component.html',
+    styleUrls  : ['./language-list.component.scss']
 })
-export class PostTypeListComponent implements OnInit
+export class LanguageListComponent implements OnInit
 {
-    displayedColumns: string[] = ['select', 'id', 'name', 'slug', 'buttons'];
+    displayedColumns: string[] = ['select', 'id', 'name', 'isDefault', 'slug', 'buttons'];
     dataSource = new MatTableDataSource<any>([]);
     selection = new SelectionModel<any>(true, []);
-    breadcrumbs = ['Post Types', 'List'];
+    breadcrumbs = ['Settings', 'Languages'];
     spinner: boolean = true;
 
     /**
@@ -47,7 +47,7 @@ export class PostTypeListComponent implements OnInit
     }
 
     ngOnInit(){
-        this.httpClient.get('/admin/en/json/post-type/get-all')
+        this.httpClient.get('/admin/en/json/language/get-all')
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
@@ -71,18 +71,12 @@ export class PostTypeListComponent implements OnInit
             this.dataSource.data.forEach(row => this.selection.select(row));
     }
 
-    loadData(){
-        this.httpClient.get('/admin/en/json/post-type/get-all')
-            .map(
-                (response) => {
-                    this.dataSource = new MatTableDataSource<any>(response['data']);
-                }
-            )
-            .subscribe();
+    addNew(){
+        this.router.navigate(['../add/'], {relativeTo: this.route});
     }
 
     delete(id, index){
-        this.httpClient.get('/admin/en/json/post-type/delete/'+id)
+        this.httpClient.get('/admin/en/json/language/delete/'+id)
             .map(
                 (response) => {
                     this.openSnackBar(response['message'], '');
@@ -100,16 +94,12 @@ export class PostTypeListComponent implements OnInit
         this.router.navigate(['../edit/'+id], {relativeTo: this.route});
     }
 
-    addNew(){
-        this.router.navigate(['../add/'], {relativeTo: this.route});
-    }
-
     openDialog(id, index): void {
         const dialogRef = this.dialog.open(AccioDialogComponent, {
             width: '400px',
             data: {
                 title: 'Delete',
-                text: 'Are you sure that you want to delete this Post Type?'
+                text: 'Are you sure that you want to delete this Language?'
             }
         });
 
