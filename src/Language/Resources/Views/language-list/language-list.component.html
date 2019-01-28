@@ -14,70 +14,79 @@
 
                 <div class="content">
 
-                    <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
 
-                    <table mat-table [dataSource]="dataSource" *ngIf="!spinner" class="mat-elevation-z8">
+                    <mat-card class="p-0 no-shadow">
+                        <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
 
-                        <!-- Checkbox Column -->
-                        <ng-container matColumnDef="select">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <mat-checkbox (change)="$event ? masterToggle() : null"
-                                              [checked]="selection.hasValue() && isAllSelected()"
-                                              [indeterminate]="selection.hasValue() && !isAllSelected()">
-                                </mat-checkbox>
-                            </th>
-                            <td mat-cell *matCellDef="let row">
-                                <mat-checkbox (click)="$event.stopPropagation()"
-                                              (change)="$event ? selection.toggle(row) : null"
-                                              [checked]="selection.isSelected(row)">
-                                </mat-checkbox>
-                            </td>
-                        </ng-container>
+                        <table mat-table [dataSource]="dataSource" *ngIf="!spinner" class="mat-elevation-z8">
 
-                        <!-- Position Column -->
-                        <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef> ID. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.languageID}} </td>
-                        </ng-container>
+                            <!-- Checkbox Column -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                  [checked]="selection.hasValue() && isAllSelected()"
+                                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                                  (change)="$event ? selection.toggle(row) : null"
+                                                  [checked]="selection.isSelected(row)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
 
-                        <!-- Name Column -->
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                        </ng-container>
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef> ID. </th>
+                                <td mat-cell *matCellDef="let element"> {{element.languageID}} </td>
+                            </ng-container>
 
-                        <!-- Is Default Column -->
-                        <ng-container matColumnDef="isDefault">
-                            <th mat-header-cell *matHeaderCellDef> Is Default </th>
-                            <td mat-cell *matCellDef="let element"> {{element.isDefault}} </td>
-                        </ng-container>
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef> Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            </ng-container>
 
-                        <!-- Slug Column -->
-                        <ng-container matColumnDef="slug">
-                            <th mat-header-cell *matHeaderCellDef> Slug </th>
-                            <td mat-cell *matCellDef="let element"> {{element.slug}} </td>
-                        </ng-container>
+                            <!-- Is Default Column -->
+                            <ng-container matColumnDef="isDefault">
+                                <th mat-header-cell *matHeaderCellDef> Is Default </th>
+                                <td mat-cell *matCellDef="let element"> {{element.isDefault}} </td>
+                            </ng-container>
 
-                        <!-- Buttons Column -->
-                        <ng-container matColumnDef="buttons">
-                            <th mat-header-cell *matHeaderCellDef class="actions-column"></th>
+                            <!-- Slug Column -->
+                            <ng-container matColumnDef="slug">
+                                <th mat-header-cell *matHeaderCellDef> Slug </th>
+                                <td mat-cell *matCellDef="let element"> {{element.slug}} </td>
+                            </ng-container>
 
-                            <td mat-cell *matCellDef="let element; let i = index" class="actions-column-btn">
-                                <button mat-button [matMenuTriggerFor]="menu">
-                                    <mat-icon class="secondary-text">more_vert</mat-icon>
-                                </button>
-                                <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="edit(element.languageID)">Edit</button>
-                                    <button mat-menu-item (click)="openDialog(element.languageID, i)">Delete</button>
-                                </mat-menu>
-                            </td>
-                        </ng-container>
+                            <!-- Buttons Column -->
+                            <ng-container matColumnDef="buttons">
+                                <th mat-header-cell *matHeaderCellDef class="actions-column"></th>
 
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                        </tr>
-                    </table>
+                                <td mat-cell *matCellDef="let element; let i = index" class="actions-column-btn">
+                                    <button mat-button [matMenuTriggerFor]="menu">
+                                        <mat-icon class="secondary-text">more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="edit(element.languageID)">Edit</button>
+                                        <button mat-menu-item (click)="openDialog(element.languageID, i)">Delete</button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
 
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                            </tr>
+                        </table>
+
+                        <mat-paginator
+                            *ngIf="!spinner"
+                            [length]="length"
+                            [pageSize]="pageSize"
+                            (page)="pageEvent = $event; onPaginateChange($event)"
+                        ></mat-paginator>
+                    </mat-card>
                 </div>
             </div>
     </div>

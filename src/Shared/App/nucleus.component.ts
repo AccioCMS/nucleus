@@ -31,6 +31,7 @@ export class NucleusComponent {
     fuseConfig: any;
     navigation: any;
     showData: boolean = false;
+    spinner: boolean = true;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -125,12 +126,10 @@ export class NucleusComponent {
         this._unsubscribeAll = new Subject();
 
         //Check Session data
-        let checkSession = false;
         this.httpClient.get('/test/auth')
             .map(
                 (data) => {
                     if(data['status'] == true){
-                        checkSession = true;
                         this.store.dispatch(new AuthActions.Signin(data['accessToken']));
 
                         let langauges = [];
@@ -145,6 +144,7 @@ export class NucleusComponent {
                                     this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
 
                                     this.showData = true;
+                                    this.spinner = false;
                                 }
                             )
                             .subscribe();
