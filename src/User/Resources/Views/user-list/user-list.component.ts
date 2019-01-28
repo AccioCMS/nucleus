@@ -6,7 +6,7 @@ import { locale as english } from './i18n/en';
 import { locale as turkish } from './i18n/tr';
 
 
-import { DataSource } from '@angular/cdk/collections';
+import { DataSource  ,SelectionModel} from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 
 import { UsersService } from "../../users.service";
@@ -63,6 +63,8 @@ export class UserListComponent
 
     dataSource = new MatTableDataSource<any>([]);
 
+    selection = new SelectionModel<any>(true, []);
+    spinner: boolean = true;
 
     displayedColumns: string[] = ['checkbox','name', 'email', 'phone', 'jobtitle','buttons'];
     // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
@@ -88,7 +90,7 @@ export class UserListComponent
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
-                    console.log(response['data']);
+                    this.spinner = false;
                 }
             )
             .subscribe();
@@ -140,6 +142,22 @@ export class UserListComponent
 
     addNew(){
         this.router.navigate(['../add/'], {relativeTo: this.route});
+    }
+
+
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
     }
 
 

@@ -68,6 +68,10 @@ export class UserUpdateComponent
     public country: string = "";
     public about: string = "";
     public isActive: number = 1;
+    public groups: string[];
+    public selecdedGroups: number[];
+    spinner: boolean = true;
+
 
     breadcrumbs = ['Users', 'Update User'];
 
@@ -83,7 +87,12 @@ export class UserUpdateComponent
 
     roles = new FormControl();
 
-    rolesList: string[] = ['Admin', 'Editor', 'Author', 'Testim Group'];
+    public rolesList = [
+        {"groupID": 1, "name": "Admin"},
+        {"groupID": 2, "name": "Editor"},
+        {"groupID": 3, "name": "Author"},
+        {"groupID": 5, "name": "Testim Group"}
+    ]
 
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
@@ -126,7 +135,11 @@ export class UserUpdateComponent
                 (data) => {
                     if(data){
 
+
                         let details = data['details'];
+                         this.groups = data['allGroups'];
+                        this.selecdedGroups = data['details']['roles'];
+                        console.log(this.selecdedGroups[0]['groupID']);
                         this.usersForm.patchValue({
                             email: details['email'],
                             firstName: details['firstName'],
@@ -135,6 +148,7 @@ export class UserUpdateComponent
                             street: details['street'],
                             country: details['country'],
                             about: details['about'],
+                            groups: data['allGroups'],
                             isActive  : details['isActive'] == 1 ? true : false,
                         });
 
@@ -143,6 +157,7 @@ export class UserUpdateComponent
                 }
             )
             .subscribe();
+        this.spinner = false;
 
     }
 
@@ -156,12 +171,14 @@ export class UserUpdateComponent
         // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
         let data = {'user' : {id:  this.id , email: this.usersForm.get('email').value, lastName: formData.lastName, firstName: formData.firstName,
                 phone: formData.phone, street: formData.street, country: formData.country , about: formData.about, groups: formData.groups, isActive: formData.isActive}};
-        console.log(data);
         this.httpClient.post("/api/user/storeUpdate/",data)
             .map(
                 (data) => {
+                    console.log(data);
                     if(data == 1){
+
                         this.router.navigate(["/test/users/edit/"+this.id+""])
+                        // this.spinner = false;
                     }else{
                     }
                 }
@@ -172,35 +189,6 @@ export class UserUpdateComponent
     onCancel(){
         console.log('Cancel clicked');
     }
-}
 
-export class UserModel {
-
-    constructor(
-        public email: string,
-        public firstName: string,
-        public lastName: string,
-        public phone: string,
-        public street: string,
-        public country: string,
-        public about: string
-    )
-    {
-
-    }
-
-}
-
-export class SelectMultipleExample {
-    toppings = new FormControl();
-    toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
-}
-
-
-export interface IUser
-{
-    id : number,
-    Name : string,
-    Lastname : string
 
 }
