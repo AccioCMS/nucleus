@@ -6,6 +6,7 @@
     width: 100%;
 }
 
+
 .example-full-width {
     width: 100%;
 }
@@ -39,9 +40,9 @@
 
     }
 
-
-
-
+    form{
+        flex: auto !important;
+    }
 
     table {
         width: 100%;
@@ -63,7 +64,7 @@
 
         .mat-column-buttons > button{
             //float: right;
-        }jjj
+        }
 
          .mat-row {
              position: relative;

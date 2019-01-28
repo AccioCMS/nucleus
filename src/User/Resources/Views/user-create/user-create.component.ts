@@ -28,19 +28,6 @@ export interface Users {
     asd: string
 }
 
-const ELEMENT_DATA: Users[] = [
-    {asd : "" ,checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum dsa', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum ds', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum ', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsuma ', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-];
-
 @Component({
     selector   : 'user-create',
     templateUrl: './user-create.component.html',
@@ -56,21 +43,42 @@ export class UserCreateComponent
      *
      * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
      */
+    // public users = [];
+
     public users = [];
+    public email: string = "";
+    public firstName: string = "";
+    public lastName: string = "";
+    public phone: string = "";
+    public street: string = "";
+    public country: string = "";
+    public about: string = "";
+    public isActive: number = 1;
+    public groups: string[];
+
 
     breadcrumbs = ['Users', 'New User'];
+
+    spinner: boolean = true;
+    // public groups: string[];
 
 
     displayedColumns: string[] = ['checkbox','name', 'email', 'phone', 'jobtitle','buttons'];
     // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
-    dataSource =   ELEMENT_DATA;
+    // dataSource =   ELEMENT_DATA;
     usersForm: FormGroup;
 
 
     roles = new FormControl();
 
-    rolesList: string[] = ['Admin', 'Editor', 'Author', 'Testim Group'];
+    // rolesList: string[] = ['Admin', 'Editor', 'Author', 'Testim Group'];
 
+    public rolesList = [
+        {"id": 1, "name": "Admin"},
+        {"id": 2, "name": "Editor"},
+        {"id": 3, "name": "Author"},
+        {"id": 5, "name": "Testim Group"}
+    ]
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _userService : UsersService,
@@ -84,63 +92,45 @@ export class UserCreateComponent
 
         this.usersForm = this._formBuilder.group({
             email: ['', Validators.required],
-            lastname: [''],
+            lastName: [''],
             firstName: [''],
             password: ['', Validators.required],
             conf_password: [''],
             phone: [''],
             street: [''],
             country: [''],
+            groups: [''],
             about   : ['', Validators.required],
         });
-    }
-
-
-    hack(val) {
-        return Array.from(val);
+        this.spinner = false;
     }
 
     onSave(){
         // this.showErrorMessage = false;
         let formData = this.usersForm.value;
-        let credentials = { email: formData.email, lastname: formData.lastname, firstName: formData.firstName, password: formData.password,
-            phone: formData.phone, street: formData.street, country: formData.country , about: formData.about };
+        let credentials = { email: formData.email, lastName: formData.lastName, firstName: formData.firstName, password: formData.password,
+            phone: formData.phone, street: formData.street, country: formData.country , about: formData.about ,groups: formData.groups};
 
         this.httpClient.post('/api/user/store', credentials)
             .map(
                 (data) => {
-                    // console.log(data);
-                    if(data['success'] == true){
+                    console.log(data);
+                    if(data){
 
                         // this.store.dispatch(new AuthActions.Signin(data['access_token']))
-                        this.router.navigate(['/test/fuse'])
+                        // this.router.navigate(['/test/fuse'])
                     }else{
                         // this.showErrorMessage = true;
                     }
                 }
             )
             .subscribe();
-        console.log('Save clicked');
+        this.spinner = false;
     }
 
     onCancel(){
         console.log('Cancel clicked');
     }
 
-
-}
-
-
-export class SelectMultipleExample {
-    toppings = new FormControl();
-    toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
-}
-
-
-export interface IUser
-{
-    id : number,
-    Name : string,
-    Lastname : string
 
 }

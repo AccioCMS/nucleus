@@ -4,6 +4,9 @@
         (saveClicked)="onSave()"
         (cancelClicked)="onCancel()"
         [breadcrumbs]="breadcrumbs"
+        [showSaveBtn]="true"
+        [saveBtnData]="{ text: 'Save', icon: 'save'}"
+        [showCancelBtn]="true" [cancelBtnData]="{ text: 'Cancel', icon: ''}"
     >
     </nucleus-template-header>
     <div class="accio-container">
@@ -13,7 +16,9 @@
 
                     <div class="accio-container">
                         <div class="content-center">
-                            <div class="accio-container-1160" fuseperfectscrollbar="">
+                            <mat-spinner color="accent" class="center" [diameter]="30" *ngIf="spinner"></mat-spinner>
+                            <div class="accio-container-850" fuseperfectscrollbar="">
+
                                 <div class="accio-content center p-24 pb-56 pr-24 ps ps--active-y p-sm-10 pr-sm-10">
                                     <form fxLayout="column" fxLayoutAlign="start"
                                           fxFlex="1 0 auto" name="exampleForm" [formGroup]="usersForm">
@@ -39,14 +44,14 @@
 
                                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                                            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                            <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
                                                 <mat-label>Email</mat-label>
                                                 <input matInput formControlName="email" required>
+                                                <mat-icon matSuffix class="secondary-text">email</mat-icon>
                                                 <mat-error>Email is <strong>required</strong></mat-error>
                                             </mat-form-field>
 
                                         </div>
-
 
                                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
@@ -65,10 +70,9 @@
 
                                         </div>
 
-
                                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                                            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                            <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
                                                 <mat-label>Phone</mat-label>
                                                 <input matInput formControlName="phone">
                                                 <mat-icon matSuffix class="secondary-text">phone</mat-icon>
@@ -94,18 +98,6 @@
 
                                         </div>
 
-                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-
-
-                                            <mat-form-field appearance="outline" fxFlex="100">
-                                                <mat-label>Groups</mat-label>
-                                                <mat-select placeholder="Groups" [formControl]="roles" formControlName="groups"  multiple>
-                                                    <mat-option *ngFor="let role of rolesList" [value]="role">{{role}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-
-                                        </div>
                                         <mat-label>About</mat-label>
                                         <div fxLayout="row" fxLayoutAlign="center"  >
                                             <div [froalaEditor] formControlName="about" fxFlex="95" ></div>
@@ -114,9 +106,43 @@
                                     </form>
                                 </div>
                             </div>
-                            <!--<div class="accio-container-300">-->
-                               <!---->
-                            <!--</div>-->
+                            <div class="accio-container-300" fuseperfectscrollbar="">
+                                <div class="expansion-panel-seperator">
+                                    <mat-accordion>
+
+                                        <mat-expansion-panel expanded>
+
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    <mat-icon class="pr-sm-32"> group </mat-icon>
+                                                    User groups
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+
+                                            <form fxLayout="column" fxLayoutAlign="start"
+                                                  fxFlex="1 0 auto" name="exampleForm" [formGroup]="usersForm">
+
+
+                                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+
+
+                                                    <mat-form-field appearance="outline" fxFlex="100">
+                                                        <mat-label>Groups</mat-label>
+                                                        <mat-select placeholder="Groups" [formControl]="groups" formControlName="groups"  multiple>
+                                                            <mat-option *ngFor="let role of rolesList" [value]="role.id">{{role.name}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+
+                                                </div>
+
+
+                                            </form>
+                                        </mat-expansion-panel>
+                                    </mat-accordion>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
