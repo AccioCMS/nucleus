@@ -35,13 +35,13 @@ class MainController extends Controller
      */
     public function index($lang = "", $view = "")
     {
-        $classNameArr = explode("\\", get_class($this));
+        /*$classNameArr = explode("\\", get_class($this));
         $className = str_replace("Controller", "", $classNameArr[4]);
         // check if user has permissions to access this link
         $key = ($view == 'list' || $view == '') ? 'read' : $view;
         if (! User::hasAccess($className, $key)) {
             return view('errors.permissions', compact('lang', 'view'));
-        }
+        }*/
         return view('index');
     }
 

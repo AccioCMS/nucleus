@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
                 (data) => {
                     if(data['success'] == true){
                         this.store.dispatch(new AuthActions.Signin(data['access_token']))
-                        this.router.navigate(['/test/fuse'])
+                        this.router.navigate(['/admin/en/fuse'])
                     }else{
                         this.showErrorMessage = true;
                     }

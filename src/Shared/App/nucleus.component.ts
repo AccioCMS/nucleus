@@ -21,6 +21,7 @@ import * as SharedActions from '../Store/shared.actions';
 import * as AuthActions from '../../Auth/Resources/Store/auth.actions';
 
 import { Router } from '@angular/router';
+import {SetAppMenuLinks} from "../Store/shared.actions";
 
 @Component({
     selector: 'app-nucleus',
@@ -30,7 +31,6 @@ import { Router } from '@angular/router';
 export class NucleusComponent {
     fuseConfig: any;
     navigation: any;
-    showData: boolean = false;
     spinner: boolean = true;
 
     // Private
@@ -140,10 +140,9 @@ export class NucleusComponent {
                                     this.store.dispatch(new SharedActions.SetGlobalData(data['global_data']));
                                     this.store.dispatch(new SharedActions.SetCmsMenus(data['cmsMenus']));
                                     this.store.dispatch(new SharedActions.SetPluginConfigs(data['pluginsConfigs']));
+                                    this.store.dispatch(new SharedActions.SetAppMenuLinks(data['applicationMenuLinks']));
 
                                     this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
-
-                                    this.showData = true;
                                     this.spinner = false;
                                 }
                             )

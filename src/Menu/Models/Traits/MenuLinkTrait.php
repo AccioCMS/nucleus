@@ -533,171 +533,227 @@ trait MenuLinkTrait
     public static function applicationMenuLinks()
     {
         $applicationMenuLinks = [
-          [
-            'label' => 'Menu',
-            'link' => self::removeDomainFromLink(action(Routes::backend("MenuController@single"), ['lang' =>  App::getLocale(), 'view' => 'list', 'menuID' => Menu::getPrimaryMenuID()])),
-            'module' =>  'menu',
-            'icon' => 'fa fa-bars',
-            'access' => User::hasAccess("Menu", "read"),
-            'children' => '',
-          ],
-          [
-            'label' => 'Users',
-            'link' =>  '',
-            'module' =>  'user',
-            'icon' => 'fa fa-users',
-            'access' => User::hasAccess("User", "read"),
-            'children' => [
-              [
-                'label' => 'List',
-                'link' => self::removeDomainFromLink(action(Routes::backend("UserController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
-                'icon' => '',
-                'access' => User::hasAccess("User", "read"),
-                'children' => '',
-              ],
-              [
-                'label' => 'Add new',
-                'link' => self::removeDomainFromLink(action(Routes::backend("UserController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
-                'icon' => '',
-                'access' => User::hasAccess("User", "create"),
-                'children' => '',
-              ],
-              [
-                'label' => 'Permissions',
-                'link' => self::removeDomainFromLink(action(Routes::backend("PermissionController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
-                'icon' => '',
-                'access' => User::hasAccess('Permission', "read"),
-                'children' => '',
-              ]
-            ],
-          ],
-          [
-            'label' => 'Post types',
-            'link' =>  '',
-            'module' =>  'post-type',
-            'icon' => 'fa fa-plus-square-o',
-            'access' => User::hasAccess("PostType", "read"),
-            'children' => [
-              [
-                'label' => 'List',
-                'link' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
-                'icon' => '',
-                'access' => User::hasAccess("PostType", "read"),
-                'children' => '',
-              ],
-              [
-                'label' => 'Add new',
-                'link' =>  self::removeDomainFromLink(action(Routes::backend("PostTypeController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
-                'icon' => '',
-                'access' => User::hasAccess("PostType", "create"),
-                'children' => '',
-              ]
-            ],
-          ],
-          [
-            'label' => 'Custom fields',
-            'link' =>  '',
-            'module' => 'custom-fields',
-            'icon' => 'fa fa-plus-square-o',
-            'access' => User::hasAccess("CustomField", "read"),
-            'children' => [
-              [
-                'label' => 'List',
-                'link' => self::removeDomainFromLink(action(Routes::backend("CustomFieldController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
-                'icon' => '',
-                'access' => User::hasAccess("CustomField", "read"),
-                'children' => '',
-              ],
-              [
-                'label' => 'Add new',
-                'link' =>  self::removeDomainFromLink(action(Routes::backend("CustomFieldController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
-                'icon' => '',
-                'access' => User::hasAccess("CustomField", "create"),
-                'children' => '',
-              ]
-            ],
-          ],
-          [
-            'label' => 'Media',
-            'link' => self::removeDomainFromLink(action(Routes::backend("MediaController@index"), ['lang' =>  App::getLocale(), 'view' => 'library'])),
-            'module' => 'media',
-            'icon' => 'fa fa-camera',
-            'access' => true,
-            'children' => '',
-          ],
-          [
-            'label' => 'Settings',
-            'link' => self::removeDomainFromLink(action(Routes::backend("SettingsController@index"), ['lang' =>  App::getLocale(), 'view' => 'general'])),
-            'module' => 'project-settings',
-            'icon' => 'fa fa-cogs',
-            'access' => User::hasAccess('Settings', "read"),
-            'children' => '',
-          ],
-          [
-            'label' => 'Language',
-            'link' => self::removeDomainFromLink(action(Routes::backend("LanguageController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
-            'icon' => 'fa fa-language',
-            'module' => 'language',
-            'access' => User::hasAccess('Language', "read"),
-            'children' => '',
-          ]
+            [
+                'id'       => 'apps-group',
+                'title'    =>  'Applications',
+                'translate'=>  'NAV.APPLICATIONS',
+                'type'     =>  'group',
+                'children' => [
+                    [
+                        'id' => 'menu',
+                        'title'    =>  'Menu',
+                        'translate'=>  'NAV.MENU',
+                        'icon' => 'notes',
+                        'type'     => 'item',
+                        'url' => self::removeDomainFromLink(action(Routes::backend("MenuController@single"), ['lang' =>  App::getLocale(), 'view' => 'list', 'menuID' => Menu::getPrimaryMenuID()])),
+                        'access' => User::hasAccess("Menu", "read"),
+                    ],
+                    [
+                        'id'       => 'users',
+                        'title'    =>  'Users',
+                        'translate'=>  'NAV.USERS',
+                        'icon' => 'account_box',
+                        'type'     =>  'collapsable',
+                        'access' => User::hasAccess("User", "read"),
+                        'children' => [
+                            [
+                                'id'       => 'user-list',
+                                'title'   => 'List',
+                                'translate'=> 'NAV.LIST',
+                                'type'     => 'item',
+                                'icon'     => 'notes',
+                                'url'      => self::removeDomainFromLink(action(Routes::backend("UserController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
+                            ],
+                            [
+                                'id'       => 'user-add',
+                                'title'   => 'Add New',
+                                'translate'=> 'NAV.ADD-NEW',
+                                'type'     => 'item',
+                                'icon'     => 'add_box',
+                                'url' => self::removeDomainFromLink(action(Routes::backend("UserController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
+                                'access' => User::hasAccess("User", "create"),
+                            ],
+                            [
+                                'id'       => 'user-permissions',
+                                'title'   => 'Permissions',
+                                'translate'=> 'NAV.PERMISSIONS',
+                                'type'     => 'item',
+                                'icon'     => 'visibility_off',
+                                'url' => self::removeDomainFromLink(action(Routes::backend("PermissionController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
+                                'access' => User::hasAccess('Permission', "read"),
+                            ]
+                        ],
+                    ],
+                    [
+                        'id'       => 'post-types',
+                        'title'    =>  'Post Types',
+                        'translate'=>  'NAV.POST_TYPES',
+                        'icon' => 'label',
+                        'type'     =>  'collapsable',
+                        'access' => User::hasAccess("PostType", "read"),
+                        'children' => [
+                            [
+                                'id'       => 'post-type-list',
+                                'title'   => 'List',
+                                'translate'=> 'NAV.LIST',
+                                'type'     => 'item',
+                                'icon'     => 'notes',
+                                'url'      => self::removeDomainFromLink(action(Routes::backend("PostTypeController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
+                                'access' => User::hasAccess("PostType", "read"),
+                            ],
+                            [
+                                'id'       => 'post-type-add',
+                                'title'   => 'Add New',
+                                'translate'=> 'NAV.ADD-NEW',
+                                'type'     => 'item',
+                                'icon'     => 'add_box',
+                                'url'      => self::removeDomainFromLink(action(Routes::backend("PostTypeController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
+                                'access' => User::hasAccess("PostType", "create"),
+                            ]
+                        ]
+                    ],
+                    [
+                        'id'       => 'custom-fields',
+                        'title'    =>  'Custom Fields',
+                        'translate'=>  'NAV.CUSTOM-FIELDS',
+                        'icon' => 'add_box',
+                        'type'     =>  'collapsable',
+                        'access' => User::hasAccess("CustomField", "read"),
+                        'children' => [
+                            [
+                                'id'       => 'custom-fields-list',
+                                'title'   => 'List',
+                                'translate'=> 'NAV.LIST',
+                                'type'     => 'item',
+                                'icon'     => 'notes',
+                                'url' => self::removeDomainFromLink(action(Routes::backend("CustomFieldController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
+                                'access' => User::hasAccess("CustomField", "read"),
+                            ],
+                            [
+                                'id'       => 'custom-fields-add',
+                                'title'   => 'Add New',
+                                'translate'=> 'NAV.ADD-NEW',
+                                'type'     => 'item',
+                                'icon'     => 'add_box',
+                                'url' =>  self::removeDomainFromLink(action(Routes::backend("CustomFieldController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
+                                'access' => User::hasAccess("CustomField", "create"),
+
+                            ]
+                        ],
+                    ],
+                    [
+                        'id' => 'media',
+                        'title'    =>  'Media',
+                        'translate'=>  'NAV.MEDIA',
+                        'icon' => 'perm_media',
+                        'type'     => 'item',
+                        'url' => self::removeDomainFromLink(action(Routes::backend("MediaController@index"), ['lang' =>  App::getLocale(), 'view' => 'library'])),
+                        'access' => true,
+                    ],
+                    [
+                        'id' => 'settings',
+                        'title'    =>  'Settings',
+                        'translate'=>  'NAV.SETTINGS',
+                        'icon' => 'settings',
+                        'type'     => 'item',
+                        'url' => self::removeDomainFromLink(action(Routes::backend("SettingsController@index"), ['lang' =>  App::getLocale(), 'view' => 'general'])),
+                        'access' => User::hasAccess('Settings', "read"),
+                    ]
+                ]
+            ]
         ];
 
+
+        $count = 0;
+        $tmpPostTypes = [
+            'id'       => 'post-types-group',
+            'title'    =>  'Post Types',
+            'translate'=>  'NAV.POST_TYPES',
+            'type'     =>  'group',
+            'children' => []
+        ];
         foreach (PostType::all() as $postType){
             if(!$postType->isVisible) {
                 continue;
             }
 
             $tmp = [
-              'label' => $postType->name,
-              'link' =>  '',
-              'module' => $postType['slug'],
-              'icon' => 'fa fa-thumb-tack',
-              'access' => User::hasAccess($postType['slug'], "read"),
-              'children' => [
-                [
-                  'label' => 'List',
-                  'link' =>  self::removeDomainFromLink(action(Routes::backend("PostController@postsIndex"), ['lang' =>  App::getLocale(), 'post_type' => $postType['slug'], 'view' => 'list' ])),
-                  'icon' => '',
-                  'access' => User::hasAccess($postType['slug'], "read"),
-                  'children' => '',
-                ],
-                [
-                  'label' => 'Add new',
-                  'link' => self::removeDomainFromLink(action(Routes::backend("PostController@postsIndex"), ['lang' =>  App::getLocale(), 'post_type' => $postType['slug'], 'view' => 'create' ])),
-                  'icon' => '',
-                  'access' => User::hasAccess($postType['slug'], "create"),
-                  'children' => '',
-                ],
-                [
-                  'label' => 'Categories',
-                  'link' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'categorylist', 'id' => $postType['postTypeID'] ])),
-                  'icon' => '',
-                  'access' => (User::hasAccess('Category', "read") && $postType['hasCategories']),
-                  'children' => '',
-                ],
-                [
-                  'label' => 'Tags',
-                  'link' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'taglist', 'id' => $postType['postTypeID'] ])),
-                  'icon' => '',
-                  'access' => (User::hasAccess('Tag', "read") && $postType['hasTags']),
-                  'children' => '',
-                ],
-              ]
+
+                'id' => $postType['slug'],
+                'title'    =>  $postType->name,
+                'translate'=>  $postType->name,
+                'icon' => 'label',
+                'type'     => 'collapsable',
+                'icon' => 'label',
+                'access' => User::hasAccess($postType['slug'], "read"),
+                'children' => [
+                    [
+                        'id'       => 'post-'.$postType['slug'].'-list',
+                        'title'   => 'List',
+                        'translate'=> 'NAV.LIST',
+                        'type'     => 'item',
+                        'icon'     => 'notes',
+                        'access' => User::hasAccess($postType['slug'], "read"),
+                        'url' =>  self::removeDomainFromLink(action(Routes::backend("PostController@postsIndex"), ['lang' =>  App::getLocale(), 'post_type' => $postType['slug'], 'view' => 'list' ])),
+                    ],
+                    [
+                        'id'       => 'post-'.$postType['slug'].'-add',
+                        'title'   => 'Add New',
+                        'translate'=> 'NAV.ADD-NEW',
+                        'type'     => 'item',
+                        'icon'     => 'add_box',
+                        'url' => self::removeDomainFromLink(action(Routes::backend("PostController@postsIndex"), ['lang' =>  App::getLocale(), 'post_type' => $postType['slug'], 'view' => 'create' ])),
+                        'access' => User::hasAccess($postType['slug'], "create"),
+                    ]
+                ]
             ];
-            array_unshift($applicationMenuLinks, $tmp);
+
+            if($postType['hasCategories']){
+                $tmpCats = [
+                    'id'       => 'post-'.$postType['slug'].'-categories',
+                    'title'   => 'Categories',
+                    'translate'=> 'NAV.CATEGORIES',
+                    'type'     => 'item',
+                    'icon'     => 'notes',
+                    'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'categorylist', 'id' => $postType['postTypeID'] ])),
+                    'access' => (User::hasAccess('Category', "read") && $postType['hasCategories']),
+                ];
+
+                array_push($tmp['children'], $tmpCats);
+            }
+
+
+            if($postType['hasTags']){
+                $tmpTags = [
+                    'id'       => 'post-'.$postType['slug'].'-tags',
+                    'title'   => 'Tags',
+                    'translate'=> 'NAV.TAGS',
+                    'type'     => 'item',
+                    'icon'     => 'notes',
+                    'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'taglist', 'id' => $postType['postTypeID'] ])),
+                    'access' => (User::hasAccess('Tag', "read") && $postType['hasTags']),
+                ];
+
+                array_push($tmp['children'], $tmpTags);
+            }
+            array_push($tmpPostTypes['children'], $tmp);
+            $count++;
+
+        }
+        if($count > 0){
+            array_unshift($applicationMenuLinks, $tmpPostTypes);
         }
 
         $plugins = Plugin::activePlugins();
         if(count($plugins)) {
             // get plugins links
             $tmpPluginLinks = [
-              'label' => "Plugins",
-              'link' =>  '',
-              'module' => "plugins",
-              'icon' => 'fa fa-thumb-tack',
-              'access' => User::hasAccess("Plugin", "read"),
-              'children' => [],
+                'id'       => 'plugins',
+                'title'    =>  'Plugins',
+                'translate'=>  'NAV.PLUGINS',
+                'type'     =>  'group',
+                'children' => [],
+                'access' => User::hasAccess("Plugin", "read"),
             ];
 
             foreach ($plugins as $plugin) {
@@ -705,18 +761,18 @@ trait MenuLinkTrait
                 $app = str_slug($title, '_');
 
                 $tmpPluginLinks['children'][] = [
-                  'label' => $plugin->title,
-                  'link' => self::removeDomainFromLink($plugin->fullBackendUrl()),
-                  'icon' => '',
-                  'access' => User::hasAccess($app, "read"),
-                  'children' => '',
-                  'module' => "plugins",
+                    'id'       => 'plugin-'.$plugin->title,
+                    'title'   => $plugin->title,
+                    'translate'=> $plugin->title,
+                    'type'     => 'item',
+                    'icon'     => 'notes',
+                    'url' => self::removeDomainFromLink($plugin->fullBackendUrl()),
+                    'access' => User::hasAccess($app, "read"),
                 ];
 
             }
             $applicationMenuLinks[] = $tmpPluginLinks;
         }
-
 
         return $applicationMenuLinks;
     }

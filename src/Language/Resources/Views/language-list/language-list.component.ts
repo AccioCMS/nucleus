@@ -28,8 +28,6 @@ export class LanguageListComponent implements OnInit
     selection = new SelectionModel<any>(true, []);
     breadcrumbs = ['Settings', 'Languages'];
     spinner: boolean = true;
-    length: number;
-    pageSize = 10;
 
     /**
      * Constructor
@@ -116,9 +114,5 @@ export class LanguageListComponent implements OnInit
         this.snackBar.open(message, action, {
             duration: 2000,
         });
-    }
-
-    onPaginateChange(event){
-        console.log(event);
     }
 }

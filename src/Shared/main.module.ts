@@ -36,12 +36,10 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AuthGuard } from "../Auth/Resources/auth-guard.service";
 
-import { BaseBataResolver } from './base-data.resolver';
-
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
-    { path: 'test', component: NucleusComponent, canActivate: [AuthGuard], resolve: { items: BaseBataResolver },children: [
+    { path: 'admin/en', component: NucleusComponent, /*canActivate: [AuthGuard],*/ children: [
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
         { path: 'users', loadChildren: () => UserModule },
@@ -101,8 +99,7 @@ const nucleusRoutes: Routes = [
         RouterModule,
     ],
     providers: [
-        AuthGuard,
-        BaseBataResolver
+        AuthGuard
     ]
 })
 export class MainModule { }

@@ -69,7 +69,7 @@ const initialState: SharedState = {
             id       : 'post-types',
             title    : 'Post Types',
             translate: 'NAV.POST_TYPES',
-            type     : 'group',
+            type     : 'collapsable',
             children : [
                 {
                     id       : 'articles',
@@ -78,6 +78,14 @@ const initialState: SharedState = {
                     type     : 'item',
                     icon     : 'label',
                     url      : '/articles'
+                },
+                {
+                    id       : 'articles-add',
+                    title    : 'Add new',
+                    translate: 'NAV.Add New',
+                    type     : 'item',
+                    icon     : 'label',
+                    url      : '/articles/add'
                 }
             ]
         },

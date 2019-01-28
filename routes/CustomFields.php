@@ -7,7 +7,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(
-    ['middleware' => ['auth:admin'], 'as' => 'backend.customField.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+    ['middleware' => ['auth:api'], 'as' => 'backend.customField.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
         /**
          * GET
          */

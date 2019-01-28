@@ -7,7 +7,7 @@ import { PostTypeEditComponent } from './Views/post-type-edit/post-type-edit.com
 
 const postRoutes: Routes = [
     { path: 'list', component: PostTypeListComponent },
-    { path: 'add', component: PostTypeCreateComponent },
+    { path: 'create', component: PostTypeCreateComponent },
     { path: 'edit/:id', component: PostTypeEditComponent },
 ];
 

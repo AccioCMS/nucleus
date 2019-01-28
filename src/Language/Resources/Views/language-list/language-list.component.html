@@ -79,13 +79,6 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;">
                             </tr>
                         </table>
-
-                        <mat-paginator
-                            *ngIf="!spinner"
-                            [length]="length"
-                            [pageSize]="pageSize"
-                            (page)="pageEvent = $event; onPaginateChange($event)"
-                        ></mat-paginator>
                     </mat-card>
                 </div>
             </div>
