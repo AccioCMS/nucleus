@@ -260,4 +260,10 @@
             margin: 0 auto;
         }
     }
+
+    mat-card{
+        &.no-shadow{
+            box-shadow: unset !important;
+        }
+    }
 }

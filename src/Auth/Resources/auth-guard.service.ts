@@ -19,16 +19,6 @@ export class AuthGuard implements CanActivate{
     ){}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-        // this.getPrice()
-        //     .then(
-        //         (response) => {
-        //             console.log('res', response);
-        //         }
-        //     );
-        // console.log(this.check);    
-
-        // console.log('Then');
-            
         return this.store.select('auth')
         .pipe(
             take(1),
@@ -49,16 +39,9 @@ export class AuthGuard implements CanActivate{
                     )
                     .subscribe();
                 }
-                
+
                 return true;
             })
         );
-    }
-
-    async getPrice(): Promise<any> {
-        const response = await this.httpClient.get('/test/auth').toPromise();
-        console.log(response);
-        this.check = response['status'];
-        return response;
     }
 }

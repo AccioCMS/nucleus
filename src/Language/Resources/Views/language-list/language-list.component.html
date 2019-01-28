@@ -9,26 +9,14 @@
 >
 </nucleus-template-header>
 <div class="accio-container">
-       <div class="center ps ps--active-y " fuseperfectscrollbar="">
-
-                <mat-card>
-                    Languages
-                    <span center></span>
-                    <mat-icon class = "table-header-icons">arrow_downward</mat-icon>
-                </mat-card>
-                <!--<mat-card>-->
-                <div class = "filter" >
-                    <mat-chip-list>
-
-                        <mat-chip color="primary" selected><mat-icon >add</mat-icon>  Add filter</mat-chip>
-
-                    </mat-chip-list>
-
-                </div>
+       <div class="accio-content p-16 pb-56 center ps ps--active-y " fuseperfectscrollbar="">
+           <div class="h2 mb-24">Languages</div>
 
                 <div class="content">
-                    <mat-card>
-                    <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
+
+
+                    <mat-card class="p-0 no-shadow">
+                        <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
 
                         <table mat-table [dataSource]="dataSource" *ngIf="!spinner" class="mat-elevation-z8">
 
@@ -92,6 +80,12 @@
                             </tr>
                         </table>
 
+                        <mat-paginator
+                            *ngIf="!spinner"
+                            [length]="length"
+                            [pageSize]="pageSize"
+                            (page)="pageEvent = $event; onPaginateChange($event)"
+                        ></mat-paginator>
                     </mat-card>
                 </div>
             </div>

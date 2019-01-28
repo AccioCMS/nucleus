@@ -10,6 +10,8 @@ import { Store } from '@ngrx/store';
 import * as fromAuth from '../../Store/auth.reducers';
 import * as AuthActions from "../../Store/auth.actions";
 
+import { FuseSplashScreenService } from '../../../../Shared/@fuse/services/splash-screen.service';
+
 import { Router } from '@angular/router';
 import 'rxjs/Rx';
 
@@ -32,6 +34,7 @@ export class LoginComponent implements OnInit {
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
+        private _fuseSplashScreenService: FuseSplashScreenService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private store: Store<fromAuth.State>,
