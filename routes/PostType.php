@@ -10,9 +10,9 @@ Route::group(
          * GET
          */
         Route::get('/{lang}/post-type/{view}', 'PostTypeController@index')->name('index');
+        Route::get('/{lang}/post-type/{view}/{id}', 'PostTypeController@single')->name('single');
 
         Route::group(['middleware' => ['auth:api']], function (){
-            Route::get('/{lang}/post-type/{view}/{id}', 'PostTypeController@single')->name('single');
             Route::get('/{lang}/json/post-type/get-all', 'PostTypeController@getAll')->name('getAll');
             Route::get('/{lang}/json/post-type/delete/{id}', 'PostTypeController@delete')->name('delete');
             Route::get('/{lang}/json/post-type/details/{id}', 'PostTypeController@detailsJSON')->name('detailsJSON');

@@ -83,7 +83,13 @@ export class LanguageCreateComponent implements OnInit
                         if(response['code'] == 200){
                             this.router.navigate(['../list'], {relativeTo:this.route});
                         }else{
-                            this.openSnackBar(response['message'], '');
+                            if(response['errors']){
+                                let errors = response['errors'];
+                                this.openSnackBar(errors[Object.keys(errors)[0]], '');
+                            }else{
+                                this.openSnackBar(response['message'], '');
+                            }
+                            this.spinner = false;
                         }
                     }
                 )

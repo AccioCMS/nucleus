@@ -191,27 +191,47 @@ class BasePostTypeController extends MainController
      */
     public function deleteRelatedTagsAndCategory($postType)
     {
-        $categories = Category::where("postTypeID", $postType->postTypeID);
-        $categoryIDs = $categories->pluck('categoryID')->toArray();
-        $categoriesRelations = (new CategoryRelation)->setTable($postType->slug."_categories")->whereIn("categoryID", $categoryIDs);
+        if($postType->hasCategories == 1) {
+            $categories = Category::where("postTypeID", $postType->postTypeID);
+            $categoryIDs = $categories->pluck('categoryID')->toArray();
+            $categoriesRelations = (new CategoryRelation)->setTable($postType->slug."_categories")->whereIn("categoryID", $categoryIDs);
+        }
 
-        $tags = Tag::where("postTypeID", $postType->postTypeID);
-        $tagIDs = $tags->pluck('tagID')->toArray();
-        $tagsRelations = (new TagRelation)->setTable($postType->slug."_tags")->whereIn("tagID", $tagIDs);
+        if($postType->hasTags == 1) {
+            $tags = Tag::where("postTypeID", $postType->postTypeID);
+            $tagIDs = $tags->pluck('tagID')->toArray();
+            $tagsRelations = (new TagRelation)->setTable($postType->slug."_tags")->whereIn("tagID", $tagIDs);
+        }
 
         // return false if any delete failed
-        if(($tagsRelations->count() && !$tagsRelations->delete())
-            || ($categoriesRelations->count() && !$categoriesRelations->delete())
-            || ($tags->count() && !$tags->delete())
-            || ($categories->count() && !$categories->delete())
+        if($postType->hasCategories == 1) {
+            if(($categoriesRelations->count() && !$categoriesRelations->delete())){
+                return false;
+            }
+        }
+        if(
+            (
+                $postType->hasCategories == 1
+                && (
+                    ($categoriesRelations->count() && !$categoriesRelations->delete())
+                   || ($categories->count() && !$categories->delete())
+                )
+            )
+            || (
+                $postType->hasTags == 1
+                && (
+                    ($tagsRelations->count() && !$tagsRelations->delete())
+                    || ($tags->count() && !$tags->delete())
+                )
+            )
         ) {
             return false;
         }else{
             Schema::drop($postType->slug."_media");
-            if($postType->hasCategories) {
+            if($postType->hasCategories == 1) {
                 Schema::drop($postType->slug."_categories");
             }
-            if($postType->hasTags) {
+            if($postType->hasTags == 1) {
                 Schema::drop($postType->slug."_tags");
             }
         }
@@ -246,9 +266,10 @@ class BasePostTypeController extends MainController
     public function store(Request $request)
     {
         // check if user has permissions to access this link
-//        if(!User::hasAccess('PostType', 'create')) {
-//            return $this->noPermission();
-//        }
+        /*if(!User::hasAccess('PostType', 'create')) {
+            return $this->noPermission();
+        }*/
+
         // custom messages for validation
         $messages = array(
             'name.required'=>'Post type name is required',
@@ -268,6 +289,26 @@ class BasePostTypeController extends MainController
 
         if(isset($request->id)) {
             $postType = PostType::findOrFail($request->id);
+            if($postType->hasCategories == 1 && !$request->hasCategories) {
+                $categories = Category::where("postTypeID", $postType->postTypeID);
+                $categoryIDs = $categories->pluck('categoryID')->toArray();
+                $categoriesRelations = (new CategoryRelation)->setTable($postType->slug."_categories")->whereIn("categoryID", $categoryIDs);
+
+                $categoriesRelations->delete();
+                $categories->delete();
+                Schema::drop($postType->slug."_categories");
+            }
+
+            if($postType->hasTags == 1 && !$request->hasTags) {
+                $tags = Tag::where("postTypeID", $postType->postTypeID);
+                $tagIDs = $tags->pluck('tagID')->toArray();
+                $tagsRelations = (new TagRelation)->setTable($postType->slug."_tags")->whereIn("tagID", $tagIDs);
+
+                $tagsRelations->delete();
+                $tags->delete();
+                Schema::drop($postType->slug."_tags");
+            }
+
             $customFieldsArray = PostType::updateTable($request->slug, $request->fields, $request->hasCategories, $request->hasTags);
         }else{
             $slug = $request->slug;

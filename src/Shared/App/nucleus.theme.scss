@@ -266,4 +266,20 @@
             box-shadow: unset !important;
         }
     }
+
+    fuse-sidebar{
+        .accio-sidebar-nav {
+            .group-title{
+                &:before{
+                    color: #949494 !important;
+                }
+            }
+
+            span {
+                &.hint-text {
+                    color: #949494 !important;
+                }
+            }
+        }
+    }
 }

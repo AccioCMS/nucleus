@@ -28,6 +28,7 @@ export class PostTypeListComponent implements OnInit
     selection = new SelectionModel<any>(true, []);
     breadcrumbs = ['Post Types', 'List'];
     spinner: boolean = true;
+    deleteSpinner: boolean = false;
 
     /**
      * Constructor
@@ -91,6 +92,7 @@ export class PostTypeListComponent implements OnInit
                         newData.splice(index, 1);
                         this.dataSource = new MatTableDataSource<any>(newData);
                     }
+                    this.deleteSpinner = false;
                 }
             )
             .subscribe();
@@ -101,7 +103,7 @@ export class PostTypeListComponent implements OnInit
     }
 
     addNew(){
-        this.router.navigate(['../add/'], {relativeTo: this.route});
+        this.router.navigate(['../create'], {relativeTo: this.route});
     }
 
     openDialog(id, index): void {
@@ -115,6 +117,7 @@ export class PostTypeListComponent implements OnInit
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
+                this.deleteSpinner = true;
                 this.delete(id, index);
             }
         });

@@ -22,6 +22,7 @@ export class LanguageEditComponent implements OnInit
     languageForm: FormGroup;
     breadcrumbs = ['Settings', 'Languages', 'Edit Language'];
     spinner: boolean = true;
+    saveSpinner: boolean = false;
 
     /**
      * Constructor
@@ -69,15 +70,17 @@ export class LanguageEditComponent implements OnInit
     }
 
     onSave(){
+        this.saveSpinner = true;
         let data = this.languageForm.getRawValue();
         data.id = this.id;
         this.httpClient.post('/admin/json/language/store', data)
             .map(
                 (response) => {
                     if(response['code'] == 200){
-                        this.router.navigate(['../../list'], {relativeTo:this.route});
+                        this.router.navigate(['../../list'], {relativeTo: this.route});
                     }else{
                         this.openSnackBar(response['message'], '');
+                        this.saveSpinner = false;
                     }
                 }
             )

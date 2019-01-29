@@ -20,7 +20,7 @@ use App\Models\PostType;
 class PostTypeModel extends Model
 {
     use
-      Cachable,
+      //Cachable,
       PostTypeTrait,
       LogsActivity,
       BootEventsTrait,
@@ -461,7 +461,7 @@ class PostTypeModel extends Model
      * @param  $fields
      * @return array
      */
-    public static function updateTable($postTypeSlug, $fields, $hasTags = false, $hasCategories = false)
+    public static function updateTable($postTypeSlug, $fields, $hasCategories = false, $hasTags = false)
     {
         self::$customFieldsArray = [];
 
@@ -494,7 +494,7 @@ class PostTypeModel extends Model
             }
         );
 
-        if($hasCategories) {
+        if( $hasCategories) {
             self::createCategoryRelationsTable($postTypeSlug);
         }
 
