@@ -78,7 +78,7 @@ class BaseGeneralController extends MainController
         ];
 
         // all languages
-        $languages = Language::select('name as title', 'slug as id')->get();
+        $languages = Language::select('name as title', 'slug as id', 'languageID')->get();
         //$request->session()->flush();
         return [
             'languages' => $languages,

@@ -79,7 +79,7 @@ export class LanguageEditComponent implements OnInit
                     if(response['code'] == 200){
                         this.router.navigate(['../../list'], {relativeTo: this.route});
                     }else{
-                        this.openSnackBar(response['message'], '');
+                        this.openSnackBar(response['message'], 'X', 'error', 10000);
                         this.saveSpinner = false;
                     }
                 }
@@ -91,9 +91,18 @@ export class LanguageEditComponent implements OnInit
         this.router.navigate(['../../list'], {relativeTo:this.route});
     }
 
-    openSnackBar(message: string, action: string) {
+    openSnackBar(message: string, action: string, type: string, duration: number = 2000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: duration,
+            panelClass: bgClass,
         });
     }
+
 }

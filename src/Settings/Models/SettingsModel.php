@@ -14,7 +14,7 @@ class SettingsModel extends Model
 {
 
     use
-        Cachable,
+        //Cachable,
         LogsActivity,
         BootEventsTrait,
         CollectionTrait;

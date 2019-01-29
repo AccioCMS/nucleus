@@ -102,14 +102,14 @@ class BaseLanguageController extends MainController
         }*/
 
         // Ensure a selection has taken place
-        if (count($request->all()) <= 0) {
+        if (count($request->ids) <= 0) {
             return $this->response('Please select some languages to be deleted', 500);
         }
 
         $allPostTypes = PostType::all();
 
         // loop through language IDs
-        foreach ($request->all() as $id) {
+        foreach ($request->ids as $id) {
             $language = Language::find($id);
 
             if ($language->isDefault) {

@@ -75,7 +75,7 @@ export class PostTypeCreateComponent implements OnInit
                         if(data['code'] == 200){
                             this.router.navigate(['../edit/'+data['id']], {relativeTo:this.route});
                         }else{
-                            this.openSnackBar(data['message'], '');
+                            this.openSnackBar(data['message'], 'X', 'error', 10000);
                         }
                     }
                 )
@@ -108,9 +108,17 @@ export class PostTypeCreateComponent implements OnInit
         }
     }
 
-    openSnackBar(message: string, action: string) {
+    openSnackBar(message: string, action: string, type: string, duration: number = 3000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: duration,
+            panelClass: bgClass,
         });
     }
 }

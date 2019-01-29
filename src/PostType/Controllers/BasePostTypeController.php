@@ -34,7 +34,13 @@ class BasePostTypeController extends MainController
     public function getAll($lang = "")
     {
         $result = [];
-        $postType = PostType::all()->orderBy('postTypeID');
+
+        if(isset($_GET['order']) && isset($_GET['type'])){
+            $postType = PostType::orderBy($_GET['order'], $_GET['type'])->get();
+        }else{
+            $postType = PostType::all()->orderBy('postTypeID');
+        }
+
         foreach ($postType as $postType){
             $postType->categories = Category::where("postTypeID", $postType->postTypeID)->get();
             $result[] = $postType;
@@ -128,16 +134,16 @@ class BasePostTypeController extends MainController
     public function bulkDelete(Request $request)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('PostType', 'delete')) {
+        /*if(!User::hasAccess('PostType', 'delete')) {
             return $this->noPermission();
-        }
+        }*/
         // if there are no item selected
         if (count($request->all()) <= 0) {
             return $this->response('Please select items to be deleted', 500);
         }
 
         // loop throw the item array (ids) and delete them
-        foreach($request->all() as $id){
+        foreach($request->ids as $id){
             $res = $this->deletePostType($id);
             if(!$res) {
                 return $this->response('Post Type could not be deleted. Please try again later or contact your Administrator!', 500);

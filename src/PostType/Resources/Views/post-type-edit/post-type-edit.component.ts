@@ -102,9 +102,9 @@ export class PostTypeEditComponent implements OnInit
                 .map(
                     (data) => {
                         if(data['code'] == 200){
-                            this.openSnackBar(data['message'], '');
+                            this.openSnackBar(data['message'], 'X', 'success');
                         }else{
-                            this.openSnackBar(data['message'], '');
+                            this.openSnackBar(data['message'], 'X', 'error', 10000);
                         }
                         this.saveSpinner = false;
                     }
@@ -122,9 +122,17 @@ export class PostTypeEditComponent implements OnInit
         this.router.navigate(['../../list'], {relativeTo:this.route});
     }
 
-    openSnackBar(message: string, action: string) {
+    openSnackBar(message: string, action: string, type: string, duration: number = 2000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: duration,
+            panelClass: bgClass,
         });
     }
 }

@@ -4,7 +4,7 @@
     [breadcrumbs]="breadcrumbs"
     [showSaveBtn]="true"
     [saveBtnData]="{ text: 'Save', icon: 'save'}"
-    [showCancelBtn]="true"
+    [showCancelBtn]="false"
     [cancelBtnData]="{ text: 'Cancel', icon: ''}"
 >
 </nucleus-template-header>
@@ -28,7 +28,7 @@
 
             <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
                 <mat-label>Site Title</mat-label>
-                <input matInput formControlName="sitTitle" required>
+                <input matInput formControlName="siteTitle" required>
                 <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
                 <mat-error>Site Title is required!</mat-error>
             </mat-form-field>
@@ -80,8 +80,8 @@
                 <mat-select formControlName="defaultLanguage" placeholder="Default Language">
                     <mat-option
                         *ngFor="let language of languages"
-                        [value]="language.name">
-                        {{ language.name }}
+                        [value]="language.languageID">
+                        {{ language.title }}
                     </mat-option>
                 </mat-select>
                 <mat-error>Default Language is required!</mat-error>

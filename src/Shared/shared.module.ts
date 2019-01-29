@@ -14,6 +14,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 import { NucleusTemplateHeaderComponent } from './App/template-header/template-header.component';
 import { AccioDialogComponent } from './App/accio-dialog/accio-dialog.component';
@@ -42,6 +43,7 @@ import { sharedReducer } from './Store/shared.reducers';
         MatDialogModule,
         MatProgressSpinnerModule,
         MatPaginatorModule,
+        MatProgressBarModule,
 
         StoreModule.forFeature('shared', sharedReducer),
     ],
@@ -61,7 +63,8 @@ import { sharedReducer } from './Store/shared.reducers';
         MatTabsModule,
         MatDialogModule,
         MatProgressSpinnerModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        MatProgressBarModule
     ],
     entryComponents: [
         AccioDialogComponent
