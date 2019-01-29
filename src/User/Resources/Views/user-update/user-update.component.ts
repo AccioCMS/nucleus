@@ -126,20 +126,17 @@ export class UserUpdateComponent
         });
 
 
-        // this.showErrorMessage = false;
-        // let formData = this.usersForm.value;
         this.id = this.route.snapshot.paramMap.get('id');
         // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
-        this.httpClient.get("api/user/get/"+this.id)
+        this.httpClient.get("admin/en/json/user/details/"+this.id)
             .map(
                 (data) => {
                     if(data){
-
-
                         let details = data['details'];
+
                          this.groups = data['allGroups'];
                         this.selecdedGroups = data['details']['roles'];
-                        console.log(this.selecdedGroups[0]['groupID']);
+                        console.log(this.selecdedGroups);
                         this.usersForm.patchValue({
                             email: details['email'],
                             firstName: details['firstName'],
@@ -169,12 +166,13 @@ export class UserUpdateComponent
 
         let formData = this.usersForm.value;
         // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
-        let data = {'user' : {id:  this.id , email: this.usersForm.get('email').value, lastName: formData.lastName, firstName: formData.firstName,
-                phone: formData.phone, street: formData.street, country: formData.country , about: formData.about, groups: formData.groups, isActive: formData.isActive}};
-        this.httpClient.post("/api/user/storeUpdate/",data)
+        // console.log("Groups"+this.usersForm.get('groups').value);
+        let data = {'user' : {id:  this.id , email: this.usersForm.get('email').value, lastName:  this.usersForm.get('lastName').value, firstName:  this.usersForm.get('firstName').value,
+                phone:  this.usersForm.get('phone').value, street:  this.usersForm.get('street').value, country: this.usersForm.get('country').value, about: this.usersForm.get('about').value, groups: this.usersForm.get('groups').value, isActive: this.usersForm.get('isActive').value}};
+        this.httpClient.post("admin/en/user/storeUpdate/",data)
             .map(
                 (data) => {
-                    console.log(data);
+                    // console.log(data);
                     if(data == 1){
 
                         this.router.navigate(["/test/users/edit/"+this.id+""])

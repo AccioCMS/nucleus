@@ -506,6 +506,7 @@ trait UserTrait
         RoleRelation::where('userID', $this->userID)->delete();
 
         $roles = [];
+
         // in case int is given
         if(is_numeric($groups)) {
             $groups = [$groups];

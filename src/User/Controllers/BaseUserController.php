@@ -6,7 +6,7 @@ use Hash;
 use Validator;
 use Response;
 use Auth;
-use Input;
+use Illuminate\Support\Facades\Input;
 use Route;
 use App;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +17,7 @@ use Accio\User\Models\RoleRelationsModel;
 use Accio\Routing\MainController;
 use Accio\Support\Facades\Search;
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Input;
 
 class BaseUserController extends MainController
 {
@@ -76,15 +77,16 @@ class BaseUserController extends MainController
      * @param  string $lang Language slug (ex. en)
      * @return array
      * */
-    public function getAll($lang = "")
+    public function getAll($lang = "",$orderBy="userID",$orderType="DESC")
     {
         // check if user has permissions to access this link
 //        if(!User::hasAccess('User', 'read')) {
 //            return $this->noPermission();
 //        }
 
-        $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
-        $orderType = (isset($_GET['type'])) ? $orderType = $_GET['type'] : 'DESC';
+//        $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
+//        $orderType = (isset($_GET['type'])) ? $orderType = $_GET['type'] : 'DESC';
+//        return $orderBy;
 
         return DB::table('users')
             ->leftJoin('media', 'users.profileImageID', '=', 'media.mediaID')
@@ -92,6 +94,7 @@ class BaseUserController extends MainController
             ->orderBy($orderBy, $orderType)
             ->paginate(User::$rowsPerPage);
     }
+
 
     /**
      * Get all User Groups.
@@ -291,11 +294,11 @@ class BaseUserController extends MainController
     public function detailsJSON($lang, $id)
     {
         // check if user has permissions to access this link
-        if(\Illuminate\Support\Facades\Auth::user()->userID != $id) {
-            if (!User::hasAccess('User', 'read')) {
-                return $this->noPermission();
-            }
-        }
+//        if(\Illuminate\Support\Facades\Auth::user()->userID != $id) {
+//            if (!User::hasAccess('User', 'read')) {
+//                return $this->noPermission();
+//            }
+//        }
 
         $user = App\Models\User::with('roles', 'profileImage')->find($id)->appendLanguageKeys();
         $final = [
@@ -362,15 +365,14 @@ class BaseUserController extends MainController
         $user->lastName = $request->user['lastName'];
         $user->phone = $request->user['phone'];
         $user->street = $request->user['street'];
-        $user->country = $request->user['email'];
+        $user->country = $request->user['country'];
         $user->isActive = $request->user['isActive'];
 
 //        $user->save();
 
-//        return $request->user['groups'];
         if($user->save()) {
             // Add roles permissions
-
+//            return $request->user;
             $user->assignRoles($request->user['groups']);
             $redirectParams = parent::redirectParams($request->redirect, 'user', $user->userID);
             $result = $this->response('User stored successfully', 200, $user->userID, $redirectParams['view'], $redirectParams['redirectUrl']);

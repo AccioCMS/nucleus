@@ -42,7 +42,7 @@ const nucleusRoutes: Routes = [
     { path: 'admin/en', component: NucleusComponent, /*canActivate: [AuthGuard],*/ children: [
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
-        { path: 'users', loadChildren: () => UserModule },
+        { path: 'user', loadChildren: () => UserModule },
         { path: 'custom-fields', loadChildren: () => CustomFieldModule },
         { path: 'language', loadChildren: () => LanguageModule },
         { path: 'menu', loadChildren: () => MenuModule },

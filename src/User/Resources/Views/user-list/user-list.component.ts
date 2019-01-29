@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -7,7 +7,7 @@ import { locale as turkish } from './i18n/tr';
 
 
 import { DataSource  ,SelectionModel} from '@angular/cdk/collections';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource ,MatTable} from '@angular/material';
 
 import { UsersService } from "../../users.service";
 
@@ -19,30 +19,18 @@ import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AccioDialogComponent} from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA,MatSort} from '@angular/material';
 
 import {MatSnackBar} from '@angular/material';
 export interface Users {
     checkbox : number;
-    name: string;
+    firstName: string;
     email: string;
     phone: string;
     jobtitle: string;
     asd: string
 }
 
-const ELEMENT_DATA: Users[] = [
-    {asd : "" ,checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum dsa', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum ds', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum ', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsuma ', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-];
 
 @Component({
     selector   : 'user-list',
@@ -64,11 +52,13 @@ export class UserListComponent
     dataSource = new MatTableDataSource<any>([]);
 
     selection = new SelectionModel<any>(true, []);
-    spinner: boolean = true;
-
-    displayedColumns: string[] = ['checkbox','name', 'email', 'phone', 'jobtitle','buttons'];
-    // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
-    // dataSource =   ELEMENT_DATA
+    spinner: boolean = false;
+    order: boolean = false;
+    orderBy: string;
+    orderType: string;
+    direction: string;
+    loadingSpinner: boolean = false;
+    displayedColumns: string[] = ['checkbox','firstName', 'email', 'phone', 'jobtitle','buttons'];
 
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
@@ -83,17 +73,34 @@ export class UserListComponent
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
     }
 
-
-
+    @ViewChild(MatTable) table: MatTable<any>;
+    @ViewChild(MatSort) sort: MatSort;
     ngOnInit(){
-        this.httpClient.get('en/json/user/get-all')
-            .map(
-                (response) => {
-                    this.dataSource = new MatTableDataSource<any>(response['data']);
-                    this.spinner = false;
-                }
-            )
-            .subscribe();
+        this.spinner = false;
+        if(this.route.snapshot.queryParamMap.get('order')){
+            // console.log(this.route.snapshot.queryParamMap.get('order'));
+            this.httpClient.get('/admin/en/json/user/get-all/'+this.route.snapshot.queryParamMap.get('order')+'/'+this.route.snapshot.queryParamMap.get('type'))
+                .map(
+                    (response) => {
+                        this.dataSource = new MatTableDataSource<any>(response['data']);
+                        // console.log(response['data']);
+                        this.spinner = false;
+                    }
+                )
+                .subscribe();
+        }else{
+            this.spinner = true;
+            this.httpClient.get('/admin/en/json/user/get-all')
+                .map(
+                    (response) => {
+                        this.dataSource = new MatTableDataSource<any>(response['data']);
+                        // console.log(response['data']);
+                        this.spinner = false;
+                    }
+                )
+                .subscribe();
+        }
+
     }
 
     edit(id){
@@ -158,6 +165,24 @@ export class UserListComponent
         this.isAllSelected() ?
             this.selection.clear() :
             this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+
+
+    sortTable(event) {
+        this.loadingSpinner = true;
+        this.spinner = false;
+        this.router.navigate(["/admin/en/user/list"],{queryParams: { order: event['active'],type: event['direction']}});
+        this.order = true;
+
+        this.httpClient.get('admin/en/json/user/get-all/'+event['active']+"/"+event['direction'])
+            .map(
+                (response) => {
+                    this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.loadingSpinner = false;
+                }
+            )
+            .subscribe();
+
     }
 
 
