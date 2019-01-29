@@ -23,6 +23,7 @@ export class PostTypeEditComponent implements OnInit
     slug = '';
     id: number;
     spinner: boolean = true;
+    saveSpinner: boolean = false;
 
     /**
      * Constructor
@@ -81,6 +82,7 @@ export class PostTypeEditComponent implements OnInit
                         hasFeaturedVideo  : details['hasFeaturedVideo'] == 1 ? true : false,
                         isFeaturedVideoRequired  : details['isFeaturedVideoRequired'] == 1 ? true : false,
                     });
+                    this.slug = details['slug'];
                     this.spinner = false;
                 }
             )
@@ -89,6 +91,7 @@ export class PostTypeEditComponent implements OnInit
 
     onSave(){
         if(this.postTypeForm.valid){
+            this.saveSpinner = true;
             let data = this.postTypeForm.value;
             data.fields = [];
             data.slug = this.slug;
@@ -99,10 +102,11 @@ export class PostTypeEditComponent implements OnInit
                 .map(
                     (data) => {
                         if(data['code'] == 200){
-                            this.openSnackBar(data['message'], '');
+                            this.openSnackBar(data['message'], 'X', 'success');
                         }else{
-                            this.openSnackBar(data['message'], '');
+                            this.openSnackBar(data['message'], 'X', 'error', 10000);
                         }
+                        this.saveSpinner = false;
                     }
                 )
                 .subscribe();
@@ -115,31 +119,20 @@ export class PostTypeEditComponent implements OnInit
     }
 
     onCancel(){
-        this.httpClient.get('/admin/en/json/post-type/details/'+this.id)
-            .map(
-                (data) => {
-                    let details = data['details'];
-                    this.postTypeForm.patchValue({
-                        name: details['name'],
-                        slug: details['slug'],
-                        isVisible  : details['isVisible'] == 1 ? true : false,
-                        hasCategories  : details['hasCategories'] == 1 ? true : false,
-                        isCategoryRequired  : details['isCategoryRequired'] == 1 ? true : false,
-                        hasTags  : details['hasTags'] == 1 ? true : false,
-                        isTagRequired  : details['isTagRequired'] == 1 ? true : false,
-                        hasFeaturedImage  : details['hasFeaturedImage'] == 1 ? true : false,
-                        isFeaturedImageRequired  : details['isFeaturedImageRequired'] == 1 ? true : false,
-                        hasFeaturedVideo  : details['hasFeaturedVideo'] == 1 ? true : false,
-                        isFeaturedVideoRequired  : details['isFeaturedVideoRequired'] == 1 ? true : false,
-                    });
-                }
-            )
-            .subscribe();
+        this.router.navigate(['../../list'], {relativeTo:this.route});
     }
 
-    openSnackBar(message: string, action: string) {
+    openSnackBar(message: string, action: string, type: string, duration: number = 2000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: duration,
+            panelClass: bgClass,
         });
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, Router} from "@angular/router";
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef, MatSort} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
 
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
@@ -23,11 +23,13 @@ import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-
 })
 export class PostTypeListComponent implements OnInit
 {
-    displayedColumns: string[] = ['select', 'id', 'name', 'slug', 'buttons'];
+    displayedColumns: string[] = ['select', 'postTypeID', 'name', 'slug', 'buttons'];
     dataSource = new MatTableDataSource<any>([]);
     selection = new SelectionModel<any>(true, []);
     breadcrumbs = ['Post Types', 'List'];
     spinner: boolean = true;
+    deleteSpinner: boolean = false;
+    loadingSpinner: boolean = false;
 
     /**
      * Constructor
@@ -47,7 +49,11 @@ export class PostTypeListComponent implements OnInit
     }
 
     ngOnInit(){
-        this.httpClient.get('/admin/en/json/post-type/get-all')
+        let params = '';
+        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
+            params = '?order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+        }
+        this.httpClient.get('/admin/en/json/post-type/get-all'+params)
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
@@ -71,26 +77,20 @@ export class PostTypeListComponent implements OnInit
             this.dataSource.data.forEach(row => this.selection.select(row));
     }
 
-    loadData(){
-        this.httpClient.get('/admin/en/json/post-type/get-all')
-            .map(
-                (response) => {
-                    this.dataSource = new MatTableDataSource<any>(response['data']);
-                }
-            )
-            .subscribe();
-    }
-
     delete(id, index){
         this.httpClient.get('/admin/en/json/post-type/delete/'+id)
             .map(
                 (response) => {
-                    this.openSnackBar(response['message'], '');
+
                     if(response['code'] == 200){
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
                         this.dataSource = new MatTableDataSource<any>(newData);
+                        this.openSnackBar(response['message'], 'X', 'success');
+                    }else{
+                        this.openSnackBar(response['message'], 'X', 'error', 10000);
                     }
+                    this.deleteSpinner = false;
                 }
             )
             .subscribe();
@@ -101,7 +101,7 @@ export class PostTypeListComponent implements OnInit
     }
 
     addNew(){
-        this.router.navigate(['../add/'], {relativeTo: this.route});
+        this.router.navigate(['../create'], {relativeTo: this.route});
     }
 
     openDialog(id, index): void {
@@ -115,14 +115,79 @@ export class PostTypeListComponent implements OnInit
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
+                this.deleteSpinner = true;
                 this.delete(id, index);
             }
         });
     }
 
-    openSnackBar(message: string, action: string) {
+    openSnackBar(message: string, action: string, type: string, duration: number = 3000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: duration,
+            panelClass: bgClass,
         });
+    }
+
+    bulkDelete(){
+        const dialogRef = this.dialog.open(AccioDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Delete',
+                text: 'Are you sure that you want to delete these Post Types?'
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == 'confirm'){
+                this.deleteSpinner = true;
+
+                let selectedData = this.selection.selected;
+                var keyArray = selectedData.map(function(item) { return item["postTypeID"]; });
+                let data = { ids: keyArray };
+
+                this.httpClient.post('/admin/json/post-type/bulk-delete', data)
+                    .map(
+                        (response) => {
+                            if(response['code'] == 200){
+                                this.removeSelection();
+                                this.openSnackBar(response['message'], 'X', 'success');
+
+                                let newData = this.dataSource.data;
+                                newData = newData.filter(item => !keyArray.includes(item.postTypeID) );
+                                this.dataSource = new MatTableDataSource<any>(newData);
+                            }else{
+                                this.openSnackBar(response['message'], 'X', 'error', 10000);
+                            }
+                            this.deleteSpinner = false;
+                        }
+                    )
+                    .subscribe();
+            }
+        });
+    }
+
+    removeSelection(){
+        this.selection.clear();
+    }
+
+    customSort(event){
+        this.loadingSpinner = true;
+        this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
+
+        this.httpClient.get('/admin/en/json/post-type/get-all?order='+event['active']+'&type='+event['direction'])
+            .map(
+                (response) => {
+                    this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.loadingSpinner = false;
+                }
+            )
+            .subscribe();
     }
 }

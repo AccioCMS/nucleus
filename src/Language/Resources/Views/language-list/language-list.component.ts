@@ -28,6 +28,7 @@ export class LanguageListComponent implements OnInit
     selection = new SelectionModel<any>(true, []);
     breadcrumbs = ['Settings', 'Languages'];
     spinner: boolean = true;
+    deleteSpinner: boolean = false;
 
     /**
      * Constructor
@@ -79,12 +80,15 @@ export class LanguageListComponent implements OnInit
         this.httpClient.get('/admin/en/json/language/delete/'+id)
             .map(
                 (response) => {
-                    this.openSnackBar(response['message'], '');
                     if(response['code'] == 200){
+                        this.openSnackBar(response['message'], 'X', 'success');
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
                         this.dataSource = new MatTableDataSource<any>(newData);
+                    }else{
+                        this.openSnackBar(response['message'], 'X', 'error', 10000);
                     }
+                    this.deleteSpinner = false;
                 }
             )
             .subscribe();
@@ -105,14 +109,65 @@ export class LanguageListComponent implements OnInit
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
+                this.deleteSpinner = true;
                 this.delete(id, index);
             }
         });
     }
 
-    openSnackBar(message: string, action: string) {
+    openSnackBar(message: string, action: string, type: string, duration: number = 2000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: duration,
+            panelClass: bgClass,
         });
+    }
+
+    bulkDelete(){
+        const dialogRef = this.dialog.open(AccioDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Delete',
+                text: 'Are you sure that you want to delete these Languages?'
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == 'confirm'){
+                this.deleteSpinner = true;
+
+                let selectedData = this.selection.selected;
+                var keyArray = selectedData.map(function(item) { return item["languageID"]; });
+                let data = { ids: keyArray };
+
+                this.httpClient.post('/admin/json/language/bulk-deletes', data)
+                    .map(
+                        (response) => {
+                            if(response['code'] == 200){
+                                this.removeSelection();
+                                this.openSnackBar(response['message'], 'X', 'success');
+
+                                let newData = this.dataSource.data;
+                                newData = newData.filter(item => !keyArray.includes(item.languageID) );
+                                this.dataSource = new MatTableDataSource<any>(newData);
+                            }else{
+                                this.openSnackBar(response['message'], 'X', 'error', 10000);
+                            }
+                            this.deleteSpinner = false;
+                        }
+                    )
+                    .subscribe();
+            }
+        });
+    }
+
+    removeSelection(){
+        this.selection.clear();
     }
 }

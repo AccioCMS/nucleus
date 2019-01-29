@@ -34,7 +34,13 @@ class BasePostTypeController extends MainController
     public function getAll($lang = "")
     {
         $result = [];
-        $postType = PostType::all()->orderBy('postTypeID');
+
+        if(isset($_GET['order']) && isset($_GET['type'])){
+            $postType = PostType::orderBy($_GET['order'], $_GET['type'])->get();
+        }else{
+            $postType = PostType::all()->orderBy('postTypeID');
+        }
+
         foreach ($postType as $postType){
             $postType->categories = Category::where("postTypeID", $postType->postTypeID)->get();
             $result[] = $postType;
@@ -128,16 +134,16 @@ class BasePostTypeController extends MainController
     public function bulkDelete(Request $request)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('PostType', 'delete')) {
+        /*if(!User::hasAccess('PostType', 'delete')) {
             return $this->noPermission();
-        }
+        }*/
         // if there are no item selected
         if (count($request->all()) <= 0) {
             return $this->response('Please select items to be deleted', 500);
         }
 
         // loop throw the item array (ids) and delete them
-        foreach($request->all() as $id){
+        foreach($request->ids as $id){
             $res = $this->deletePostType($id);
             if(!$res) {
                 return $this->response('Post Type could not be deleted. Please try again later or contact your Administrator!', 500);
@@ -191,27 +197,47 @@ class BasePostTypeController extends MainController
      */
     public function deleteRelatedTagsAndCategory($postType)
     {
-        $categories = Category::where("postTypeID", $postType->postTypeID);
-        $categoryIDs = $categories->pluck('categoryID')->toArray();
-        $categoriesRelations = (new CategoryRelation)->setTable($postType->slug."_categories")->whereIn("categoryID", $categoryIDs);
+        if($postType->hasCategories == 1) {
+            $categories = Category::where("postTypeID", $postType->postTypeID);
+            $categoryIDs = $categories->pluck('categoryID')->toArray();
+            $categoriesRelations = (new CategoryRelation)->setTable($postType->slug."_categories")->whereIn("categoryID", $categoryIDs);
+        }
 
-        $tags = Tag::where("postTypeID", $postType->postTypeID);
-        $tagIDs = $tags->pluck('tagID')->toArray();
-        $tagsRelations = (new TagRelation)->setTable($postType->slug."_tags")->whereIn("tagID", $tagIDs);
+        if($postType->hasTags == 1) {
+            $tags = Tag::where("postTypeID", $postType->postTypeID);
+            $tagIDs = $tags->pluck('tagID')->toArray();
+            $tagsRelations = (new TagRelation)->setTable($postType->slug."_tags")->whereIn("tagID", $tagIDs);
+        }
 
         // return false if any delete failed
-        if(($tagsRelations->count() && !$tagsRelations->delete())
-            || ($categoriesRelations->count() && !$categoriesRelations->delete())
-            || ($tags->count() && !$tags->delete())
-            || ($categories->count() && !$categories->delete())
+        if($postType->hasCategories == 1) {
+            if(($categoriesRelations->count() && !$categoriesRelations->delete())){
+                return false;
+            }
+        }
+        if(
+            (
+                $postType->hasCategories == 1
+                && (
+                    ($categoriesRelations->count() && !$categoriesRelations->delete())
+                   || ($categories->count() && !$categories->delete())
+                )
+            )
+            || (
+                $postType->hasTags == 1
+                && (
+                    ($tagsRelations->count() && !$tagsRelations->delete())
+                    || ($tags->count() && !$tags->delete())
+                )
+            )
         ) {
             return false;
         }else{
             Schema::drop($postType->slug."_media");
-            if($postType->hasCategories) {
+            if($postType->hasCategories == 1) {
                 Schema::drop($postType->slug."_categories");
             }
-            if($postType->hasTags) {
+            if($postType->hasTags == 1) {
                 Schema::drop($postType->slug."_tags");
             }
         }
@@ -246,9 +272,10 @@ class BasePostTypeController extends MainController
     public function store(Request $request)
     {
         // check if user has permissions to access this link
-//        if(!User::hasAccess('PostType', 'create')) {
-//            return $this->noPermission();
-//        }
+        /*if(!User::hasAccess('PostType', 'create')) {
+            return $this->noPermission();
+        }*/
+
         // custom messages for validation
         $messages = array(
             'name.required'=>'Post type name is required',
@@ -268,6 +295,26 @@ class BasePostTypeController extends MainController
 
         if(isset($request->id)) {
             $postType = PostType::findOrFail($request->id);
+            if($postType->hasCategories == 1 && !$request->hasCategories) {
+                $categories = Category::where("postTypeID", $postType->postTypeID);
+                $categoryIDs = $categories->pluck('categoryID')->toArray();
+                $categoriesRelations = (new CategoryRelation)->setTable($postType->slug."_categories")->whereIn("categoryID", $categoryIDs);
+
+                $categoriesRelations->delete();
+                $categories->delete();
+                Schema::drop($postType->slug."_categories");
+            }
+
+            if($postType->hasTags == 1 && !$request->hasTags) {
+                $tags = Tag::where("postTypeID", $postType->postTypeID);
+                $tagIDs = $tags->pluck('tagID')->toArray();
+                $tagsRelations = (new TagRelation)->setTable($postType->slug."_tags")->whereIn("tagID", $tagIDs);
+
+                $tagsRelations->delete();
+                $tags->delete();
+                Schema::drop($postType->slug."_tags");
+            }
+
             $customFieldsArray = PostType::updateTable($request->slug, $request->fields, $request->hasCategories, $request->hasTags);
         }else{
             $slug = $request->slug;

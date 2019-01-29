@@ -7,6 +7,9 @@ Route::group(
     ['as' => 'backend.settings.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
 
         Route::get('/{lang}/settings/{view}', 'SettingsController@index')->name('index');
+        Route::get('/{lang}/settings/language/{view}', 'LanguageController@index')->name('languageIndex');
+        Route::get('/{lang}/settings/language/{view}/{id}', 'LanguageController@index')->name('languageIndex');
+
         Route::group(['middleware' => ['auth:api']], function (){
             /**
              * GET

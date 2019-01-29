@@ -8,6 +8,9 @@
     [cancelBtnData]="{ text: 'Cancel', icon: ''}"
 >
 </nucleus-template-header>
+<div class="spinner" *ngIf="saveSpinner">
+    <mat-spinner color="accent" [diameter]="60"></mat-spinner>
+</div>
 <div class="accio-container">
     <div class="accio-content center p-16 ps ps--active-y " fuseperfectscrollbar="">
 

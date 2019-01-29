@@ -93,7 +93,7 @@ class MainController extends Controller
 
         $key = ($key == "list" || $key == "posts") ? 'read' : $key;
         // check if user has permissions to access this link
-        if($key == 'read') {
+        /*if($key == 'read') {
             if(!User::hasAccess($className, $key)) {
                 return view('errors.permissions', compact('lang', 'view', 'id'));
             }
@@ -101,7 +101,7 @@ class MainController extends Controller
             if(!User::hasAccess($className, $key, $id, true)) {
                 return view('errors.permissions', compact('lang', 'view', 'id'));
             }
-        }
+        }*/
 
         return view('index');
     }

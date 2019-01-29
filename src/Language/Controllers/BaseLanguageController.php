@@ -31,9 +31,9 @@ class BaseLanguageController extends MainController
      */
     public function getAll($lang = "")
     {
-//        if(!User::hasAccess('Language', 'read')) {
-//            return $this->noPermission();
-//        }
+       /* if(!User::hasAccess('Language', 'read')) {
+            return $this->noPermission();
+        }*/
         return ['data' => Language::all()];
     }
 
@@ -62,9 +62,9 @@ class BaseLanguageController extends MainController
      */
     public function delete($lang, $id)
     {
-//        if(!User::hasAccess('Language', 'delete')) {
-//            return $this->noPermission();
-//        }
+        /*if(!User::hasAccess('Language', 'delete')) {
+            return $this->noPermission();
+        }*/
         $language = Language::find($id);
 
         if($language) {
@@ -97,19 +97,19 @@ class BaseLanguageController extends MainController
      */
     public function bulkDelete(Request $request)
     {
-        if(!User::hasAccess('Language', 'delete')) {
+        /*if(!User::hasAccess('Language', 'delete')) {
             return $this->noPermission();
-        }
+        }*/
 
         // Ensure a selection has taken place
-        if (count($request->all()) <= 0) {
+        if (count($request->ids) <= 0) {
             return $this->response('Please select some languages to be deleted', 500);
         }
 
         $allPostTypes = PostType::all();
 
         // loop through language IDs
-        foreach ($request->all() as $id) {
+        foreach ($request->ids as $id) {
             $language = Language::find($id);
 
             if ($language->isDefault) {
@@ -194,12 +194,11 @@ class BaseLanguageController extends MainController
             }
 
             // create labels
-//            if(!isset($request->id)) {
-//                $this->createNewLanguageLabels($language->slug);
-//            }
+            /*if(!isset($request->id)) {
+                $this->createNewLanguageLabels($language->slug);
+            }*/
 
             $redirectParams = parent::redirectParams($request->redirect, 'language', $language->languageID);
-            $result = $this->response('Language is stored', 200, $language->languageID, $redirectParams['view'], $redirectParams['redirectUrl']);
             $result = $this->response('Language is stored', 200, $language->languageID, $redirectParams['view'], $redirectParams['redirectUrl']);
         }else{
             $result = $this->response('Language could not be stored. Internal server error. Please try again later', 500);
