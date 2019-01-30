@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -10,14 +10,17 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {MatSnackBar} from '@angular/material';
+import { Subject } from "rxjs/index";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector   : 'language-edit',
     templateUrl: './language-edit.component.html',
     styleUrls  : ['./language-edit.component.scss']
 })
-export class LanguageEditComponent implements OnInit
+export class LanguageEditComponent implements OnInit, OnDestroy
 {
+    private _unsubscribeAll: Subject<any>;
     id: number;
     languageForm: FormGroup;
     breadcrumbs = ['Settings', 'Languages', 'Edit Language'];
@@ -39,6 +42,9 @@ export class LanguageEditComponent implements OnInit
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(){
@@ -53,6 +59,7 @@ export class LanguageEditComponent implements OnInit
         this.id = this.route.snapshot.params['id'];
 
         this.httpClient.get('/admin/en/json/language/details/'+this.id)
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     let details = response['details'];
@@ -74,6 +81,7 @@ export class LanguageEditComponent implements OnInit
         let data = this.languageForm.getRawValue();
         data.id = this.id;
         this.httpClient.post('/admin/json/language/store', data)
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     if(response['code'] == 200){
@@ -103,6 +111,11 @@ export class LanguageEditComponent implements OnInit
             duration: duration,
             panelClass: bgClass,
         });
+    }
+
+    ngOnDestroy() {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 
 }

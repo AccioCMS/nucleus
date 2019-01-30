@@ -19,22 +19,23 @@ import { takeUntil } from 'rxjs/operators';
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 
 @Component({
-    selector   : 'post-type-list',
-    templateUrl: './post-type-list.component.html',
-    styleUrls  : ['./post-type-list.component.scss']
+    selector   : 'category-list',
+    templateUrl: './category-list.component.html',
+    styleUrls  : ['./category-list.component.scss']
 })
-export class PostTypeListComponent implements OnInit, OnDestroy
+export class CategoryListComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
-    displayedColumns: string[] = ['select', 'postTypeID', 'name', 'slug', 'buttons'];
+    displayedColumns: string[] = ['select', 'categoryID', 'title', 'slug', 'buttons'];
     dataSource = new MatTableDataSource<any>([]);
     selection = new SelectionModel<any>(true, []);
-    breadcrumbs = ['Post Types', 'List'];
+    breadcrumbs = ['Post Type', 'Categories', 'List'];
     spinner: boolean = true;
     deleteSpinner: boolean = false;
     loadingSpinner: boolean = false;
     totalSize: number = 0;
     pageSize: number = 10;
+    postTypeID: number;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -67,7 +68,9 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
             params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
-        this.httpClient.get('/admin/en/json/post-type/get-all'+params)
+
+        this.postTypeID = this.route.snapshot.params['id'];
+        this.httpClient.get('admin/en/json/category/get-tree/'+this.postTypeID+''+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -94,11 +97,10 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     }
 
     delete(id, index){
-        this.httpClient.get('/admin/en/json/post-type/delete/'+id)
+        this.httpClient.get('/admin/en/json/category/delete/'+id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
-
                     if(response['code'] == 200){
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
@@ -114,11 +116,11 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     }
 
     edit(id){
-        this.router.navigate(['../edit/'+id], {relativeTo: this.route});
+        this.router.navigate(['../../edit/'+id], {relativeTo: this.route});
     }
 
     addNew(){
-        this.router.navigate(['../create'], {relativeTo: this.route});
+        this.router.navigate(['../../create/'+this.postTypeID], {relativeTo: this.route});
     }
 
     openDialog(id, index): void {
@@ -126,7 +128,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
             width: '400px',
             data: {
                 title: 'Delete',
-                text: 'Are you sure that you want to delete this Post Type?'
+                text: 'Are you sure that you want to delete this Category?'
             }
         });
 
@@ -157,7 +159,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
             width: '400px',
             data: {
                 title: 'Delete',
-                text: 'Are you sure that you want to delete these Post Types?'
+                text: 'Are you sure that you want to delete these Categories?'
             }
         });
 
@@ -166,10 +168,10 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                 this.deleteSpinner = true;
 
                 let selectedData = this.selection.selected;
-                var keyArray = selectedData.map(function(item) { return item["postTypeID"]; });
+                var keyArray = selectedData.map(function(item) { return item["categoryID"]; });
                 let data = { ids: keyArray };
 
-                this.httpClient.post('/admin/json/post-type/bulk-delete', data)
+                this.httpClient.post('/admin/json/category/bulk-delete', data)
                     .pipe(takeUntil(this._unsubscribeAll))
                     .map(
                         (response) => {
@@ -178,7 +180,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                                 this.openSnackBar(response['message'], 'X', 'success');
 
                                 let newData = this.dataSource.data;
-                                newData = newData.filter(item => !keyArray.includes(item.postTypeID) );
+                                newData = newData.filter(item => !keyArray.includes(item.categoryID) );
                                 this.dataSource = new MatTableDataSource<any>(newData);
                             }else{
                                 this.openSnackBar(response['message'], 'X', 'error', 10000);
@@ -197,9 +199,22 @@ export class PostTypeListComponent implements OnInit, OnDestroy
 
     customSort(event){
         this.loadingSpinner = true;
-        this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
+        if (this.route.snapshot.queryParams['page']) {
+            this.router.navigate(['./'],
+                {
+                            relativeTo: this.route,
+                            queryParams: {
+                                page: this.route.snapshot.queryParams['page'],
+                                pageSize: this.route.snapshot.queryParams['page'] ? this.route.snapshot.queryParams['page'] : null,
+                                order: event['active'],
+                                type: event['direction']
+                            }
+                });
+        }else{
+            this.router.navigate(['./'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
+        }
 
-        this.httpClient.get('/admin/en/json/post-type/get-all?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+        this.httpClient.get('/admin/en/json/category/get-tree/'+this.postTypeID+'?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -214,22 +229,23 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     onPaginateChange(event){
         this.loadingSpinner = true;
         let params = '?pageSize='+this.paginator.pageSize+'&page='+(event.pageIndex + 1);
+
         if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
             params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
             this.router.navigate(['./'],
                 {
-                    relativeTo: this.route,
-                    queryParams: {
-                        page: (event.pageIndex + 1),
-                        order: this.route.snapshot.queryParams['order'],
-                        type: this.route.snapshot.queryParams['type']
-                    }
+                        relativeTo: this.route,
+                        queryParams: {
+                            page: (event.pageIndex + 1),
+                            order: this.route.snapshot.queryParams['order'],
+                            type: this.route.snapshot.queryParams['type']
+                        }
                 });
         }else{
-            this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
+            this.router.navigate(['./'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
         }
 
-        this.httpClient.get('/admin/en/json/post-type/get-all'+params)
+        this.httpClient.get('/admin/en/json/category/get-tree/'+this.postTypeID+''+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

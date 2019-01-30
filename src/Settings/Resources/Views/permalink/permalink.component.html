@@ -12,11 +12,12 @@
     <mat-spinner color="accent" [diameter]="60"></mat-spinner>
 </div>
 <div class="accio-content center p-16 pb-56 ps ps--active-y">
-    <form fxLayout="column" fxLayoutAlign="start"
-        fxFlex="1 0 auto" name="settingsForm">
+    <form fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
+
         <div class="h2 mb-24">Permalink Settings</div>
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
+        <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
+        <div *ngIf="spinner" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
             <mat-tab-group fxFlex="100">
                 <mat-tab label="Post Articles">
                     <div class="item-wrapper" *ngFor="let permalink of data['post_articles']; let i = index">
@@ -251,8 +252,6 @@
                 </mat-tab>
             </mat-tab-group>
         </div>
-
-
 
         <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
             <mat-accordion fxFlex="100">

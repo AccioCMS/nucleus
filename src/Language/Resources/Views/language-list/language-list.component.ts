@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -13,6 +13,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
+import { Subject } from "rxjs/index";
+import { takeUntil } from 'rxjs/operators';
 
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 
@@ -21,8 +23,9 @@ import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-
     templateUrl: './language-list.component.html',
     styleUrls  : ['./language-list.component.scss']
 })
-export class LanguageListComponent implements OnInit
+export class LanguageListComponent implements OnInit, OnDestroy
 {
+    private _unsubscribeAll: Subject<any>;
     displayedColumns: string[] = ['select', 'id', 'name', 'isDefault', 'slug', 'buttons'];
     dataSource = new MatTableDataSource<any>([]);
     selection = new SelectionModel<any>(true, []);
@@ -45,10 +48,14 @@ export class LanguageListComponent implements OnInit
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(){
         this.httpClient.get('/admin/en/json/language/get-all')
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
@@ -78,6 +85,7 @@ export class LanguageListComponent implements OnInit
 
     delete(id, index){
         this.httpClient.get('/admin/en/json/language/delete/'+id)
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     if(response['code'] == 200){
@@ -147,6 +155,7 @@ export class LanguageListComponent implements OnInit
                 let data = { ids: keyArray };
 
                 this.httpClient.post('/admin/json/language/bulk-deletes', data)
+                    .pipe(takeUntil(this._unsubscribeAll))
                     .map(
                         (response) => {
                             if(response['code'] == 200){
@@ -169,5 +178,10 @@ export class LanguageListComponent implements OnInit
 
     removeSelection(){
         this.selection.clear();
+    }
+
+    ngOnDestroy() {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 }

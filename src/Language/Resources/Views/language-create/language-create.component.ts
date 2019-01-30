@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -12,14 +12,18 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import * as LanguageList from '../../language-list';
 
+import { Subject } from "rxjs/index";
+import { takeUntil } from 'rxjs/operators';
+
 @Component({
     selector   : 'language-create',
     templateUrl: './language-create.component.html',
     styleUrls  : ['./language-create.component.scss']
 })
 
-export class LanguageCreateComponent implements OnInit
+export class LanguageCreateComponent implements OnInit, OnDestroy
 {
+    private _unsubscribeAll: Subject<any>;
     languageForm: FormGroup;
     slug: string;
     nativeName: string;
@@ -42,6 +46,9 @@ export class LanguageCreateComponent implements OnInit
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(){
@@ -78,6 +85,7 @@ export class LanguageCreateComponent implements OnInit
             data.nativeName = this.nativeName;
 
             this.httpClient.post('/admin/json/language/store', data)
+                .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (response) => {
                         if(response['code'] == 200){
@@ -118,5 +126,10 @@ export class LanguageCreateComponent implements OnInit
             duration: duration,
             panelClass: bgClass,
         });
+    }
+
+    ngOnDestroy() {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 }

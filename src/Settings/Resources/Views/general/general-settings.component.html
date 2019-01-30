@@ -8,130 +8,111 @@
     [cancelBtnData]="{ text: 'Cancel', icon: ''}"
 >
 </nucleus-template-header>
-<div class="spinner" *ngIf="spinner">
+<div class="spinner" *ngIf="saveSpinner">
     <mat-spinner color="accent" [diameter]="60"></mat-spinner>
 </div>
 <div class="accio-content center p-16 pb-56 ps ps--active-y">
     <form fxLayout="column" fxLayoutAlign="start"
         fxFlex="1 0 auto" name="settingsForm" [formGroup]="settingsForm">
+
         <div class="h2 mb-24">Site Settings</div>
 
-        <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
-            <mat-tab-group fxFlex="100">
-                <mat-tab label="First"> Content 1 </mat-tab>
-                <mat-tab label="Second"> Content 2 </mat-tab>
-                <mat-tab label="Third"> Content 3 </mat-tab>
-            </mat-tab-group>
-        </div>-->
+        <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
+        <ng-container *ngIf="!spinner">
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+                    <mat-label>Site Title</mat-label>
+                    <input matInput formControlName="siteTitle" required>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <mat-error>Site Title is required!</mat-error>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
-                <mat-label>Site Title</mat-label>
-                <input matInput formControlName="siteTitle" required>
-                <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                <mat-error>Site Title is required!</mat-error>
-            </mat-form-field>
+            </div>
 
-        </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+                    <mat-label>Admin Email</mat-label>
+                    <input matInput formControlName="adminEmail" required>
+                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <mat-error>Admin Email is required!</mat-error>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
-                <mat-label>Admin Email</mat-label>
-                <input matInput formControlName="adminEmail" required>
-                <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                <mat-error>Admin Email is required!</mat-error>
-            </mat-form-field>
+            </div>
 
-        </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field fxFlex="70">
+                    <mat-select formControlName="defaultUserRole" placeholder="Default User Role">
+                        <mat-option
+                            *ngFor="let userGroup of userGroups"
+                            [value]="userGroup.slug">
+                            {{ userGroup.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>User Group is required!</mat-error>
+                </mat-form-field>
+            </div>
 
-            <mat-form-field fxFlex="70">
-                <mat-select formControlName="defaultUserRole" placeholder="Default User Role">
-                    <mat-option
-                        *ngFor="let userGroup of userGroups"
-                        [value]="userGroup.slug">
-                        {{ userGroup.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error>User Group is required!</mat-error>
-            </mat-form-field>
-        </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field fxFlex="70">
+                    <mat-select formControlName="timezone" placeholder="Timezone">
+                        <mat-option
+                            *ngFor="let timezone of timezoneOptions"
+                            [value]="timezone">
+                            {{ timezone }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Timezone is required!</mat-error>
+                </mat-form-field>
+            </div>
 
-            <mat-form-field fxFlex="70">
-                <mat-select formControlName="timezone" placeholder="Timezone">
-                    <mat-option
-                        *ngFor="let timezone of timezoneOptions"
-                        [value]="timezone">
-                        {{ timezone }}
-                    </mat-option>
-                </mat-select>
-                <mat-error>Timezone is required!</mat-error>
-            </mat-form-field>
-        </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field fxFlex="70">
+                    <mat-select formControlName="defaultLanguage" placeholder="Default Language">
+                        <mat-option
+                            *ngFor="let language of languages"
+                            [value]="language.languageID">
+                            {{ language.title }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Default Language is required!</mat-error>
+                </mat-form-field>
+            </div>
 
-            <mat-form-field fxFlex="70">
-                <mat-select formControlName="defaultLanguage" placeholder="Default Language">
-                    <mat-option
-                        *ngFor="let language of languages"
-                        [value]="language.languageID">
-                        {{ language.title }}
-                    </mat-option>
-                </mat-select>
-                <mat-error>Default Language is required!</mat-error>
-            </mat-form-field>
-        </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field fxFlex="70">
+                    <mat-select formControlName="homepageID" placeholder="Home Page">
+                        <mat-option
+                            *ngFor="let page of pages"
+                            [value]="page.postID">
+                            {{ page.title }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Home Page is required!</mat-error>
+                </mat-form-field>
+            </div>
 
-            <mat-form-field fxFlex="70">
-                <mat-select formControlName="homepageID" placeholder="Home Page">
-                    <mat-option
-                        *ngFor="let page of pages"
-                        [value]="page.postID">
-                        {{ page.title }}
-                    </mat-option>
-                </mat-select>
-                <mat-error>Home Page is required!</mat-error>
-            </mat-form-field>
-        </div>
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field fxFlex="70">
+                    <mat-select formControlName="activeTheme" placeholder="Active Theme">
+                        <mat-option
+                            *ngFor="let theme of themes"
+                            [value]="theme">
+                            {{ theme }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
 
-            <mat-form-field fxFlex="70">
-                <mat-select formControlName="activeTheme" placeholder="Active Theme">
-                    <mat-option
-                        *ngFor="let theme of themes"
-                        [value]="theme">
-                        {{ theme }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
-
-        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-            <mat-slide-toggle formControlName="activateMobileTheme">Activate Mobile Theme</mat-slide-toggle>
-        </div>
-
-        <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-            <mat-accordion fxFlex="100">
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-icon class="pr-sm-32">account_circle</mat-icon>
-                        Author
-                    </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <p>Lorem Ipsum</p>
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>-->
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-slide-toggle formControlName="activateMobileTheme">Activate Mobile Theme</mat-slide-toggle>
+            </div>
+        </ng-container>
     </form>
 </div>

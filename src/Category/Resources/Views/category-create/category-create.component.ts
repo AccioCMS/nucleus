@@ -5,7 +5,6 @@ import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/
 import { locale as english } from '../../i18n/en';
 import { locale as turkish } from '../../i18n/tr';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -13,18 +12,28 @@ import {MatSnackBar} from '@angular/material';
 import { Subject } from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
+import { Store } from '@ngrx/store';
+import * as fromShared from '../../../../Shared/Store/shared.reducers';
+
 @Component({
-    selector   : 'post-type-create',
-    templateUrl: './post-type-create.component.html',
-    styleUrls  : ['./post-type-create.component.scss']
+    selector   : 'category-create',
+    templateUrl: './category-create.component.html',
+    styleUrls  : ['./category-create.component.scss']
 })
-export class PostTypeCreateComponent implements OnInit, OnDestroy
+
+export class CategoryCreateComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
-    breadcrumbs = ['Post Type', 'Add New'];
-    postTypeForm: FormGroup;
+    breadcrumbs = ['Post Type', 'Category', 'Add New'];
     slug = '';
     spinner: boolean = false;
+    languages = [];
+
+    public options: Object = {
+        toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent',
+            'clearFormatting', 'insertTable', 'html', 'align', 'insertLink', 'insertImage'],
+        toolbarButtonsXS: ['undo', 'redo' , '-', 'bold', 'italic', 'underline']
+    }
 
     /**
      * Constructor
@@ -33,11 +42,11 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private router: Router,
         private route:ActivatedRoute,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<fromShared.SharedState>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -47,31 +56,21 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
-        this.postTypeForm = this._formBuilder.group({
-            name : ['', Validators.required],
-            slug   : [
-                {
-                    value   : this.slug,
-                    disabled: true
-                }
-            ],
-            isVisible  : [true],
-            hasCategories  : [false],
-            isCategoryRequired  : [false],
-            hasTags  : [false],
-            isTagRequired  : [false],
-            hasFeaturedImage  : [true],
-            isFeaturedImageRequired  : [false],
-            hasFeaturedVideo  : [false],
-            isFeaturedVideoRequired  : [false],
-            fields  : []
-        });
+
+        this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                data => (
+                    this.languages = data['shared']['languages']
+                )
+            );
+
     }
 
     onSave(){
-        if(this.postTypeForm.valid){
+        /*if(this.categoryForm.valid){
             this.spinner = true;
-            let data = this.postTypeForm.value;
+            let data = this.categoryForm.value;
             data.fields = [];
             data.slug = this.slug;
 
@@ -88,32 +87,32 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                 )
                 .subscribe();
         }else{
-            Object.keys(this.postTypeForm.controls).forEach(field => {
-                const control = this.postTypeForm.get(field);
+            Object.keys(this.categoryForm.controls).forEach(field => {
+                const control = this.categoryForm.get(field);
                 control.markAsTouched({ onlySelf: true });
             });
-        }
+        }*/
     }
 
     onCancel(){
-        this.router.navigate(['../list'], {relativeTo:this.route});
+        this.router.navigate(['../../list/'+this.route.snapshot.params['id']], {relativeTo:this.route});
     }
 
     createSlug(title, index){
-        let name = this.postTypeForm.value.name;
+        /*let name = this.categoryForm.value.name;
         if(name != ''){
             this.httpClient.get('/admin/en/json/post-type/check-slug/'+name)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (data) => {
-                        this.postTypeForm.patchValue({
+                        this.categoryForm.patchValue({
                             slug: data['slug']
                         });
                         this.slug  = data['slug'];
                     }
                 )
                 .subscribe();
-        }
+        }*/
     }
 
     openSnackBar(message: string, action: string, type: string, duration: number = 3000) {
