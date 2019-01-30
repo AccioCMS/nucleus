@@ -102,6 +102,13 @@
                             </tr>
                         </table>
 
+                        <mat-paginator [length]="totalSize"
+                                       [pageSize]="pageSize"
+                                       (page)="pageEvent = $event; onPaginateChange($event)"
+                                       [pageSizeOptions]="[5, 10, 25, 50]"
+                        >
+                        </mat-paginator>
+
                     </mat-card>
                 </div>
             </div>

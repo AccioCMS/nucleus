@@ -34,19 +34,24 @@ class BasePostTypeController extends MainController
     public function getAll($lang = "")
     {
         $result = [];
-
-        if(isset($_GET['order']) && isset($_GET['type'])){
-            $postType = PostType::orderBy($_GET['order'], $_GET['type'])->get();
-        }else{
-            $postType = PostType::all()->orderBy('postTypeID');
+        $pageSize = 10;
+        if(isset($_GET['pageSize'])){
+            $pageSize = $_GET['pageSize'];
         }
 
+        if(isset($_GET['order']) && isset($_GET['type'])){
+            $postType = PostType::orderBy($_GET['order'], $_GET['type'])->paginate($pageSize);
+        }else{
+            $postType = PostType::orderBy('postTypeID')->paginate($pageSize);
+        }
+
+        $total = $postType->total();
         foreach ($postType as $postType){
             $postType->categories = Category::where("postTypeID", $postType->postTypeID)->get();
             $result[] = $postType;
         }
 
-        return ['data' => $result];
+        return [ 'data' => $result, 'total' => $total ];
     }
 
     /**

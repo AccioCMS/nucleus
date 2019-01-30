@@ -552,7 +552,7 @@ trait MenuLinkTrait
                         'id'       => 'users',
                         'title'    =>  'Users',
                         'translate'=>  'NAV.USERS',
-                        'icon' => 'account_box',
+                        'icon' => 'group',
                         'type'     =>  'collapsable',
                         'access' => User::hasAccess("User", "read"),
                         'children' => [

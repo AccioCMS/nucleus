@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, Router} from "@angular/router";
 
-import {MatDialog, MatDialogRef, MatSort} from '@angular/material';
+import {MatDialog, MatDialogRef, MatSort, MatPaginator} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
 
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
@@ -30,6 +30,10 @@ export class PostTypeListComponent implements OnInit
     spinner: boolean = true;
     deleteSpinner: boolean = false;
     loadingSpinner: boolean = false;
+    totalSize: number = 0;
+    pageSize: number = 10;
+
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     /**
      * Constructor
@@ -49,14 +53,15 @@ export class PostTypeListComponent implements OnInit
     }
 
     ngOnInit(){
-        let params = '';
+        let params = '?pageSize='+this.pageSize;
         if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
-            params = '?order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+            params = '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
         this.httpClient.get('/admin/en/json/post-type/get-all'+params)
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.totalSize = response['total'];
                     this.spinner = false;
                 }
             )
@@ -181,7 +186,28 @@ export class PostTypeListComponent implements OnInit
         this.loadingSpinner = true;
         this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
 
-        this.httpClient.get('/admin/en/json/post-type/get-all?order='+event['active']+'&type='+event['direction'])
+        this.httpClient.get('/admin/en/json/post-type/get-all?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+            .map(
+                (response) => {
+                    this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.paginator.pageIndex = 0;
+                    this.loadingSpinner = false;
+                }
+            )
+            .subscribe();
+    }
+
+    onPaginateChange(event){
+        this.loadingSpinner = true;
+        let params = '?pageSize='+this.paginator.pageSize+'&page='+(event.pageIndex + 1);
+        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
+            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+            this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1), order: event['active'], type: event['direction'] } });
+        }else{
+            this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
+        }
+
+        this.httpClient.get('/admin/en/json/post-type/get-all'+params)
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
