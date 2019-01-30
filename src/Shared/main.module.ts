@@ -47,6 +47,8 @@ const nucleusRoutes: Routes = [
         { path: 'language', loadChildren: () => LanguageModule },
         { path: 'menu', loadChildren: () => MenuModule },
         { path: 'post-type', loadChildren: () => PostTypeModule },
+        { path: 'post-type/category', loadChildren: () => CategoryModule },
+        { path: 'post-type/tag', loadChildren: () => TagModule },
         { path: 'post', loadChildren: () => PostModule },
         { path: 'settings', loadChildren: () => SettingsModule },
     ] }

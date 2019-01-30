@@ -715,7 +715,7 @@ trait MenuLinkTrait
                     'translate'=> 'NAV.CATEGORIES',
                     'type'     => 'item',
                     'icon'     => 'notes',
-                    'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'categorylist', 'id' => $postType['postTypeID'] ])),
+                    'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'category/list', 'id' => $postType['postTypeID'] ])),
                     'access' => (User::hasAccess('Category', "read") && $postType['hasCategories']),
                 ];
 
@@ -730,7 +730,7 @@ trait MenuLinkTrait
                     'translate'=> 'NAV.TAGS',
                     'type'     => 'item',
                     'icon'     => 'notes',
-                    'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'taglist', 'id' => $postType['postTypeID'] ])),
+                    'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'tag/list', 'id' => $postType['postTypeID'] ])),
                     'access' => (User::hasAccess('Tag', "read") && $postType['hasTags']),
                 ];
 

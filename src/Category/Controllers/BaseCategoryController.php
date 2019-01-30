@@ -81,10 +81,16 @@ class BaseCategoryController extends MainController
     {
         $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'order';
         $orderType = (isset($_GET['type'])) ? $orderType = $_GET['type'] : 'ASC';
+        $pageSize = (isset($_GET['pageSize'])) ? $_GET['pageSize'] : Category::$rowsPerPage;
+
+        if($orderBy == 'title' || $orderBy == 'slug'){
+            $orderBy .= '->'.$lang;
+        }
+
         $parentList = Category::where('postTypeID', $postTypeID)->where('parentID', null)
             ->orWhere('parentID', 0)
             ->orderBy($orderBy, $orderType)
-            ->paginate(Category::$rowsPerPage);
+            ->paginate($pageSize);
 
         $category = new Category();
 
@@ -120,17 +126,17 @@ class BaseCategoryController extends MainController
      */
     public function delete($lang, $id)
     {
-        if(!User::hasAccess('Categories', 'delete')) {
+        /*if(!User::hasAccess('Categories', 'delete')) {
             return $this->noPermission();
-        }
+        }*/
 
         $categoryDeleteRes = $this->deleteCategory($id);
         if(gettype($categoryDeleteRes) == "boolean") {
             if($categoryDeleteRes) {
-                return $this->response('Category could not be deleted.', 500);
+                return $this->response('Category deleted successfully.', 200);
             }
         }else{
-            return $categoryDeleteRes;
+            return $this->response('Category could not be deleted.', 500);
         }
 
         return $this->response('Category could not be deleted. Please try again later or contact your Administrator!', 500);
@@ -146,28 +152,28 @@ class BaseCategoryController extends MainController
     public function bulkDelete(Request $request)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Categories', 'delete')) {
+        /*if(!User::hasAccess('Categories', 'delete')) {
             return $this->noPermission();
-        }
+        }*/
 
         // if there are no item selected
-        if (count($request->all()) <= 0) {
+        if (count($request->ids) <= 0) {
             return $this->response('Please select items to be deleted', 500);
         }
 
         // loop throw the items
-        foreach ($request->all() as $id) {
+        foreach ($request->ids as $id) {
             $categoryDeleteRes = $this->deleteCategory($id);
             if(gettype($categoryDeleteRes) == "boolean") {
                 if(!$categoryDeleteRes) {
                     return $this->response('Category could not be deleted.', 500);
                 }
             }else{
-                return $categoryDeleteRes;
+                return $this->response('Category could not be deleted.', 500);
             }
         }
 
-        return $this->response('Selected categories are successfully deleted');
+        return $this->response('Selected Categories are successfully deleted');
     }
 
     /**
@@ -190,7 +196,8 @@ class BaseCategoryController extends MainController
             $category->deleteChildren($category->categoryID, $postType->postTypeID);
 
             // delete relations
-            DB::table(categoriesRelationTable($postType->slug))->where("categoryID", $category->categoryID)->delete();
+            DB::table('categories_relations')->where('belongsTo', $postType->slug)->where('categoryID', $category->categoryID)->delete();
+            //DB::table(categoriesRelationTable($postType->slug))->where("categoryID", $category->categoryID)->delete();
 
             // Delete the item
             if($category->delete()) {

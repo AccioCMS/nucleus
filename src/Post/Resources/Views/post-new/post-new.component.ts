@@ -23,7 +23,7 @@ export class NewPostComponent
     statuses = ['Published', 'Draft'];
 
     public options: Object = {
-        toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 
+        toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent',
             'clearFormatting', 'insertTable', 'html', 'align', 'insertLink', 'insertImage'],
         toolbarButtonsXS: ['undo', 'redo' , '-', 'bold', 'italic', 'underline']
     }
@@ -52,8 +52,6 @@ export class NewPostComponent
     }
 
     onSave(){
-        console.log('Save clicked');
-
         this.httpClient.get('/admin/get-base-data')
             .map(
                 (data) => {

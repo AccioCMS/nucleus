@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
-import { locale as english } from './i18n/en';
-import { locale as turkish } from './i18n/tr';
+import { locale as english } from '../../i18n/en';
+import { locale as turkish } from '../../i18n/tr';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
@@ -25,7 +25,6 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
     private _unsubscribeAll: Subject<any>;
     settingsForm: FormGroup;
     breadcrumbs = ['Settings', 'General'];
-    spinner: boolean = false;
     pages: [];
     languages: [];
     userGroups: [];
@@ -34,6 +33,8 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
         'UTC+0', 'UTC+0:30', 'UTC+1', 'UTC+1:30', 'UTC+2', 'UTC+2:30', 'UTC+3', 'UTC+3:30', 'UTC+4', 'UTC+4:30', 'UTC+5', 'UTC+5:30', 'UTC+6', 'UTC+6:30', 'UTC+7', 'UTC+7:30', 'UTC+8', 'UTC+8:30', 'UTC+9', 'UTC+9:30', 'UTC+10',
         'UTC+10:30', 'UTC+11', 'UTC+11:30', 'UTC+12', 'UTC+12.45', 'UTC+13', 'UTC+13.45', 'UTC+14'];
     themes: [];
+    spinner: boolean = true;
+    saveSpinner: boolean = false;
 
     /**
      * Constructor
@@ -104,7 +105,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
     }
 
     onSave(){
-        this.spinner = true;
+        this.saveSpinner = true;
         let data = {
             settingsType: 'general',
             form: this.settingsForm.value
@@ -122,7 +123,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
                     }else{
                         this.openSnackBar(response['message'], 'X', 'success');
                     }
-                    this.spinner = false;
+                    this.saveSpinner = false;
                 }
             )
             .subscribe();

@@ -10,6 +10,9 @@ Route::group(
          * GET
          */
         Route::get('/{lang}/post-type/{view}', 'PostTypeController@index')->name('index');
+        Route::get('/{lang}/post-type/category/{view}/{id}', function(){
+            return view('index');
+        });
         Route::get('/{lang}/post-type/{view}/{id}', 'PostTypeController@single')->name('single');
 
         Route::group(['middleware' => ['auth:api']], function (){

@@ -21,7 +21,8 @@ export class PermalinkComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
     breadcrumbs = ['Settings', 'Permalinks'];
-    spinner: boolean = false;
+    spinner: boolean = true;
+    saveSpinner: boolean = false;
     data = {};
 
     /**
@@ -56,13 +57,14 @@ export class PermalinkComponent implements OnInit, OnDestroy
                         }
                         this.data[belongsTo].push(permalinks[permalink]);
                     }
+                    this.spinner = false;
                 }
             )
             .subscribe();
     }
 
     onSave(){
-        this.spinner = true;
+        this.saveSpinner = true;
         this.httpClient.post('admin/json/settings/store-permalinks', this.data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
@@ -75,7 +77,7 @@ export class PermalinkComponent implements OnInit, OnDestroy
                     }else{
                         this.openSnackBar(response['message'], 'X', 'success');
                     }
-                    this.spinner = false;
+                    this.saveSpinner = false;
                 }
             )
             .subscribe();

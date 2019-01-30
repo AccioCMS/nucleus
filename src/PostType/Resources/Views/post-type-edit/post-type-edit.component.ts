@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -10,14 +10,17 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {MatSnackBar} from '@angular/material';
+import { Subject } from "rxjs/index";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector   : 'post-type-edit',
     templateUrl: './post-type-edit.component.html',
     styleUrls  : ['./post-type-edit.component.scss']
 })
-export class PostTypeEditComponent implements OnInit
+export class PostTypeEditComponent implements OnInit, OnDestroy
 {
+    private _unsubscribeAll: Subject<any>;
     breadcrumbs = ['Post Type', 'Edit'];
     postTypeForm: FormGroup;
     slug = '';
@@ -40,6 +43,9 @@ export class PostTypeEditComponent implements OnInit
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(){
@@ -66,6 +72,7 @@ export class PostTypeEditComponent implements OnInit
         this.id = this.route.snapshot.params['id'];
 
         this.httpClient.get('/admin/en/json/post-type/details/'+this.id)
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (data) => {
                     let details = data['details'];
@@ -99,6 +106,7 @@ export class PostTypeEditComponent implements OnInit
             data.deletedFieldsSlugs = [];
 
             this.httpClient.post('/admin/json/post-type/store', data)
+                .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (data) => {
                         if(data['code'] == 200){
@@ -134,5 +142,10 @@ export class PostTypeEditComponent implements OnInit
             duration: duration,
             panelClass: bgClass,
         });
+    }
+
+    ngOnDestroy() {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 }
