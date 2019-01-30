@@ -25,9 +25,15 @@ Route::group(
              * GET
              */
 
+            //get all pagginate
+            Route::get('/{lang}/json/user/get-all/{page}/{size}', 'UserController@getAllPagginated')->name('getAllPagginated');
+
             Route::get('/{lang}/json/user/get-all', 'UserController@getAll')->name('getAll');
 
+            //get all ordered
             Route::get('/{lang}/json/user/get-all/{orderby}/{type}', 'UserController@getAll')->name('getAll');
+
+
 
             Route::any('/{lang}/user/get/{id}','UserController@detailsJSON')->name('detailsJSON');
 

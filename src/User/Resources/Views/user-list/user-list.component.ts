@@ -7,7 +7,7 @@ import { locale as turkish } from './i18n/tr';
 
 
 import { DataSource  ,SelectionModel} from '@angular/cdk/collections';
-import { MatTableDataSource ,MatTable} from '@angular/material';
+import { MatTableDataSource ,MatTable,MatPaginator} from '@angular/material';
 
 import { UsersService } from "../../users.service";
 
@@ -22,6 +22,7 @@ import {AccioDialogComponent} from "../../../../Shared/App/accio-dialog/accio-di
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA,MatSort} from '@angular/material';
 
 import {MatSnackBar} from '@angular/material';
+import {takeUntil} from "rxjs/operators";
 export interface Users {
     checkbox : number;
     firstName: string;
@@ -48,7 +49,7 @@ export class UserListComponent
      * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
      */
     public users = [];
-
+    private _unsubscribeAll: Subject<any>;
     dataSource = new MatTableDataSource<any>([]);
 
     selection = new SelectionModel<any>(true, []);
@@ -58,7 +59,10 @@ export class UserListComponent
     orderType: string;
     direction: string;
     loadingSpinner: boolean = false;
-    displayedColumns: string[] = ['checkbox','firstName', 'email', 'phone', 'jobtitle','buttons'];
+    totalPages: number;
+    pageIndex: number;
+    pageSize: string = '10';
+    displayedColumns: string[] = ['checkbox','userID','firstName', 'email', 'phone', 'jobtitle','buttons'];
 
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
@@ -71,8 +75,10 @@ export class UserListComponent
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+        this._unsubscribeAll = new Subject();
     }
 
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatTable) table: MatTable<any>;
     @ViewChild(MatSort) sort: MatSort;
     ngOnInit(){
@@ -80,26 +86,49 @@ export class UserListComponent
         if(this.route.snapshot.queryParamMap.get('order')){
             // console.log(this.route.snapshot.queryParamMap.get('order'));
             this.httpClient.get('/admin/en/json/user/get-all/'+this.route.snapshot.queryParamMap.get('order')+'/'+this.route.snapshot.queryParamMap.get('type'))
+                .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (response) => {
                         this.dataSource = new MatTableDataSource<any>(response['data']);
-                        // console.log(response['data']);
+                        this.totalPages = response['total'];
+                        this.pageIndex = response['current_page'];
                         this.spinner = false;
                     }
                 )
                 .subscribe();
-        }else{
-            this.spinner = true;
-            this.httpClient.get('/admin/en/json/user/get-all')
+        }else if(this.route.snapshot.queryParamMap.get('page')) {
+            if(this.route.snapshot.queryParamMap.get('size')){
+                this.pageSize = this.route.snapshot.queryParamMap.get('size');
+            }
+
+            this.httpClient.get('admin/en/json/user/get-all/?page=' +this.route.snapshot.queryParamMap.get('page')+"&size="+this.pageSize)
+                .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (response) => {
+                        console.log(response);
                         this.dataSource = new MatTableDataSource<any>(response['data']);
-                        // console.log(response['data']);
-                        this.spinner = false;
+                        this.totalPages = response['total'];
+                        this.pageIndex = response['current_page'];
+                        this.loadingSpinner = false;
                     }
                 )
                 .subscribe();
         }
+        else{
+            this.spinner = true;
+            this.httpClient.get('/admin/en/json/user/get-all')
+                .pipe(takeUntil(this._unsubscribeAll))
+                .map(
+                    (response) => {
+                        this.dataSource = new MatTableDataSource<any>(response['data']);
+                        this.totalPages = response['total'];
+                            this.spinner = false;
+                    }
+                )
+                .subscribe();
+        }
+
+        this.dataSource.paginator = this.paginator;
 
     }
 
@@ -127,9 +156,10 @@ export class UserListComponent
 
     delete(id, index){
         this.httpClient.get('/api/json/user/delete/en/'+id)
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
-                    this.openSnackBar(response['message'], '');
+                    this.openSnackBar(response['message'], 'X', 'success');
                     if(response['code'] == 200){
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
@@ -140,9 +170,63 @@ export class UserListComponent
             .subscribe();
     }
 
-    openSnackBar(message: string, action: string) {
+
+    bulkDelete(){
+        const dialogRef = this.dialog.open(AccioDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Delete',
+                text: 'Are you sure that you want to delete these Users?'
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == 'confirm'){
+                this.spinner = true;
+
+                let selectedData = this.selection.selected;
+
+                var keyArray = selectedData.map(function(item) { return item["userID"]; });
+                // console.log(keyArray);
+                let data = { ids: keyArray };
+
+                this.httpClient.post('/admin/json/user/bulk-delete', data)
+                    .map(
+                        (response) => {
+                            // console.log(data);
+                            if(response['code'] == 200){
+                                this.removeSelection();
+                                this.openSnackBar(response['message'], 'X', 'success');
+
+                                let newData = this.dataSource.data;
+                                newData = newData.filter(item => !keyArray.includes(item.userID) );
+                                this.dataSource = new MatTableDataSource<any>(newData);
+                            }else{
+                                this.openSnackBar(response['message'], 'X', 'error', 10000);
+                            }
+                            this.spinner = false;
+                        }
+                    )
+                    .subscribe();
+            }
+        });
+    }
+
+    removeSelection(){
+        this.selection.clear();
+    }
+
+    openSnackBar(message: string, action: string, type: string, duration: number = 3000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
         this.snackBar.open(message, action, {
-            duration: 2000,
+            duration: duration,
+            panelClass: bgClass,
         });
     }
 
@@ -175,6 +259,7 @@ export class UserListComponent
         this.order = true;
 
         this.httpClient.get('admin/en/json/user/get-all/'+event['active']+"/"+event['direction'])
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
@@ -185,7 +270,28 @@ export class UserListComponent
 
     }
 
+    public onPageChange(event){
+        if(event['pageSize']){
+            this.pageSize = event['pageSize'];
+        }
 
+        this.router.navigate(["/admin/en/user/list"],{queryParams: { page: event['pageIndex'] +1 ,size: event['pageSize'] }});
+        this.httpClient.get('admin/en/json/user/get-all/?page='+(event['pageIndex'] +1)+"&size="+event['pageSize'] )
+            .pipe(takeUntil(this._unsubscribeAll))
+            .map(
+                (response) => {
+                    console.log(response);
+                    this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.loadingSpinner = false;
+                }
+            )
+            .subscribe();
+    }
+
+    ngOnDestroy() {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
+    }
 
 }
 

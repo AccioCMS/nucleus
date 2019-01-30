@@ -63,7 +63,7 @@
 
                                             <mat-form-field appearance="outline" fxFlex="50" class="px-8">
                                                 <mat-label>Confirm Password</mat-label>
-                                                <input type = "password" matInput formControlName="conf_password" required>
+                                                <input type = "password" matInput formControlName="confpassword" required>
                                                 <mat-error>Password is required!</mat-error>
                                             </mat-form-field>
 
@@ -80,8 +80,6 @@
                                             </mat-form-field>
 
                                         </div>
-
-
 
                                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
@@ -129,7 +127,7 @@
 
                                                     <mat-form-field appearance="outline" fxFlex="100">
                                                         <mat-label>Groups</mat-label>
-                                                        <mat-select placeholder="Groups" [formControl]="groups" formControlName="groups"  multiple>
+                                                        <mat-select placeholder="Groups" formControlName="groups"  multiple>
                                                             <mat-option *ngFor="let role of rolesList" [value]="role.id">{{role.name}}</mat-option>
                                                         </mat-select>
                                                     </mat-form-field>
