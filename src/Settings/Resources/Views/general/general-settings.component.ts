@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -11,15 +11,18 @@ import {MatSnackBar} from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import * as fromShared from '../../../../Shared/Store/shared.reducers';
-import {SharedState} from "../../../../Shared/Store/shared.reducers";
+
+import { Subject } from "rxjs/index";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector   : 'general-settings',
     templateUrl: './general-settings.component.html',
     styleUrls  : ['./general-settings.component.scss']
 })
-export class GeneralSettingsComponent implements OnInit
+export class GeneralSettingsComponent implements OnInit, OnDestroy
 {
+    private _unsubscribeAll: Subject<any>;
     settingsForm: FormGroup;
     breadcrumbs = ['Settings', 'General'];
     spinner: boolean = false;
@@ -46,6 +49,9 @@ export class GeneralSettingsComponent implements OnInit
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(){
@@ -64,10 +70,10 @@ export class GeneralSettingsComponent implements OnInit
         });
 
         this.httpClient.get('/admin/en/json/settings/get-settings')
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     let settings = response['settings'];
-                    console.log(response['settings']);
                     this.userGroups = response['userGroups'];
                     this.pages = response['pages'];
 
@@ -87,7 +93,9 @@ export class GeneralSettingsComponent implements OnInit
             )
             .subscribe();
 
-        this.store.select(state => state).subscribe(
+       this.store.select(state => state)
+           .pipe(takeUntil(this._unsubscribeAll))
+           .subscribe(
             data => (
                 this.languages = data['shared']['languages']
             )
@@ -103,6 +111,7 @@ export class GeneralSettingsComponent implements OnInit
         };
 
         this.httpClient.post('/admin/json/settings/store', data)
+            .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     if(response['code'] != 200){
@@ -131,5 +140,10 @@ export class GeneralSettingsComponent implements OnInit
             duration: duration,
             panelClass: bgClass,
         });
+    }
+
+    ngOnDestroy() {
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 }

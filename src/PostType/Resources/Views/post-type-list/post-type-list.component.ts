@@ -31,7 +31,7 @@ export class PostTypeListComponent implements OnInit
     deleteSpinner: boolean = false;
     loadingSpinner: boolean = false;
     totalSize: number = 0;
-    pageSize: number = 10;
+    pageSize: number = 2;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -54,8 +54,12 @@ export class PostTypeListComponent implements OnInit
 
     ngOnInit(){
         let params = '?pageSize='+this.pageSize;
+
+        if (this.route.snapshot.queryParams['page']){
+            params += '&page='+this.route.snapshot.queryParams['page'];
+        }
         if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
-            params = '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
         this.httpClient.get('/admin/en/json/post-type/get-all'+params)
             .map(
