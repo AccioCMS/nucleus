@@ -11,13 +11,14 @@
 <div class="spinner" *ngIf="saveSpinner">
     <mat-spinner color="accent" [diameter]="60"></mat-spinner>
 </div>
-<div class="accio-content center p-16 pb-56 ps ps--active-y">
+<div class="accio-content center pb-56 ps ps--active-y d-block">
+    <mat-progress-bar mode="indeterminate" class="settings-progress-bar" color="accent" *ngIf="spinner"></mat-progress-bar>
+
+    <div class="h2 mb-24 p-16">Site Settings</div>
+
     <form fxLayout="column" fxLayoutAlign="start"
-        fxFlex="1 0 auto" name="settingsForm" [formGroup]="settingsForm">
+        fxFlex="1 0 auto" name="settingsForm" [formGroup]="settingsForm" class="p-16">
 
-        <div class="h2 mb-24">Site Settings</div>
-
-        <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
         <ng-container *ngIf="!spinner">
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 

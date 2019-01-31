@@ -45,7 +45,7 @@
             </div>
 
             <div class="accio-container-300" fuseperfectscrollbar="">
-                <form name="postTypeForm" [formGroup]="postTypeForm">
+                <form name="postTypeForm" [formGroup]="postTypeForm" *ngIf="!spinner">
 
                     <div class="expansion-panel-seperator">
                         <mat-accordion>
