@@ -32,7 +32,7 @@ $code-line-height: 1.6;
 $code-background: $base00;
 $code-color: $base05;
 $code-color-fade: $base05;
-// $code-text-shadow: none; 
+// $code-text-shadow: none;
 $code-color-comment: $base02;
 $code-color-keyword: $base0B;
 $code-color-value: $base0C;
@@ -47,9 +47,9 @@ $code-color-important: $base08;
 $code-color-tag: $base0D;
 $code-color-atrule: $base0C;
 
-// @import "../partials/prism"; 
+// @import "../partials/prism";
 /**
- * Prism base code highlighter theme using Sass 
+ * Prism base code highlighter theme using Sass
  *
  * @author @MoOx
  * https://github.com/MoOx/sass-prism-theme-base/blob/master/_prism.scss
@@ -62,7 +62,7 @@ $code-selector-block: "pre[class*=\"language-\"]";
 $code-selector-inline: ":not(pre) > code[class*=\"language-\"]";
 
 // generic stuff
-$code-font-family: Menlo, Monaco, "Courier New", monospace !default;
+$code-font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif !default;
 $code-font-size: 14px !default;
 $code-line-height: 1.6 !default;
 
@@ -144,7 +144,7 @@ $code-color-attr-name: #B65611 !default;
 // }
 
 // prism tokens
-// 
+//
 $code-color-comment: null !default;
 $code-color-keyword: null !default;
 $code-color-value: null !default;

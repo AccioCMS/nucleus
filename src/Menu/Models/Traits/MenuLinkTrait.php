@@ -656,7 +656,7 @@ trait MenuLinkTrait
                         'translate'=>  'NAV.SETTINGS',
                         'icon' => 'settings',
                         'type'     => 'item',
-                        'url' => self::removeDomainFromLink(action(Routes::backend("SettingsController@index"), ['lang' =>  App::getLocale(), 'view' => 'general'])),
+                        'url' => self::removeDomainFromLink(action(Routes::backend("SettingsController@index"), ['lang' =>  App::getLocale(), 'view' => ''])),
                         'access' => User::hasAccess('Settings', "read"),
                     ]
                 ]

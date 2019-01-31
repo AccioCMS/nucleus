@@ -6,6 +6,7 @@ import { LanguageCreateComponent } from './Views/language-create/language-create
 import { LanguageEditComponent } from './Views/language-edit/language-edit.component';
 
 const postRoutes: Routes = [
+    { path: '', redirectTo: 'list', pathMatch: 'full' },
     { path: 'list', component: LanguageListComponent },
     { path: 'add', component: LanguageCreateComponent },
     { path: 'edit/:id', component: LanguageEditComponent },

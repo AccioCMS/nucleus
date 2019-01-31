@@ -14,88 +14,86 @@
             <div class="center ps ps--active-y accio-container-1160" fuseperfectscrollbar="">
                 <div class="content">
 
-                    <div class="accio-container">
-                        <div class="content-center">
-                            <div class="accio-container-850" fuseperfectscrollbar="">
-                                <div class="accio-content center pb-56 ps ps--active-y p-sm-10 pr-sm-10 d-block">
-                                    <mat-progress-bar mode="indeterminate" color="accent" *ngIf="spinner"></mat-progress-bar>
+                    <div class="accio-container-850" fuseperfectscrollbar="">
+                        <div class="accio-content center pb-56 ps ps--active-y p-sm-10 pr-sm-10 d-block">
+                            <mat-progress-bar mode="indeterminate" color="accent" *ngIf="spinner"></mat-progress-bar>
 
-                                    <form fxLayout="column" fxLayoutAlign="start"
-                                          fxFlex="1 0 auto" name="exampleForm" [formGroup]="usersForm" *ngIf="!spinner" class="p-24">
+                            <form fxLayout="column" fxLayoutAlign="start"
+                                  fxFlex="1 0 auto" name="exampleForm" [formGroup]="usersForm" *ngIf="!spinner" class="p-24">
 
 
-                                        <!--{{ _userModel | json}}-->
+                                <!--{{ _userModel | json}}-->
 
-                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                                            <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                                                <mat-label>Name</mat-label>
-                                                <input matInput formControlName="firstName" required >
-                                                <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                                                <mat-error>First Name is required!</mat-error>
-                                            </mat-form-field>
+                                    <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
+                                        <mat-label>Name</mat-label>
+                                        <input matInput formControlName="firstName" required >
+                                        <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                                        <mat-error>First Name is required!</mat-error>
+                                    </mat-form-field>
 
-                                            <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
-                                                <mat-label>Last name</mat-label>
-                                                <input matInput formControlName="lastName"  required>
-                                                <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                                                <mat-error>Last Name is required!</mat-error>
-                                            </mat-form-field>
+                                    <mat-form-field appearance="outline" fxFlex="50" class="pl-4">
+                                        <mat-label>Last name</mat-label>
+                                        <input matInput formControlName="lastName"  required>
+                                        <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                                        <mat-error>Last Name is required!</mat-error>
+                                    </mat-form-field>
 
-                                        </div>
-
-                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-                                            <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
-                                                <mat-label>Email</mat-label>
-                                                <input matInput formControlName="email" required>
-                                                <mat-icon matSuffix class="secondary-text">email</mat-icon>
-                                                <mat-error>Email is <strong>required</strong></mat-error>
-                                            </mat-form-field>
-
-                                        </div>
-
-
-
-                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-                                            <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
-                                                <mat-label>Phone</mat-label>
-                                                <input matInput formControlName="phone"  >
-                                                <mat-icon matSuffix class="secondary-text">phone</mat-icon>
-                                                <mat-error>Email is <strong>required</strong></mat-error>
-                                            </mat-form-field>
-
-                                        </div>
-
-                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-                                            <mat-form-field appearance="outline" fxFlex="50">
-                                                <mat-label>Street</mat-label>
-                                                <input matInput formControlName="street"  >
-                                                <mat-icon matSuffix class="secondary-text">streetview</mat-icon>
-                                            </mat-form-field>
-
-                                            <mat-form-field appearance="outline" fxFlex="50" class="px-8">
-                                                <mat-label>Country</mat-label>
-                                                <input matInput formControlName="country"   >
-                                                <mat-icon matSuffix class="secondary-text">country</mat-icon>
-                                            </mat-form-field>
-
-
-                                        </div>
-
-
-
-                                        <mat-label>About</mat-label>
-                                        <div fxLayout="row" fxLayoutAlign="center"  >
-                                            <div [froalaEditor] formControlName="about" fxFlex="95" ></div>
-                                        </div>
-
-                                    </form>
                                 </div>
-                            </div>
-                            <div class="accio-container-300" fuseperfectscrollbar="" *ngIf="!spinner">
+
+                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                                    <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
+                                        <mat-label>Email</mat-label>
+                                        <input matInput formControlName="email" required>
+                                        <mat-icon matSuffix class="secondary-text">email</mat-icon>
+                                        <mat-error>Email is <strong>required</strong></mat-error>
+                                    </mat-form-field>
+
+                                </div>
+
+
+
+                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                                    <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
+                                        <mat-label>Phone</mat-label>
+                                        <input matInput formControlName="phone"  >
+                                        <mat-icon matSuffix class="secondary-text">phone</mat-icon>
+                                        <mat-error>Email is <strong>required</strong></mat-error>
+                                    </mat-form-field>
+
+                                </div>
+
+                                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                                    <mat-form-field appearance="outline" fxFlex="50">
+                                        <mat-label>Street</mat-label>
+                                        <input matInput formControlName="street"  >
+                                        <mat-icon matSuffix class="secondary-text">streetview</mat-icon>
+                                    </mat-form-field>
+
+                                    <mat-form-field appearance="outline" fxFlex="50" class="px-8">
+                                        <mat-label>Country</mat-label>
+                                        <input matInput formControlName="country"   >
+                                        <mat-icon matSuffix class="secondary-text">country</mat-icon>
+                                    </mat-form-field>
+
+
+                                </div>
+
+
+
+                                <mat-label>About</mat-label>
+                                <div fxLayout="row" fxLayoutAlign="center"  >
+                                    <div [froalaEditor] formControlName="about" fxFlex="95" ></div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="accio-container-300" fuseperfectscrollbar="" *ngIf="!spinner">
                                 <div class="expansion-panel-seperator">
                                     <mat-accordion>
 
@@ -136,9 +134,7 @@
                                 </div>
 
                             </div>
-                        </div>
 
-                    </div>
                 </div>
             </div>
 
