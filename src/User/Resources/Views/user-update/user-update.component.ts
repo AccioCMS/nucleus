@@ -12,7 +12,7 @@ import { UsersService } from "../../users.service";
 
 import { fuseAnimations } from '../../../../Shared/@fuse/animations';
 import { HttpClient } from '@angular/common/http';
-
+import {MatSnackBar} from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 
 import { FormBuilder, FormGroup, Validators ,FormControl} from '@angular/forms';
@@ -102,6 +102,7 @@ export class UserUpdateComponent
         private router: Router,
         // private route: ActivatedRoute
         private route: ActivatedRoute,
+        public snackBar: MatSnackBar
 
     )
     {
@@ -113,15 +114,13 @@ export class UserUpdateComponent
 
         this.usersForm = this._formBuilder.group({
             email: ['', Validators.required],
-            lastName: [''],
-            firstName: [''],
-            password: ['', Validators.required],
-            conf_password: [''],
+            lastName: ['', Validators.required],
+            firstName: ['', Validators.required],
             phone: [''],
             street: [''],
             country: [''],
-            groups: [''],
-            about   : ['', Validators.required],
+            groups: ['', Validators.required],
+            about   : [''],
             isActive :[false],
         });
 
@@ -161,29 +160,49 @@ export class UserUpdateComponent
     }
 
     onSave(){
-        // this.showErrorMessage = false;
-        // let formData = this.usersForm.value;
-        this.id = this.route.snapshot.paramMap.get('id');
 
+        if(this.usersForm.valid) {
+            this.id = this.route.snapshot.paramMap.get('id');
+            this.spinner = true;
+            let formData = this.usersForm.value;
+            let data = {'user' : {id:  this.id , email: this.usersForm.get('email').value, lastName:  this.usersForm.get('lastName').value, firstName:  this.usersForm.get('firstName').value,
+                    phone:  this.usersForm.get('phone').value, street:  this.usersForm.get('street').value, country: this.usersForm.get('country').value, about: this.usersForm.get('about').value, groups: this.usersForm.get('groups').value, isActive: this.usersForm.get('isActive').value}};
+            this.httpClient.post("admin/en/user/storeUpdate/",data)
+                .map(
+                    (data) => {
+                        // console.log(data);
 
-        let formData = this.usersForm.value;
-        // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
-        // console.log("Groups"+this.usersForm.get('groups').value);
-        let data = {'user' : {id:  this.id , email: this.usersForm.get('email').value, lastName:  this.usersForm.get('lastName').value, firstName:  this.usersForm.get('firstName').value,
-                phone:  this.usersForm.get('phone').value, street:  this.usersForm.get('street').value, country: this.usersForm.get('country').value, about: this.usersForm.get('about').value, groups: this.usersForm.get('groups').value, isActive: this.usersForm.get('isActive').value}};
-        this.httpClient.post("admin/en/user/storeUpdate/",data)
-            .map(
-                (data) => {
-                    // console.log(data);
-                    if(data == 1){
+                        if(data['code'] == 200){
+                            this.openSnackBar(data['message'], 'X', 'success');
+                            this.spinner = false;
+                        }else{
+                            this.openSnackBar(data['message'], 'X', 'error', 10000);
+                        }
 
-                        this.router.navigate(["/test/users/edit/"+this.id+""])
-                        this.spinner = false;
-                    }else{
                     }
-                }
-            )
-            .subscribe();
+                )
+                .subscribe();
+        }else{
+            Object.keys(this.usersForm.controls).forEach(field => {
+                const control = this.usersForm.get(field);
+                control.markAsTouched({ onlySelf: true });
+            });
+        }
+    }
+
+
+    openSnackBar(message: string, action: string, type: string, duration: number = 2000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
+        this.snackBar.open(message, action, {
+            duration: duration,
+            panelClass: bgClass,
+        });
     }
 
     onCancel(){

@@ -16,11 +16,9 @@
 
     <div class="accio-container">
         <div class="content-center">
-            <div class="center p-24 pb-56 pr-sm-92 ps ps--active-y accio-container-1160" fuseperfectscrollbar="">
-
+            <div class="center p-24 pb-56 ps ps--active-y accio-container-850" fuseperfectscrollbar="">
                 <mat-card class = "mat-card-title" *ngIf="selection.selected.length == 0">
                     Categories <span center></span>
-                    <!--<mat-icon class = "table-header-icons">arrow_downward</mat-icon>-->
                 </mat-card>
                 <mat-card class="p-0" *ngIf="selection.selected.length > 0">
                     <div class="multi-selected-box  main-list p-16">
@@ -32,7 +30,6 @@
                         <mat-icon (click)="bulkDelete()">delete</mat-icon>
                     </div>
                 </mat-card>
-                <!--<mat-card>-->
                 <div class = "filter mat-card">
                     <mat-chip-list>
 
@@ -40,7 +37,6 @@
 
                     </mat-chip-list>
                 </div>
-
                 <div class="content">
                     <mat-card class = 'p-0 mat-card-content'>
                         <mat-progress-bar mode="indeterminate" *ngIf="loadingSpinner" color="accent"></mat-progress-bar>

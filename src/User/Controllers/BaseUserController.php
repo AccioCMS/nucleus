@@ -222,8 +222,10 @@ class BaseUserController extends MainController
             $redirectParams = parent::redirectParams($request->redirect, 'user', $user->userID);
             $result = $this->response('User stored successfully', 200, $user->userID, $redirectParams['view'], $redirectParams['redirectUrl']);
             $result['data'] = $user;
+//            return $result;
         }else{
             $result = $this->response('User could not be stored. Internal server error. Please try again later', 500);
+//            return $result;
         }
         return $result;
     }
@@ -270,22 +272,14 @@ class BaseUserController extends MainController
      */
     private function deleteUser($id)
     {
-        // check if user has permissions to access this link
-//        if(!User::hasAccess('user', 'delete')) {
-//            return $this->noPermission();
-//        }
-//        return $this->response($id, 500);
-
         $user = User::find($id);
         // user can't be deleted if it has related data to him, like posts, categories ect
         if($user->hasRelatedData()) {
             $user->isActive = false;
-
             if($user->save()) {
                 return true;
             }
         }
-
         $roles = RoleRelationsModel::where('userID', $id);
         if($roles) {
             $roles->delete();
@@ -410,11 +404,13 @@ class BaseUserController extends MainController
 //            return $request->user;
             $user->assignRoles($request->user['groups']);
             $redirectParams = parent::redirectParams($request->redirect, 'user', $user->userID);
-            $result = $this->response('User stored successfully', 200, $user->userID, $redirectParams['view'], $redirectParams['redirectUrl']);
+            $result = $this->response('User updated successfully', 200, $user->userID, $redirectParams['view'], $redirectParams['redirectUrl']);
             $result['data'] = $user;
-            return 1;
+//            $result = $this->response('User Was updated successfully', 200);
+            return $result;
         }else{
-            $result = $this->response('User could not be stored. Internal server error. Please try again later', 500);
+            $result = $this->response('User could not be updated. Internal server error. Please try again later', 500);
+            return $result;
         }
 
 

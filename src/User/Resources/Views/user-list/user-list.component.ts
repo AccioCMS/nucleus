@@ -154,7 +154,8 @@ export class UserListComponent
 
 
     delete(id, index){
-        this.httpClient.get('/api/json/user/delete/en/'+id)
+        this.spinner = true;
+        this.httpClient.get('admin/en/json/user/delete/'+id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -163,6 +164,7 @@ export class UserListComponent
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
                         this.dataSource = new MatTableDataSource<any>(newData);
+                        this.spinner = false;
                     }
                 }
             )

@@ -13,11 +13,13 @@ import { UsersService } from "../../users.service";
 import { fuseAnimations } from '../../../../Shared/@fuse/animations';
 import { HttpClient } from '@angular/common/http';
 
+// import {MatSnackBar} from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 
 import { FormBuilder, FormGroup, Validators ,FormControl} from '@angular/forms';
 import * as AuthActions from "../../../../Auth/Resources/Store/auth.actions";
 import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material";
 
 export interface Users {
     checkbox : number;
@@ -84,7 +86,8 @@ export class UserCreateComponent
         private _userService : UsersService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
-        private router: Router
+        private router: Router,
+        public snackBar: MatSnackBar
 
     )
     {
@@ -92,39 +95,77 @@ export class UserCreateComponent
 
         this.usersForm = this._formBuilder.group({
             email: ['', Validators.required],
-            lastName: [''],
-            firstName: [''],
+            lastName: ['', Validators.required],
+            firstName: ['', Validators.required],
             password: ['', Validators.required],
             confpassword: [''],
             phone: [''],
             street: [''],
             country: [''],
             groups: [''],
-            about   : ['', Validators.required],
+            about   : [''],
         });
         this.spinner = false;
     }
 
     onSave(){
-        // this.showErrorMessage = false;
-        this.spinner = true;
-        let formData = this.usersForm.value;
-        console.log(formData);
-        let data = {'user' : { email: this.usersForm.get('email').value,password: this.usersForm.get('password').value, confpassword: this.usersForm.get('confpassword').value,lastName:  this.usersForm.get('lastName').value, firstName:  this.usersForm.get('firstName').value,
-                phone:  this.usersForm.get('phone').value, street:  this.usersForm.get('street').value, country: this.usersForm.get('country').value, about: this.usersForm.get('about').value, groups: this.usersForm.get('groups').value}};
 
-        this.httpClient.post('admin/api/user/store', data)
-            .map(
-                (data) => {
-                    console.log(data);
-                    if(data){
-                        this.spinner = false;
-                    }else{
-                        // this.showErrorMessage = true;
-                    }
+        if(this.usersForm.valid) {
+            this.spinner = true;
+            let formData = this.usersForm.value;
+            console.log(formData);
+            let data = {
+                'user': {
+                    email: this.usersForm.get('email').value,
+                    password: this.usersForm.get('password').value,
+                    confpassword: this.usersForm.get('confpassword').value,
+                    lastName: this.usersForm.get('lastName').value,
+                    firstName: this.usersForm.get('firstName').value,
+                    phone: this.usersForm.get('phone').value,
+                    street: this.usersForm.get('street').value,
+                    country: this.usersForm.get('country').value,
+                    about: this.usersForm.get('about').value,
+                    groups: this.usersForm.get('groups').value
                 }
-            )
-            .subscribe();
+            };
+
+            this.httpClient.post('admin/api/user/store', data)
+                .map(
+                    (data) => {
+                        // console.log(data);
+                        if (data['code'] == 200) {
+                            this.openSnackBar(data['message'], 'X', 'success');
+                            this.spinner = false;
+                        } else {
+                            this.openSnackBar(data['message'], 'X', 'error', 10000);
+                        }
+                    }
+                )
+                .subscribe();
+        }else{
+            Object.keys(this.usersForm.controls).forEach(field => {
+                const control = this.usersForm.get(field);
+                control.markAsTouched({ onlySelf: true });
+                this.openSnackBar("Please fill out the required fields", 'X', 'error', 10000);
+            });
+        }
+
+    }
+
+
+    openSnackBar(message: string, action: string, type: string, duration: number = 2000) {
+        let bgClass = [''];
+        if(type == 'error'){
+            bgClass = ['red-snackbar-bg'];
+        }else if(type == 'success'){
+            bgClass = ['green-snackbar-bg'];
+        }
+
+        let snackBarRef =  this.snackBar.open(message, action, {
+            duration: duration,
+            panelClass: bgClass,
+        });
+
 
     }
 
