@@ -25,6 +25,7 @@ import 'rxjs/Rx';
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     showErrorMessage: boolean = false;
+    loadingSpinner: boolean = false;
 
     /**
      * Constructor
@@ -76,6 +77,7 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit(){
+        this.loadingSpinner = true;
         this.showErrorMessage = false;
         let authData = this.loginForm.value;
         let credentials = { email: authData.email, password: authData.password };
@@ -88,6 +90,7 @@ export class LoginComponent implements OnInit {
                         this.router.navigate(['/admin/en/fuse'])
                     }else{
                         this.showErrorMessage = true;
+                        this.loadingSpinner = false;
                     }
                 }
             )

@@ -8,16 +8,19 @@
     [cancelBtnData]="{ text: 'Cancel', icon: ''}"
 >
 </nucleus-template-header>
-<div class="spinner" *ngIf="spinner">
+
+<div class="spinner" *ngIf="saveSpinner">
     <mat-spinner color="accent" [diameter]="60"></mat-spinner>
 </div>
-<div class="accio-content center p-16 pb-56 ps ps--active-y">
+
+<div class="accio-content center pb-56 ps ps--active-y d-block">
+
+    <mat-progress-bar mode="indeterminate" class="settings-progress-bar" color="accent" *ngIf="spinner"></mat-progress-bar>
+
+    <div class="h2 mb-24 p-16">Permalink Settings</div>
+
     <form fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
-
-        <div class="h2 mb-24">Permalink Settings</div>
-
-        <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
-        <div *ngIf="spinner" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
+        <div *ngIf="!spinner" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20 p-16">
             <mat-tab-group fxFlex="100">
                 <mat-tab label="Post Articles">
                     <div class="item-wrapper" *ngFor="let permalink of data['post_articles']; let i = index">
@@ -269,10 +272,3 @@
         </div>-->
     </form>
 </div>
-
-<style>
-    .mat-tab-label{
-        min-width: 120px;
-        color: red;
-    }
-</style>

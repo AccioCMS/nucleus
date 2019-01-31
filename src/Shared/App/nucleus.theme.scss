@@ -348,6 +348,10 @@
         background-color: #e8f0fe;
         overflow: hidden;
 
+        &.main-list{
+            padding: 13.5px !important;
+        }
+
         h2{
             float: left;
             color: rgba(0,0,0,0.54);
@@ -356,8 +360,11 @@
         }
 
         button{
-            margin-top: -11px;
+            margin-top: 1px;
             color: rgba(0,0,0,0.54);
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
         }
 
         mat-icon{
@@ -378,5 +385,14 @@
 
     .mat-progress-bar.mat-accent .mat-progress-bar-buffer {
         background-color: #bdeaff !important;
+    }
+
+
+    .d-block{
+        display: block !important;
+    }
+
+    .p-18{
+        padding: 18px;
     }
 }

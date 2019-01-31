@@ -30,6 +30,7 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
     languageList: any;
     breadcrumbs = ['Settings', 'Languages', 'New Language'];
     spinner: boolean = false;
+    loadingSpinner: boolean = true;
 
     /**
      * Constructor
@@ -62,6 +63,8 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
             isVisible  : [true],
             isDefault  : [false]
         });
+
+        this.loadingSpinner = false;
     }
 
     languageChanged(){

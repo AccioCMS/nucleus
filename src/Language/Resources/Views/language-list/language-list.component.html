@@ -11,88 +11,88 @@
 <div class="spinner" *ngIf="deleteSpinner">
     <mat-spinner color="accent" [diameter]="60"></mat-spinner>
 </div>
-<div class="accio-container">
 
-       <div class="accio-content pb-56 center ps ps--active-y " fuseperfectscrollbar="">
-           <div class="h2 p-16" *ngIf="selection.selected.length == 0">Languages</div>
-           <div class="multi-selected-box p-16" *ngIf="selection.selected.length > 0">
-               <h2 class="m-0">
-                   <span>{{ selection.selected.length }}</span>
-                   Languages selected
-               </h2>
-               <button mat-icon-button (click)="removeSelection()">X</button>
-               <mat-icon (click)="bulkDelete()">delete</mat-icon>
-           </div>
+<div class="accio-content pb-56 center ps ps--active-y " fuseperfectscrollbar="">
+    <mat-progress-bar mode="indeterminate" color="accent" class="settings-progress-bar" *ngIf="spinner"></mat-progress-bar>
+   <div class="h2 p-16" *ngIf="selection.selected.length == 0">Languages</div>
+   <div class="multi-selected-box p-18" *ngIf="selection.selected.length > 0">
+       <h2 class="m-0">
+           <span>{{ selection.selected.length }}</span>
+           Languages selected
+       </h2>
+       <button mat-icon-button (click)="removeSelection()">X</button>
+       <mat-icon (click)="bulkDelete()">delete</mat-icon>
+   </div>
 
-            <div class="content p-16">
-                <mat-card class="p-0 no-shadow">
-                    <mat-spinner class="center" color="accent" [diameter]="30" *ngIf="spinner"></mat-spinner>
+    <div class="content p-16">
+        <mat-card class="p-0 no-shadow">
+            <table mat-table [dataSource]="dataSource" *ngIf="!spinner" class="mat-elevation-z8">
 
-                    <table mat-table [dataSource]="dataSource" *ngIf="!spinner" class="mat-elevation-z8">
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                      [checked]="selection.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? selection.toggle(row) : null"
+                                      [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
 
-                        <!-- Checkbox Column -->
-                        <ng-container matColumnDef="select">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <mat-checkbox (change)="$event ? masterToggle() : null"
-                                              [checked]="selection.hasValue() && isAllSelected()"
-                                              [indeterminate]="selection.hasValue() && !isAllSelected()">
-                                </mat-checkbox>
-                            </th>
-                            <td mat-cell *matCellDef="let row">
-                                <mat-checkbox (click)="$event.stopPropagation()"
-                                              (change)="$event ? selection.toggle(row) : null"
-                                              [checked]="selection.isSelected(row)">
-                                </mat-checkbox>
-                            </td>
-                        </ng-container>
+                <!-- Position Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> ID. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.languageID}} </td>
+                </ng-container>
 
-                        <!-- Position Column -->
-                        <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef> ID. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.languageID}} </td>
-                        </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element">
+                        <a [routerLink]="['../edit', element.languageID]">{{element.name}}</a>
+                    </td>
+                </ng-container>
 
-                        <!-- Name Column -->
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                        </ng-container>
+                <!-- Is Default Column -->
+                <ng-container matColumnDef="isDefault">
+                    <th mat-header-cell *matHeaderCellDef> Is Default </th>
+                    <td mat-cell *matCellDef="let element"> {{element.isDefault}} </td>
+                </ng-container>
 
-                        <!-- Is Default Column -->
-                        <ng-container matColumnDef="isDefault">
-                            <th mat-header-cell *matHeaderCellDef> Is Default </th>
-                            <td mat-cell *matCellDef="let element"> {{element.isDefault}} </td>
-                        </ng-container>
+                <!-- Slug Column -->
+                <ng-container matColumnDef="slug">
+                    <th mat-header-cell *matHeaderCellDef> Slug </th>
+                    <td mat-cell *matCellDef="let element"> {{element.slug}} </td>
+                </ng-container>
 
-                        <!-- Slug Column -->
-                        <ng-container matColumnDef="slug">
-                            <th mat-header-cell *matHeaderCellDef> Slug </th>
-                            <td mat-cell *matCellDef="let element"> {{element.slug}} </td>
-                        </ng-container>
+                <!-- Buttons Column -->
+                <ng-container matColumnDef="buttons">
+                    <th mat-header-cell *matHeaderCellDef class="actions-column"></th>
 
-                        <!-- Buttons Column -->
-                        <ng-container matColumnDef="buttons">
-                            <th mat-header-cell *matHeaderCellDef class="actions-column"></th>
+                    <td mat-cell *matCellDef="let element; let i = index" class="actions-column-btn">
+                        <button mat-button [matMenuTriggerFor]="menu">
+                            <mat-icon class="secondary-text">more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="edit(element.languageID)">Edit</button>
+                            <button mat-menu-item (click)="openDialog(element.languageID, i)">Delete</button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
 
-                            <td mat-cell *matCellDef="let element; let i = index" class="actions-column-btn">
-                                <button mat-button [matMenuTriggerFor]="menu">
-                                    <mat-icon class="secondary-text">more_vert</mat-icon>
-                                </button>
-                                <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="edit(element.languageID)">Edit</button>
-                                    <button mat-menu-item (click)="openDialog(element.languageID, i)">Delete</button>
-                                </mat-menu>
-                            </td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                        </tr>
-                    </table>
-                </mat-card>
-            </div>
-        </div>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+            </table>
+        </mat-card>
+    </div>
 </div>
+
 
 
 
