@@ -63,6 +63,7 @@ export class UserListComponent
     totalPages: number;
     pageIndex: number;
     pageSize: string = '10';
+    selectedIndex:number;
     displayedColumns: string[] = ['checkbox','userID','firstName', 'email', 'phone', 'jobtitle','buttons'];
 
     constructor(
@@ -235,6 +236,11 @@ export class UserListComponent
 
     addNew(){
         this.router.navigate(['../add/'], {relativeTo: this.route});
+    }
+
+    setSelected(id){
+        this.selectedIndex = id;
+        console.log(id);
     }
 
 
