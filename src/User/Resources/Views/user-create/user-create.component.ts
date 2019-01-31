@@ -95,7 +95,7 @@ export class UserCreateComponent
             lastName: [''],
             firstName: [''],
             password: ['', Validators.required],
-            conf_password: [''],
+            confpassword: [''],
             phone: [''],
             street: [''],
             country: [''],
@@ -108,10 +108,11 @@ export class UserCreateComponent
     onSave(){
         // this.showErrorMessage = false;
         let formData = this.usersForm.value;
-        let credentials = { email: formData.email, lastName: formData.lastName, firstName: formData.firstName, password: formData.password,
-            phone: formData.phone, street: formData.street, country: formData.country , about: formData.about ,groups: formData.groups};
+        console.log(formData);
+        let data = {'user' : { email: this.usersForm.get('email').value,password: this.usersForm.get('password').value, confpassword: this.usersForm.get('confpassword').value,lastName:  this.usersForm.get('lastName').value, firstName:  this.usersForm.get('firstName').value,
+                phone:  this.usersForm.get('phone').value, street:  this.usersForm.get('street').value, country: this.usersForm.get('country').value, about: this.usersForm.get('about').value, groups: this.usersForm.get('groups').value}};
 
-        this.httpClient.post('/api/user/store', credentials)
+        this.httpClient.post('admin/api/user/store', data)
             .map(
                 (data) => {
                     console.log(data);

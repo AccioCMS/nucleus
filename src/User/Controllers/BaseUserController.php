@@ -77,7 +77,33 @@ class BaseUserController extends MainController
      * @param  string $lang Language slug (ex. en)
      * @return array
      * */
-    public function getAll($lang = "",$orderBy="userID",$orderType="DESC")
+    public function getAll($lang = "",$page=0,$orderBy = "userID",$orderType = "DESC ")
+    {
+        // check if user has permissions to access this link
+//        if(!User::hasAccess('User', 'read')) {
+//            return $this->noPermission();
+//        }
+
+//        $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
+        $page = (isset($_GET['page'])) ? $page = $_GET['page'] : '';
+
+        $size = 10;
+        if($page){
+            $size = (isset($_GET['size'])) ? $size = $_GET['size'] : '';
+//            return $_GET['size'];
+        }
+        return DB::table('users')
+            ->leftJoin('media', 'users.profileImageID', '=', 'media.mediaID')
+            ->select("users.userID", "users.email", "users.firstName", "users.lastName", "users.slug", "users.gravatar", "media.url", "media.filename", "media.fileDirectory")
+            ->orderBy($orderBy, $orderType)
+            ->paginate($size)
+            ->withPath('admin/en/user/list');
+
+//        $users->withPath('custom/url');
+    }
+
+
+    public function getAllPagginated($lang = "",$page=0 , $size=10,$orderBy = "userID",$orderType = "DESC ")
     {
         // check if user has permissions to access this link
 //        if(!User::hasAccess('User', 'read')) {
@@ -86,13 +112,16 @@ class BaseUserController extends MainController
 
 //        $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
 //        $orderType = (isset($_GET['type'])) ? $orderType = $_GET['type'] : 'DESC';
-//        return $orderBy;
+        return $size;
 
         return DB::table('users')
             ->leftJoin('media', 'users.profileImageID', '=', 'media.mediaID')
             ->select("users.userID", "users.email", "users.firstName", "users.lastName", "users.slug", "users.gravatar", "media.url", "media.filename", "media.fileDirectory")
             ->orderBy($orderBy, $orderType)
-            ->paginate(User::$rowsPerPage);
+            ->paginate($size)
+            ->withPath('admin/en/user/list');
+
+//        $users->withPath('custom/url');
     }
 
 
@@ -139,21 +168,21 @@ class BaseUserController extends MainController
         ];
 
 
-//        return $request['email'] ;
+//        return $request['password'];
 
-        if(isset($request['id'])) {
+        if(isset($request->user['id'])) {
             // update user
-            $user = App\Models\User::findOrFail($request['id']);
-            $user->isActive = $request['isActive'];
-            $currentID = $request['id'];
-            if($user->email == $request['email']) {
-                unset($validatorFields['email']);
+            $user = App\Models\User::findOrFail($request->user['id']);
+            $user->isActive = $request->user['isActive'];
+            $currentID = $request->user['id'];
+            if($user->email == $request->user['email']) {
+                unset($validatorFields->user['email']);
             }
         }else{
             // Create user
             $user = new User();
             $user->createdByUserID = 21;
-            $user->password = Hash::make($request['password']);
+            $user->password = Hash::make($request->user['password']);
             $user->isActive = 1;
             $currentID = 0;
 
@@ -169,27 +198,27 @@ class BaseUserController extends MainController
 //        }
 
         // if image is not set make it 0
-        if (!isset($request['profileImageID']) || $request['profileImageID'] == "") {
+        if (!isset($request->user['profileImageID']) || $request->user['profileImageID'] == "") {
             $profileImageID = null;
         }else{
-            $profileImageID = $request['profileImageID'];
+            $profileImageID = $request->user['profileImageID'];
         }
 
         // Store data
-        $user->email = $request['email'];
-        $user->firstName = $request['firstName'];
-        $user->lastName = $request['lastName'];
-        $user->phone = $request['phone'];
-        $user->street = $request['street'];
-        $user->country = $request['country'];
-        $user->slug = parent::generateSlug($request['firstName']." ".$request['lastName'], 'users', 'userID', '', $currentID, false);
+        $user->email = $request->user['email'];
+        $user->firstName = $request->user['firstName'];
+        $user->lastName = $request->user['lastName'];
+        $user->phone = $request->user['phone'];
+        $user->street = $request->user['street'];
+        $user->country = $request->user['country'];
+        $user->slug = parent::generateSlug($request->user['firstName']." ".$request->user['lastName'], 'users', 'userID', '', $currentID, false);
         $user->about = $request['about'];
         $user->profileImageID = $profileImageID;
-        $user->gravatar = User::getGravatarFromEmail($request['email']);
+        $user->gravatar = User::getGravatarFromEmail($request->user['email']);
 
         if($user->save()) {
             // Add roles permissions
-            $user->assignRoles($request['groups']);
+            $user->assignRoles($request->user['groups']);
             $redirectParams = parent::redirectParams($request->redirect, 'user', $user->userID);
             $result = $this->response('User stored successfully', 200, $user->userID, $redirectParams['view'], $redirectParams['redirectUrl']);
             $result['data'] = $user;
@@ -245,25 +274,31 @@ class BaseUserController extends MainController
 //        if(!User::hasAccess('user', 'delete')) {
 //            return $this->noPermission();
 //        }
+//        return $this->response($id, 500);
+
 
         $user = User::find($id);
         // user can't be deleted if it has related data to him, like posts, categories ect
         if($user->hasRelatedData()) {
             $user->isActive = false;
+
             if($user->save()) {
                 return true;
             }
         }
 
-        // Delete all roles relations
+
         $roles = RoleRelationsModel::where('userID', $id);
         if($roles) {
             $roles->delete();
         }
 
-        if ($user && $user->delete()) {
+        if ($user->delete()) {
+
             return true;
+            // Delete all roles relations
         }
+        
 
         return false;
     }
@@ -275,12 +310,16 @@ class BaseUserController extends MainController
      * */
     public function bulkDelete(Request $request)
     {
-        foreach ($request->all() as $id){
-            if (!$this->deleteUser($id)) {
+        $c = 0;
+        foreach ($request->all() as $u_id){
+
+            if (!$this->deleteUser($request->ids[$c])) {
                 return $this->response('Internal server error. Please try again later', 500);
             }
+            $c++;
         }
-        return $this->response('Users are deleted');
+        return $this->response("User/s were deleted successfully");
+
     }
 
 
