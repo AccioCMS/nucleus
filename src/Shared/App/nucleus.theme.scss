@@ -10,6 +10,44 @@
             }
         }
 
+        /*Add Default blue color*/
+            .accio-blue{
+                background: #4285f4 !important;
+            }
+
+            //Mat Slide
+            .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb{
+                background: #4285f4;
+            }
+
+            .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar{
+                background: rgba(66, 133, 244, 0.54);
+            }
+
+            //Mat Progress
+            .mat-progress-bar.mat-accent .mat-progress-bar-fill::after{
+                background-color: #4285f4 !important;
+            }
+            .mat-progress-bar.mat-accent .mat-progress-bar-buffer {
+                background-color: #b8d0f8 !important;
+            }
+
+            button{
+                font-weight: normal;
+
+                &.btn-accio-confirm{
+                    background-color: #4285f4 !important;
+                }
+            }
+
+            //checkbox
+            .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+            .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background
+            {
+                background-color: #4285f4;
+            }
+        /*End of Default blue color*/
+
         .accio-container{
             overflow: hidden;
             width: 100%;
@@ -114,12 +152,6 @@
 
         .expansion-panel-seperator{
             margin-bottom: 20px;
-        }
-
-        button{
-            &.btn-accio-confirm{
-                background-color: #2887EF !important;
-            }
         }
 
         @media only screen and (max-width: 1470px) {
@@ -320,6 +352,7 @@
             span {
                 &.hint-text {
                     color: #949494 !important;
+                    font-weight: normal;
                 }
             }
         }
@@ -383,16 +416,21 @@
         opacity: 0.5;
     }
 
-    .mat-progress-bar.mat-accent .mat-progress-bar-buffer {
-        background-color: #bdeaff !important;
-    }
-
-
     .d-block{
         display: block !important;
     }
 
     .p-18{
         padding: 18px;
+    }
+
+    a{
+        &.item-list-link{
+            color: rgba(0, 0, 0, 0.87);
+
+            &:hover{
+                text-decoration: none !important;
+            }
+        }
     }
 }

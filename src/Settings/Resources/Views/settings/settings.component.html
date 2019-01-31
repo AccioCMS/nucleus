@@ -27,8 +27,9 @@
                             </div>-->
 
                             <div class="nav-item" >
-                                <a class="nav-link" matRipple [routerLink]="'language/list'"
-                                    [routerLinkActive]="['active', 'settings-nav-active']">
+                                <a class="nav-link" matRipple [routerLink]="'language'"
+                                    [routerLinkActive]="['active', 'settings-nav-active']"
+                                   [routerLinkActiveOptions]="{exact: false}">
                                     <mat-icon class="nav-link-icon">language</mat-icon>
                                     <span>Languages</span>
                                 </a>

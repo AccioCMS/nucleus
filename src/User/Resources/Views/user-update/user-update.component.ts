@@ -31,19 +31,6 @@ export interface Users {
     asd: string
 }
 
-const ELEMENT_DATA: Users[] = [
-    {asd : "" ,checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum dsa', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum ds', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum ', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsuma ', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-    {asd : "",checkbox: 0, name: 'Lorem Ipsum', email: 'example@example.com', phone: '044 123 456', jobtitle: 'Software Developer'},
-];
-
 @Component({
     selector   : 'user-update',
     templateUrl: './user-update.component.html',
@@ -74,11 +61,6 @@ export class UserUpdateComponent
 
 
     breadcrumbs = ['Users', 'Update User'];
-
-
-    displayedColumns: string[] = ['checkbox','name', 'email', 'phone', 'jobtitle','buttons'];
-    // dataSource = this._userService.getUsers().subscribe(data => this.users = data);
-    dataSource =   ELEMENT_DATA;
     usersForm: FormGroup;
 
     private sub: any;
@@ -130,9 +112,11 @@ export class UserUpdateComponent
         this.httpClient.get("admin/en/json/user/details/"+this.id)
             .map(
                 (data) => {
+                    console.log(data);
                     if(data){
-                        let details = data['details'];
 
+
+                        let details = data['details'];
                          this.groups = data['allGroups'];
                         this.selecdedGroups = data['details']['roles'];
                         // console.log(this.selecdedGroups);

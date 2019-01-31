@@ -11,6 +11,7 @@ import {LanguageModule} from "../../Language/Resources/language.module";
 
 const userRoutes: Routes = [
     { path: '', component: SettingsComponent, children: [
+        { path: '', redirectTo: 'general', pathMatch: 'full' },
         { path: 'general', component: GeneralSettingsComponent },
         { path: 'analytics', component: AnalyticsComponent },
         { path: 'language', loadChildren: () => LanguageModule },

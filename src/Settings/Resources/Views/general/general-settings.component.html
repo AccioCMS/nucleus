@@ -22,16 +22,12 @@
         <ng-container *ngIf="!spinner">
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
+                <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                     <mat-label>Site Title</mat-label>
                     <input matInput formControlName="siteTitle" required>
                     <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
                     <mat-error>Site Title is required!</mat-error>
                 </mat-form-field>
-
-            </div>
-
-            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                 <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
                     <mat-label>Admin Email</mat-label>
@@ -44,7 +40,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                <mat-form-field fxFlex="70">
+                <mat-form-field fxFlex="100">
                     <mat-select formControlName="defaultUserRole" placeholder="Default User Role">
                         <mat-option
                             *ngFor="let userGroup of userGroups"
@@ -58,7 +54,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                <mat-form-field fxFlex="70">
+                <mat-form-field fxFlex="100">
                     <mat-select formControlName="timezone" placeholder="Timezone">
                         <mat-option
                             *ngFor="let timezone of timezoneOptions"
@@ -71,8 +67,20 @@
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field fxFlex="100">
+                    <mat-select formControlName="homepageID" placeholder="Home Page">
+                        <mat-option
+                            *ngFor="let page of pages"
+                            [value]="page.postID">
+                            {{ page.title }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Home Page is required!</mat-error>
+                </mat-form-field>
+            </div>
 
-                <mat-form-field fxFlex="70">
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field fxFlex="100">
                     <mat-select formControlName="defaultLanguage" placeholder="Default Language">
                         <mat-option
                             *ngFor="let language of languages"
@@ -86,21 +94,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
-                <mat-form-field fxFlex="70">
-                    <mat-select formControlName="homepageID" placeholder="Home Page">
-                        <mat-option
-                            *ngFor="let page of pages"
-                            [value]="page.postID">
-                            {{ page.title }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error>Home Page is required!</mat-error>
-                </mat-form-field>
-            </div>
-
-            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-                <mat-form-field fxFlex="70">
+                <mat-form-field fxFlex="100">
                     <mat-select formControlName="activeTheme" placeholder="Active Theme">
                         <mat-option
                             *ngFor="let theme of themes"

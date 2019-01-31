@@ -54,6 +54,7 @@ export class UserListComponent
 
     selection = new SelectionModel<any>(true, []);
     spinner: boolean = true;
+    breadcrumbs = ['Users', 'List'];
     order: boolean = false;
     orderBy: string;
     orderType: string;
