@@ -131,6 +131,8 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
                 const control = this.postTypeForm.get(field);
                 control.markAsTouched({ onlySelf: true });
             });
+
+            this.openSnackBar('Please fill out the required fields.', 'X', 'error', 10000);
         }
     }
 
