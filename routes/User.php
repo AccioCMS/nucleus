@@ -18,7 +18,7 @@ Route::group(
         Route::get('{lang}/user/{view}', 'UserController@index')->name('index');
 
 
-//        Route::get('{lang}/user/{view}/{id}', 'UserController@index')->name('index');
+        Route::get('{lang}/user/{view}/{id}', 'UserController@single')->name('single');
 
         Route::group(['middleware' => ['auth:api']], function(){
             /**

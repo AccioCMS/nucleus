@@ -53,7 +53,7 @@ export class UserListComponent
     dataSource = new MatTableDataSource<any>([]);
 
     selection = new SelectionModel<any>(true, []);
-    spinner: boolean = false;
+    spinner: boolean = true;
     order: boolean = false;
     orderBy: string;
     orderType: string;
@@ -82,7 +82,6 @@ export class UserListComponent
     @ViewChild(MatTable) table: MatTable<any>;
     @ViewChild(MatSort) sort: MatSort;
     ngOnInit(){
-        this.spinner = false;
         if(this.route.snapshot.queryParamMap.get('order')){
             // console.log(this.route.snapshot.queryParamMap.get('order'));
             this.httpClient.get('/admin/en/json/user/get-all/'+this.route.snapshot.queryParamMap.get('order')+'/'+this.route.snapshot.queryParamMap.get('type'))
@@ -115,7 +114,7 @@ export class UserListComponent
                 .subscribe();
         }
         else{
-            this.spinner = true;
+            // this.spinner = true;
             this.httpClient.get('/admin/en/json/user/get-all')
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
@@ -128,7 +127,7 @@ export class UserListComponent
                 .subscribe();
         }
 
-        this.dataSource.paginator = this.paginator;
+        // this.dataSource.paginator = this.paginator;
 
     }
 
@@ -270,7 +269,7 @@ export class UserListComponent
 
     }
 
-    public onPageChange(event){
+    onPageChange(event){
         if(event['pageSize']){
             this.pageSize = event['pageSize'];
         }
@@ -292,6 +291,7 @@ export class UserListComponent
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
+
 
 }
 

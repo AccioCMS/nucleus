@@ -276,7 +276,6 @@ class BaseUserController extends MainController
 //        }
 //        return $this->response($id, 500);
 
-
         $user = User::find($id);
         // user can't be deleted if it has related data to him, like posts, categories ect
         if($user->hasRelatedData()) {
@@ -287,19 +286,15 @@ class BaseUserController extends MainController
             }
         }
 
-
         $roles = RoleRelationsModel::where('userID', $id);
         if($roles) {
             $roles->delete();
         }
 
         if ($user->delete()) {
-
             return true;
             // Delete all roles relations
         }
-        
-
         return false;
     }
 
@@ -317,6 +312,7 @@ class BaseUserController extends MainController
                 return $this->response('Internal server error. Please try again later', 500);
             }
             $c++;
+
         }
         return $this->response("User/s were deleted successfully");
 

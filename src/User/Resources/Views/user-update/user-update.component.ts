@@ -136,7 +136,7 @@ export class UserUpdateComponent
 
                          this.groups = data['allGroups'];
                         this.selecdedGroups = data['details']['roles'];
-                        console.log(this.selecdedGroups);
+                        // console.log(this.selecdedGroups);
                         this.usersForm.patchValue({
                             email: details['email'],
                             firstName: details['firstName'],
@@ -144,17 +144,19 @@ export class UserUpdateComponent
                             phone: details['phone'],
                             street: details['street'],
                             country: details['country'],
-                            about: details['about'],
+                            about: '',
                             groups: data['allGroups'],
                             isActive  : details['isActive'] == 1 ? true : false,
                         });
+
+                        this.spinner = false;
 
                     }else{
                     }
                 }
             )
             .subscribe();
-        this.spinner = false;
+
 
     }
 
@@ -176,7 +178,7 @@ export class UserUpdateComponent
                     if(data == 1){
 
                         this.router.navigate(["/test/users/edit/"+this.id+""])
-                        // this.spinner = false;
+                        this.spinner = false;
                     }else{
                     }
                 }
