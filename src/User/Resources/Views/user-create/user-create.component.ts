@@ -107,6 +107,7 @@ export class UserCreateComponent
 
     onSave(){
         // this.showErrorMessage = false;
+        this.spinner = true;
         let formData = this.usersForm.value;
         console.log(formData);
         let data = {'user' : { email: this.usersForm.get('email').value,password: this.usersForm.get('password').value, confpassword: this.usersForm.get('confpassword').value,lastName:  this.usersForm.get('lastName').value, firstName:  this.usersForm.get('firstName').value,
@@ -117,16 +118,14 @@ export class UserCreateComponent
                 (data) => {
                     console.log(data);
                     if(data){
-
-                        // this.store.dispatch(new AuthActions.Signin(data['access_token']))
-                        // this.router.navigate(['/test/fuse'])
+                        this.spinner = false;
                     }else{
                         // this.showErrorMessage = true;
                     }
                 }
             )
             .subscribe();
-        this.spinner = false;
+
     }
 
     onCancel(){
