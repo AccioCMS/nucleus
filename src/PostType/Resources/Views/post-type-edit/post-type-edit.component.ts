@@ -13,6 +13,9 @@ import {MatSnackBar} from '@angular/material';
 import { Subject } from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
+import { Store } from '@ngrx/store';
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
+
 @Component({
     selector   : 'post-type-edit',
     templateUrl: './post-type-edit.component.html',
@@ -39,7 +42,8 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
         private httpClient: HttpClient,
         private router: Router,
         private route:ActivatedRoute,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -98,7 +102,7 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
 
     onSave(){
         if(this.postTypeForm.valid){
-            this.saveSpinner = true;
+            this.store.dispatch(new SharedActions.SetIsLoading(true));
             let data = this.postTypeForm.value;
             data.fields = [];
             data.slug = this.slug;
@@ -114,7 +118,7 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
                         }else{
                             this.openSnackBar(data['message'], 'X', 'error', 10000);
                         }
-                        this.saveSpinner = false;
+                        this.store.dispatch(new SharedActions.SetIsLoading(false));
                     }
                 )
                 .subscribe();

@@ -1,7 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSlideToggleModule } from '@angular/material';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatGridListModule, MatCardModule, MatChipsModule, MatPaginatorModule, MatTableModule, MatMenuModule, MatSortModule  } from '@angular/material';
 
 import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
@@ -12,7 +9,6 @@ import { PostTypeListComponent } from './Views/post-type-list/post-type-list.com
 import { PostTypeCreateComponent } from './Views/post-type-create/post-type-create.component';
 import { PostTypeEditComponent } from './Views/post-type-edit/post-type-edit.component';
 
-
 @NgModule({
   declarations: [
       PostTypeListComponent,
@@ -22,18 +18,6 @@ import { PostTypeEditComponent } from './Views/post-type-edit/post-type-edit.com
   imports: [
       SharedModule,
       PostTypeRoutingModule,
-
-      //Material
-      MatSlideToggleModule,
-      MatSnackBarModule,
-      MatGridListModule,
-      MatGridListModule,
-      MatCardModule,
-      MatChipsModule,
-      MatPaginatorModule,
-      MatTableModule,
-      MatMenuModule,
-      MatSortModule,
 
       TranslateModule,
       FuseSharedModule,

@@ -39,8 +39,10 @@
                 </div>
                 <div class="content">
                     <mat-card class = 'p-0 mat-card-content'>
-                        <mat-progress-bar mode="indeterminate" *ngIf="loadingSpinner || spinner"></mat-progress-bar>
-                        <div class="content-disabled" *ngIf="loadingSpinner"></div>
+                        <mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>
+                        <div class="content-disabled" *ngIf="loadingSpinner">
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        </div>
 
                         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 p-16" *ngIf="!spinner" (matSortChange)="customSort($event)">
                             <!-- Checkbox Column -->

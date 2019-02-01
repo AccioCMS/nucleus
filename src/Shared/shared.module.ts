@@ -3,18 +3,31 @@ import { CommonModule } from '@angular/common';
 
 import { MatButtonModule,
     MatCheckboxModule,
+    MatRadioModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
     MatStepperModule,
     MatTabsModule,
-    MatPaginatorModule } from '@angular/material';
+    MatSlideToggleModule} from '@angular/material';
+
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatDividerModule} from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import {
+    MatGridListModule,
+    MatCardModule,
+    MatChipsModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatMenuModule,
+    MatSortModule
+} from '@angular/material';
 
 import { NucleusTemplateHeaderComponent } from './App/template-header/template-header.component';
 import { AccioDialogComponent } from './App/accio-dialog/accio-dialog.component';
@@ -32,6 +45,7 @@ import { sharedReducer } from './Store/shared.reducers';
         //Material
         MatButtonModule,
         MatCheckboxModule,
+        MatRadioModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
@@ -42,8 +56,16 @@ import { sharedReducer } from './Store/shared.reducers';
         MatTabsModule,
         MatDialogModule,
         MatProgressSpinnerModule,
-        MatPaginatorModule,
         MatProgressBarModule,
+        MatSlideToggleModule,
+        MatSnackBarModule,
+        MatGridListModule,
+        MatCardModule,
+        MatChipsModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatMenuModule,
+        MatSortModule,
 
         StoreModule.forFeature('shared', sharedReducer),
     ],
@@ -53,6 +75,7 @@ import { sharedReducer } from './Store/shared.reducers';
         //Material
         MatButtonModule,
         MatCheckboxModule,
+        MatRadioModule,
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
@@ -63,8 +86,16 @@ import { sharedReducer } from './Store/shared.reducers';
         MatTabsModule,
         MatDialogModule,
         MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatSlideToggleModule,
+        MatSnackBarModule,
+        MatGridListModule,
+        MatCardModule,
+        MatChipsModule,
         MatPaginatorModule,
-        MatProgressBarModule
+        MatTableModule,
+        MatMenuModule,
+        MatSortModule,
     ],
     entryComponents: [
         AccioDialogComponent

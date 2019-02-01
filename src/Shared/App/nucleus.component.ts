@@ -32,6 +32,7 @@ export class NucleusComponent {
     fuseConfig: any;
     navigation: any;
     spinner: boolean = true;
+    isLoading: boolean = false;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -187,6 +188,14 @@ export class NucleusComponent {
 
                 this.document.body.classList.add(this.fuseConfig.colorTheme);
             });
+
+        this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    this.isLoading = data['shared']['isLoading'];
+                }
+            );
     }
 
     /**

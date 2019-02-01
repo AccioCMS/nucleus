@@ -40,7 +40,7 @@ export class SetPluginConfigs implements Action {
 export class SetIsLoading implements Action {
     readonly type = SET_IS_LOADING;
 
-    constructor(public payload: object){}
+    constructor(public payload: boolean){}
 }
 
 export type SharedActions =  SetAppMenuLinks | SetGlobalData | SetCmsMenus | SetLanguages | SetPluginConfigs | SetIsLoading;

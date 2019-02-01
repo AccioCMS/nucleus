@@ -17,7 +17,8 @@
 
             //Mat Slide
             .accio-slide-toggle{
-                &.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb{
+                &.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb,
+                &.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-ripple-element{
                     background: #4285f4;
                 }
 
@@ -416,9 +417,8 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background: #fff;
+        background: rgba(255, 255, 255, 0.5);
         z-index: 9;
-        opacity: 0.5;
     }
 
     .d-block{
@@ -436,6 +436,14 @@
             &:hover{
                 text-decoration: none !important;
             }
+        }
+    }
+
+    .accio-info-card{
+        max-width: 100%;
+
+        .h3, .h4{
+            color: #002250;
         }
     }
 }
