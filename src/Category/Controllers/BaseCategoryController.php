@@ -472,9 +472,9 @@ class BaseCategoryController extends MainController
     public function makeSearch($lang, $postTypeID, $term)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Categories', 'read')) {
+        /*if(!User::hasAccess('Categories', 'read')) {
             return $this->noPermission();
-        }
+        }*/
 
         $orderBy = (isset($_GET['order'])) ? $_GET['order'] : 'categoryID';
         $orderType = (isset($_GET['type'])) ? $_GET['type'] : 'ASC';

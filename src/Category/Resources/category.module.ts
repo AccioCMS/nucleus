@@ -4,10 +4,10 @@ import {
     MatPaginatorModule, MatTableModule, MatMenuModule,
     MatSlideToggleModule, MatSortModule
 } from '@angular/material';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
@@ -37,13 +37,13 @@ import { CategoryEditComponent } from './Views/category-edit/category-edit.compo
       MatSlideToggleModule,
       MatSnackBarModule,
       MatSortModule,
-      MatAutocompleteModule,
 
       TranslateModule,
       FuseSharedModule,
 
       FroalaEditorModule,
-      FroalaViewModule
+      FroalaViewModule,
+      NgxMatSelectSearchModule
   ]
 })
 export class CategoryModule {}

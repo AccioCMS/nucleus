@@ -27,9 +27,10 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
     breadcrumbs = ['Post Type', 'Category', 'Add New'];
     slug = '';
     spinner: boolean = true;
+    saveSpinner: boolean = false;
     languages = [];
     form = { title: {}, slug: {}, parent: {}, description: {}, featuredImage: {},  isVisible: {}};
-    parentCategories: string[] = ['One', 'Two', 'Three'];
+    parentCategories: [] = [];
 
     public options: Object = {
         toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent',
@@ -69,13 +70,13 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
     }
 
     onSave(){
-        console.log(this.form);
+        this.saveSpinner = true;
         let data = {
             form: this.form,
             postTypeID: this.route.snapshot.params['id'],
         };
 
-        /*this.httpClient.post('/admin/json/category/store', data)
+        this.httpClient.post('/admin/json/category/store', data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -87,14 +88,16 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
                         }else{
                             this.openSnackBar(response['message'], 'X', 'error', 10000);
                         }
+                        this.saveSpinner = false;
 
                     }else{
+                        this.router.navigate(['../../list/'+this.route.snapshot.params['id']], {relativeTo: this.route});
                         this.openSnackBar(response['message'], 'X', 'success');
+
                     }
-                    console.log(response);
                 }
             )
-            .subscribe();*/
+            .subscribe();
     }
 
     onCancel(){
@@ -103,15 +106,30 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
 
     createSlug(title, slug){
         this.form.slug[slug] = "";
-        if(title != '' && title.length > 0){
+        if(typeof title !== 'undefined' && title.length > 0){
             this.httpClient.get('/admin/en/json/category/check-slug/'+this.route.snapshot.params['id']+'/'+title)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (response) => {
-                        this.form.slug['en'] = response['slug'];
+                        this.form.slug[slug] = response['slug'];
                     }
                 )
                 .subscribe();
+        }
+    }
+
+    searchCategories(value: string){
+        if(value.length > 1){
+            this.httpClient.get('/admin/en/json/category/'+this.route.snapshot.params['id']+'/search/'+value)
+                .pipe(takeUntil(this._unsubscribeAll))
+                .map(
+                    (response) => {
+                        this.parentCategories = response['data'];
+                    }
+                )
+                .subscribe();
+        }else{
+            this.parentCategories = [];
         }
     }
 

@@ -10,7 +10,7 @@
     >
     </nucleus-template-header>
 
-    <div class="spinner" *ngIf="spinner">
+    <div class="spinner" *ngIf="saveSpinner">
         <mat-spinner color="accent" [diameter]="60"></mat-spinner>
     </div>
 
@@ -40,22 +40,16 @@
                                         </div>
 
                                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                            <!--<mat-form-field fxFlex="100">
-                                                <mat-select placeholder="Parent Category" [(ngModel)]="form.parent" [ngModelOptions]="{standalone: true}">
-                                                    <mat-option [value]="1">1</mat-option>
-                                                    <mat-option [value]="2">2</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>-->
-
-                                            <mat-form-field   fxFlex="100">
-                                                <mat-select [(ngModel)]="form.parent" [ngModelOptions]="{standalone: true}" placeholder="Search Categories" #singleSelect>
-                                                    <mat-select-search [formControl]="bankFilterCtrl"></mat-select-search>
-                                                    <mat-option *ngFor="let category of parentCategories" [value]="category">
-                                                        {{category}}
+                                            <mat-form-field fxFlex="100">
+                                                <mat-select [(ngModel)]="form.parent" [ngModelOptions]="{standalone: true}" placeholder="Search Categories">
+                                                    <mat-option>
+                                                        <ngx-mat-select-search (keyup)="searchCategories(searchCatInput.value)" #searchCatInput></ngx-mat-select-search>
+                                                    </mat-option>
+                                                    <mat-option *ngFor="let category of parentCategories" [value]="category.categoryID">
+                                                        {{category.title}}
                                                     </mat-option>
                                                 </mat-select>
                                             </mat-form-field>
-
                                         </div>
 
 
