@@ -12,7 +12,7 @@
     <mat-spinner color="accent" [diameter]="60"></mat-spinner>
 </div>
 <div class="accio-content center pb-56 ps ps--active-y d-block">
-    <mat-progress-bar mode="indeterminate" class="settings-progress-bar" color="accent" *ngIf="spinner"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" class="settings-progress-bar" *ngIf="spinner"></mat-progress-bar>
 
     <div class="h2 mb-24 p-16">Site Settings</div>
 
@@ -25,7 +25,7 @@
                 <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
                     <mat-label>Site Title</mat-label>
                     <input matInput formControlName="siteTitle" required>
-                    <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
+                    <mat-icon matSuffix class="secondary-text">title</mat-icon>
                     <mat-error>Site Title is required!</mat-error>
                 </mat-form-field>
 

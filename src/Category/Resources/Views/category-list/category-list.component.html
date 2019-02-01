@@ -39,9 +39,10 @@
                 </div>
                 <div class="content">
                     <mat-card class = 'p-0 mat-card-content'>
-                        <mat-progress-bar mode="indeterminate" *ngIf="loadingSpinner" color="accent"></mat-progress-bar>
-                        <div class="content-disabled" *ngIf="loadingSpinner"></div>
-                        <mat-spinner color="accent" class="center" [diameter]="30" *ngIf="spinner"></mat-spinner>
+                        <mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>
+                        <div class="content-disabled" *ngIf="loadingSpinner">
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        </div>
 
                         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 p-16" *ngIf="!spinner" (matSortChange)="customSort($event)">
                             <!-- Checkbox Column -->
@@ -49,13 +50,15 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     <mat-checkbox (change)="$event ? masterToggle() : null"
                                                   [checked]="selection.hasValue() && isAllSelected()"
-                                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                    class="accio-checkbox">
                                     </mat-checkbox>
                                 </th>
                                 <td mat-cell *matCellDef="let row">
                                     <mat-checkbox (click)="$event.stopPropagation()"
                                                   (change)="$event ? selection.toggle(row) : null"
-                                                  [checked]="selection.isSelected(row)">
+                                                  [checked]="selection.isSelected(row)"
+                                                    class="accio-checkbox">
                                     </mat-checkbox>
                                 </td>
                             </ng-container>

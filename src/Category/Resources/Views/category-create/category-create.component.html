@@ -10,7 +10,7 @@
     >
     </nucleus-template-header>
 
-    <div class="spinner" *ngIf="spinner">
+    <div class="spinner" *ngIf="saveSpinner">
         <mat-spinner color="accent" [diameter]="60"></mat-spinner>
     </div>
 
@@ -21,80 +21,47 @@
                     <form name="categoryForm">
                         <div *ngIf="!spinner" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20">
                             <mat-tab-group fxFlex="100">
-                                <mat-tab label="English">
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
-                                            <mat-label>Title</mat-label>
-                                            <input matInput [(ngModel)]="title" (blur)="createSlug()" [ngModelOptions]="{standalone: true}">
-                                            <mat-icon matSuffix class="secondary-text">label</mat-icon>
-                                            <mat-error>Title is required!</mat-error>
-                                        </mat-form-field>
-                                    </div>
+                                <mat-tab *ngFor="let lang of languages" [label]="lang.title">
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                            <mat-form-field appearance="outline" fxFlex="100" class="pr-4 mt-12">
+                                                <mat-label>Title</mat-label>
+                                                <input matInput [(ngModel)]="form.title[lang.id]" (blur)="createSlug(form.title[lang.id], lang.id)" [ngModelOptions]="{standalone: true}">
+                                                <mat-icon matSuffix class="secondary-text">label</mat-icon>
+                                                <mat-error>Title is required!</mat-error>
+                                            </mat-form-field>
+                                        </div>
 
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-form-field appearance="outline" fxFlex="100">
-                                            <mat-label>Slug</mat-label>
-                                            <input matInput [(ngModel)]="slug" [ngModelOptions]="{standalone: true}">
-                                            <mat-error>Slug is required!</mat-error>
-                                        </mat-form-field>
-                                    </div>
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                            <mat-form-field appearance="outline" fxFlex="100">
+                                                <mat-label>Slug</mat-label>
+                                                <input matInput [(ngModel)]="form.slug[lang.id]" [ngModelOptions]="{standalone: true}" disabled>
+                                                <mat-error>Slug is required!</mat-error>
+                                            </mat-form-field>
+                                        </div>
 
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-form-field fxFlex="100">
-                                            <mat-select placeholder="Parent Category" [(ngModel)]="parentID" [ngModelOptions]="{standalone: true}">
-                                                <mat-option [value]="1">1</mat-option>
-                                                <mat-option [value]="2">2</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                            <mat-form-field fxFlex="100">
+                                                <mat-select [(ngModel)]="form.parent" [ngModelOptions]="{standalone: true}" placeholder="Search Categories">
+                                                    <mat-option>
+                                                        <ngx-mat-select-search (keyup)="searchCategories(searchCatInput.value)" #searchCatInput></ngx-mat-select-search>
+                                                    </mat-option>
+                                                    <mat-option *ngFor="let category of parentCategories" [value]="category.categoryID">
+                                                        {{category.title}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
 
 
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                                         <p>Description</p>
-                                        <div [froalaEditor]='options' [(ngModel)]="description" [ngModelOptions]="{standalone: true}" class="mb-20" fxFlex="100"></div>
-                                    </div>
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                            <div [froalaEditor]='options' [(ngModel)]="form.description[lang.id]" [ngModelOptions]="{standalone: true}" class="mb-20" fxFlex="99" style="padding-left:1px;"></div>
+                                        </div>
 
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle [(ngModel)]="isVisible" [ngModelOptions]="{standalone: true}">Visible</mat-slide-toggle>
-                                    </div>
-                                </mat-tab>
-                                <mat-tab label="Albanian">
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
-                                            <mat-label>Title</mat-label>
-                                            <input matInput [(ngModel)]="title" [ngModelOptions]="{standalone: true}" (blur)="createSlug()">
-                                            <mat-icon matSuffix class="secondary-text">label</mat-icon>
-                                            <mat-error>Title is required!</mat-error>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-form-field appearance="outline" fxFlex="100">
-                                            <mat-label>Slug</mat-label>
-                                            <input matInput [(ngModel)]="slug" [ngModelOptions]="{standalone: true}" required>
-                                            <mat-error>Slug is required!</mat-error>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-form-field fxFlex="100">
-                                            <mat-select placeholder="Parent Category" [(ngModel)]="parentID" [ngModelOptions]="{standalone: true}">
-                                                <mat-option [value]="1">1</mat-option>
-                                                <mat-option [value]="2">2</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-
-
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <p>Description</p>
-                                        <div [froalaEditor]='options' [(ngModel)]="description" [ngModelOptions]="{standalone: true}"class="mb-20" fxFlex="100"></div>
-                                    </div>
-
-                                    <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle [(ngModel)]="isVisible" [ngModelOptions]="{standalone: true}">Visible</mat-slide-toggle>
-                                    </div>
-                                </mat-tab>
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                            <mat-slide-toggle class="accio-slide-toggle" [(ngModel)]="form.isVisible[lang.id]" [ngModelOptions]="{standalone: true}">Visible</mat-slide-toggle>
+                                        </div>
+                                    </mat-tab>
                             </mat-tab-group>
                         </div>
 

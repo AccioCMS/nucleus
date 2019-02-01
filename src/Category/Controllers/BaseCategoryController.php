@@ -217,9 +217,9 @@ class BaseCategoryController extends MainController
     public function store(Request $request)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Categories', 'create')) {
+        /*if(!User::hasAccess('Categories', 'create')) {
             return $this->noPermission();
-        }
+        }*/
 
         $data = $request->all();
         $structuredData =  $this->generateTitleAndSlug($data['form']);
@@ -257,7 +257,7 @@ class BaseCategoryController extends MainController
         $categoryModel->title = $form['title'];
         $categoryModel->postTypeID = $data['postTypeID'];
         $categoryModel->parentID = ($parentID ? $parentID: null);
-        $categoryModel->featuredImageID = $form['featuredImageID'];
+        $categoryModel->featuredImageID = isset($form['featuredImageID']) ? $form['featuredImageID'] : null;
         $categoryModel->description = $form['description'];
         $categoryModel->slug = $form['slug'];
         $categoryModel->isVisible = $form['isVisible'];
@@ -271,8 +271,9 @@ class BaseCategoryController extends MainController
                 // update label in menu link with the category title
                 $this->updateMenuLinkLabel($data['id'], $form['title'], $oldTitle);
             }
-            $redirect = $this->redirect($request->redirect, $categoryModel->categoryID, $data['postTypeID']);
-            $response = $this->response('Category is saved', 200, $redirect['id'], $redirect['view'], $redirect['url']);
+            //$redirect = $this->redirect($request->redirect, $categoryModel->categoryID, $data['postTypeID']);
+            //$response = $this->response('Category is saved', 200, $redirect['id'], $redirect['view'], $redirect['url']);
+            $response = $this->response('Category is saved', 200);
         }else{
             $response = $this->response('Category is not saved. Please try again later!', 500);
         }
@@ -300,7 +301,7 @@ class BaseCategoryController extends MainController
             && $form['title'][$defaultLanguage->slug] != ""
         ) {
             $defaultLanguageTitle = $form['title'][$defaultLanguage->slug];
-            $newSlug = parent::generateSlug($defaultLanguageTitle, 'categories', 'categoryID', App::getLocale(), 0, true);
+            $newSlug = parent::generateSlug($defaultLanguageTitle, 'categories', 'categoryID', \App::getLocale(), 0, true);
         }else{
             $errors['title_'.$defaultLanguage['slug']] = array('Title '.$requiredMessage. " in ".$defaultLanguage['name']);
         }
@@ -311,7 +312,7 @@ class BaseCategoryController extends MainController
             foreach($form as $formDataKey => $formDataValue){
                 foreach($languages as $language){
                     if($formDataKey == "title" && !$language['isDefault']) {
-                        if(!$formDataValue[$language['slug']]) {
+                        if(!isset($formDataValue[$language['slug']])) {
                             if($defaultLanguageTitle) {
                                 $formDataValue[$language['slug']] = $defaultLanguageTitle;
                             }
@@ -319,7 +320,7 @@ class BaseCategoryController extends MainController
                     }
 
                     if($formDataKey == "slug") {
-                        if(!$formDataValue[$language['slug']]) {
+                        if(!isset($formDataValue[$language['slug']])) {
                             $formDataValue[$language['slug']] = $newSlug;
                         }
                     }
@@ -471,9 +472,9 @@ class BaseCategoryController extends MainController
     public function makeSearch($lang, $postTypeID, $term)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Categories', 'read')) {
+        /*if(!User::hasAccess('Categories', 'read')) {
             return $this->noPermission();
-        }
+        }*/
 
         $orderBy = (isset($_GET['order'])) ? $_GET['order'] : 'categoryID';
         $orderType = (isset($_GET['type'])) ? $_GET['type'] : 'ASC';
@@ -528,7 +529,8 @@ class BaseCategoryController extends MainController
      */
     public function getSlug($lang, $postTypeID, $slug)
     {
-        return parent::generateSlug($slug, 'categories', 'categoryID', $lang, 0, true);
+        $slug = parent::generateSlug($slug, 'categories', 'categoryID', $lang, 0, true);
+        return response()->json(['slug' => $slug]);
     }
 
     /**

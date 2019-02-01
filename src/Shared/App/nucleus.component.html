@@ -13,8 +13,14 @@
     </div>
 
 </div>
+
+<div class="full-body-spinner" *ngIf="isLoading">
+    <mat-progress-bar mode="indeterminate" color="warn"></mat-progress-bar>
+</div>
 <!-- VERTICAL LAYOUT 1 -->
 <ng-container *ngIf="fuseConfig.layout.style === 'vertical-layout-1' && !spinner">
     <vertical-layout-1></vertical-layout-1>
 </ng-container>
 <!-- / VERTICAL LAYOUT 1 -->
+
+

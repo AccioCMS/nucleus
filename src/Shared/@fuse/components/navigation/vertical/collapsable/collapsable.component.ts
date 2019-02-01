@@ -60,7 +60,6 @@ export class FuseNavVerticalCollapsableComponent implements OnInit, OnDestroy
                 takeUntil(this._unsubscribeAll)
             )
             .subscribe((event: NavigationEnd) => {
-
                 // Check if the url can be found in
                 // one of the children of this item
                 if ( this.isUrlInChildren(this.item, event.urlAfterRedirects) )
@@ -71,6 +70,8 @@ export class FuseNavVerticalCollapsableComponent implements OnInit, OnDestroy
                 {
                     this.collapse();
                 }
+
+                this.checkExpand();
             });
 
         // Listen for collapsing of any navigation item
@@ -114,6 +115,7 @@ export class FuseNavVerticalCollapsableComponent implements OnInit, OnDestroy
             this.collapse();
         }
 
+        this.checkExpand();
         // Subscribe to navigation item
         merge(
             this._fuseNavigationService.onNavigationItemAdded,
@@ -137,6 +139,15 @@ export class FuseNavVerticalCollapsableComponent implements OnInit, OnDestroy
         this._unsubscribeAll.complete();
     }
 
+
+    checkExpand(){
+        if(this.item.id == 'post-types' && this._router.url.indexOf('post-type') > -1 && this._router.url.indexOf('category') == -1){
+
+            this.expand();
+        }else if(this.item.id == 'users' && this._router.url.indexOf('user') > -1){
+            this.expand();
+        }
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------

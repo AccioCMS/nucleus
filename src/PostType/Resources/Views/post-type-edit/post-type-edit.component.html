@@ -19,7 +19,7 @@
             <div class="accio-container-850" fuseperfectscrollbar="">
 
                 <div class="accio-content center pb-56 ps ps--active-y d-block">
-                    <mat-progress-bar mode="indeterminate" *ngIf="spinner" color="accent"></mat-progress-bar>
+                    <mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>
                     <form fxLayout="column" fxLayoutAlign="start"
                           fxFlex="1 0 auto" name="postTypeForm" [formGroup]="postTypeForm" *ngIf="!spinner" class="p-24">
 
@@ -59,7 +59,7 @@
                                 </mat-expansion-panel-header>
 
                                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                    <mat-slide-toggle formControlName="isVisible">Visible</mat-slide-toggle>
+                                    <mat-slide-toggle class="accio-slide-toggle" formControlName="isVisible">Visible</mat-slide-toggle>
                                 </div>
                             </mat-expansion-panel>
                         </mat-accordion>
@@ -76,11 +76,11 @@
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="hasCategories">Has categories</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasCategories">Has categories</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="isCategoryRequired">Is category required</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isCategoryRequired">Is category required</mat-slide-toggle>
                                     </div>
                                 </div>
                             </mat-expansion-panel>
@@ -94,11 +94,11 @@
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="hasTags">Has tags</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasTags">Has tags</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="isTagRequired">Is tag required</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isTagRequired">Is tag required</mat-slide-toggle>
                                     </div>
                                 </div>
                             </mat-expansion-panel>
@@ -116,11 +116,11 @@
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="hasFeaturedImage">Has Featured image</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasFeaturedImage">Has Featured image</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="isFeaturedImageRequired">Is Featured image required
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isFeaturedImageRequired">Is Featured image required
                                         </mat-slide-toggle>
                                     </div>
                                 </div>
@@ -135,11 +135,11 @@
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="hasFeaturedVideo">Has Featured video</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasFeaturedVideo">Has Featured video</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle formControlName="isFeaturedVideoRequired">Is Featured video required</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isFeaturedVideoRequired">Is Featured video required</mat-slide-toggle>
                                     </div>
                                 </div>
                             </mat-expansion-panel>

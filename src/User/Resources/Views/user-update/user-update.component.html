@@ -15,12 +15,10 @@
                 <div class="content">
                     <div class="accio-container-850" fuseperfectscrollbar="">
                         <div class="accio-content center pb-56 ps ps--active-y p-sm-10 pr-sm-10 d-block">
-                            <mat-progress-bar mode="indeterminate" color="accent" *ngIf="spinner"></mat-progress-bar>
+                            <mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>
 
                             <form fxLayout="column" fxLayoutAlign="start"
                                   fxFlex="1 0 auto" name="exampleForm" [formGroup]="usersForm" *ngIf="!spinner" class="p-24">
-
-                                <!--{{ _userModel | json}}-->
 
                                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
@@ -122,7 +120,7 @@
                                                 </div>
 
                                                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                                    <mat-slide-toggle formControlName="isActive">Is Active
+                                                    <mat-slide-toggle class="accio-slide-toggle" formControlName="isActive">Is Active
                                                     </mat-slide-toggle>
                                                 </div>
 
