@@ -18,6 +18,10 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 
+import { Store } from '@ngrx/store';
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
+import {DeleteMupltipleLanguages} from "../../../../Shared/Store/shared.actions";
+
 @Component({
     selector   : 'language-list',
     templateUrl: './language-list.component.html',
@@ -44,7 +48,9 @@ export class LanguageListComponent implements OnInit, OnDestroy
         private router: Router,
         private route:ActivatedRoute,
         public dialog: MatDialog,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>
+
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -93,6 +99,8 @@ export class LanguageListComponent implements OnInit, OnDestroy
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
                         this.dataSource = new MatTableDataSource<any>(newData);
+
+                        this.store.dispatch(new SharedActions.DeleteLanguage(id));
                     }else{
                         this.openSnackBar(response['message'], 'X', 'error', 10000);
                     }
@@ -165,6 +173,8 @@ export class LanguageListComponent implements OnInit, OnDestroy
                                 let newData = this.dataSource.data;
                                 newData = newData.filter(item => !keyArray.includes(item.languageID) );
                                 this.dataSource = new MatTableDataSource<any>(newData);
+
+                                this.store.dispatch(new SharedActions.DeleteMupltipleLanguages(keyArray));
                             }else{
                                 this.openSnackBar(response['message'], 'X', 'error', 10000);
                             }

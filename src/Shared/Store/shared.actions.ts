@@ -7,6 +7,10 @@ export const SET_LANGUAGES = 'SET_LANGUAGES';
 export const SET_PLUGIN_CONFIGS = 'SET_PLUGIN_CONFIGS';
 export const SET_IS_LOADING = 'SET_IS_LOADING';
 
+export const ADD_LANGUAGE = 'ADD_LANGUAGE';
+export const DELETE_LANGUAGE = 'DELETE_LANGUAGE';
+export const DELETE_MULTIPLE_LANGUAGES = 'DELETE_MULTIPLE_LANGUAGES';
+
 export class SetAppMenuLinks implements Action{
     readonly type = SET_APPLICATION_MENU_LINKS;
 
@@ -43,4 +47,32 @@ export class SetIsLoading implements Action {
     constructor(public payload: boolean){}
 }
 
-export type SharedActions =  SetAppMenuLinks | SetGlobalData | SetCmsMenus | SetLanguages | SetPluginConfigs | SetIsLoading;
+
+export class AddLanguage implements Action {
+    readonly type = ADD_LANGUAGE;
+
+    constructor(public payload: {}){}
+}
+
+export class DeleteLanguage implements Action {
+    readonly type = DELETE_LANGUAGE;
+
+    constructor(public payload: string){}
+}
+
+export class DeleteMupltipleLanguages implements Action {
+    readonly type = DELETE_MULTIPLE_LANGUAGES;
+
+    constructor(public payload: any[]){}
+}
+
+export type SharedActions =
+    SetAppMenuLinks |
+    SetGlobalData |
+    SetCmsMenus |
+    SetLanguages |
+    SetPluginConfigs |
+    SetIsLoading |
+    AddLanguage |
+    DeleteLanguage |
+    DeleteMupltipleLanguages;

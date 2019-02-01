@@ -56,11 +56,38 @@ export function sharedReducer(state = initialState, action: SharedActions.Shared
             ...state,
             pluginsConfigs: action.payload
           };
+
         case (SharedActions.SET_IS_LOADING):
             return {
                 ...state,
                 isLoading: action.payload
             };
+
+        case (SharedActions.ADD_LANGUAGE):
+            return {
+                ...state,
+                languages: [...state.languages, action.payload]
+            };
+
+        case (SharedActions.DELETE_LANGUAGE):
+            let oldLanguages = [...state.languages];
+            oldLanguages = oldLanguages.filter(function( obj ) {
+                return obj.languageID != action.payload;
+            });
+            return{
+                ...state,
+                languages: oldLanguages
+            };
+
+        case (SharedActions.DELETE_MULTIPLE_LANGUAGES):
+            let keyArray = action.payload;
+            let oldLanguagesM = [...state.languages];
+            oldLanguagesM = oldLanguagesM.filter(item => !keyArray.includes(item.languageID) );
+            return{
+                ...state,
+                languages: oldLanguagesM
+            };
+
         default:
           return state;
     }

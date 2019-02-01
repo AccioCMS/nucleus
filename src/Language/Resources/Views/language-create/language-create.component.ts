@@ -15,6 +15,9 @@ import * as LanguageList from '../../language-list';
 import { Subject } from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
+import { Store} from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
+
 @Component({
     selector   : 'language-create',
     templateUrl: './language-create.component.html',
@@ -43,7 +46,8 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
         private httpClient: HttpClient,
         private router: Router,
         private route:ActivatedRoute,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -92,6 +96,8 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
                 .map(
                     (response) => {
                         if(response['code'] == 200){
+                            let storeLang = { id: this.slug, title: data.name, languageID: response['id']};
+                            this.store.dispatch(new SharedActions.AddLanguage(storeLang));
                             this.router.navigate(['../list'], {relativeTo:this.route});
                         }else{
                             if(response['errors']){
