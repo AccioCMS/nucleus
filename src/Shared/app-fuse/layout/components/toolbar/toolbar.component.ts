@@ -31,6 +31,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
     selectedLanguage: any;
     userStatusOptions: any[];
     authUser: object;
+    searchCollaps: boolean = false;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -138,6 +139,23 @@ export class ToolbarComponent implements OnInit, OnDestroy
     {
         this._fuseSidebarService.getSidebar(key).toggleOpen();
     }
+
+
+    /**
+     * Collapse
+     */
+    collapse(): void
+    {
+        if(this.searchCollaps){
+            this.searchCollaps = false;
+        }else{
+            this.searchCollaps = true;
+        }
+
+        console.log( this.searchCollaps );
+
+    }
+
 
     /**
      * Search

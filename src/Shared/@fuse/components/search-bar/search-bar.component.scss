@@ -25,14 +25,14 @@ $background-color : #3C82D8;
         input {
             background-color: $background-color;
             position: relative !important;
-            bottom: 15% !important;
-            height: 100% !important;
+            //bottom: 15% !important;
+            height: 90% !important;
             width: 90% !important;
         }
 
         label {
             position: relative !important;
-            bottom: 15% !important;
+            //bottom: 15% !important;
             height: 100% !important;
         }
 
@@ -51,11 +51,12 @@ $background-color : #3C82D8;
 
         &.expanded {
             //position: absolute;
-            top: 0;
+            top: 0 !important;
             right: 0;
             bottom: 0;
             left: 0;
             z-index: 10;
+            height: 40px !important;
 
             .fuse-search-bar-content {
 
