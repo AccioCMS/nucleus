@@ -12,7 +12,7 @@
     <mat-spinner color="accent" [diameter]="60"></mat-spinner>
 </div>
 <div class="accio-content center pb-56 pr-sm-24 ps ps--active-y d-block">
-    <mat-progress-bar mode="indeterminate" class="settings-progress-bar" color="accent" *ngIf="spinner"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" class="settings-progress-bar" *ngIf="spinner"></mat-progress-bar>
     <div class="h2 mb-24 p-16">Analytics Settings</div>
     <form fxLayout="column"
           fxLayoutAlign="start"
@@ -50,7 +50,7 @@
             <mat-divider></mat-divider>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-12 mt-12">
-                <mat-slide-toggle formControlName="useTagManager">Use Google Tag Manager Instead</mat-slide-toggle>
+                <mat-slide-toggle class="accio-slide-toggle" formControlName="useTagManager">Use Google Tag Manager Instead</mat-slide-toggle>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">

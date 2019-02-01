@@ -13,7 +13,7 @@
 </div>
 
 <div class="accio-content center ps ps--active-y d-block" fuseperfectscrollbar="">
-    <mat-progress-bar mode="indeterminate" color="accent" class="settings-progress-bar" *ngIf="loadingSpinner"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" class="settings-progress-bar" *ngIf="loadingSpinner"></mat-progress-bar>
     <div class="h2 mb-24 p-16">Add New Language</div>
     <form fxLayout="column" fxLayoutAlign="start" class="p-16"
       fxFlex="1 0 auto" name="languageForm" [formGroup]="languageForm">
@@ -48,11 +48,11 @@
         </div>
 
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-            <mat-slide-toggle formControlName="isVisible">Visible</mat-slide-toggle>
+            <mat-slide-toggle class="accio-slide-toggle" formControlName="isVisible">Visible</mat-slide-toggle>
         </div>
 
         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-            <mat-slide-toggle formControlName="isDefault">Default</mat-slide-toggle>
+            <mat-slide-toggle class="accio-slide-toggle" formControlName="isDefault">Default</mat-slide-toggle>
         </div>
     </form>
 </div>

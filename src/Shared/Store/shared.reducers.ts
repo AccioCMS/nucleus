@@ -7,112 +7,11 @@ export interface SharedState {
     cmsMenus: [];
     languages: any;
     pluginsConfigs: [];
+    isLoading: boolean;
 }
 
 const initialState: SharedState = {
-    applicationMenuLinks: [
-        {
-            id       : 'applications',
-            title    : 'Applications',
-            translate: 'NAV.APPLICATIONS',
-            type     : 'group',
-            children : [
-                {
-                    id       : 'sample',
-                    title    : 'Sample',
-                    translate: 'NAV.SAMPLE.TITLE',
-                    type     : 'item',
-                    icon     : 'email',
-                    url      : '/test/fuse',
-                    badge    : {
-                        title    : '25',
-                        translate: 'NAV.SAMPLE.BADGE',
-                        bg       : '#F44336',
-                        fg       : '#FFFFFF'
-                    }
-                },
-                {
-                    id       : 'users',
-                    title    : 'Users',
-                    translate: 'NAV.USERS.TITLE',
-                    type     : 'item',
-                    icon     : 'account_box',
-                    url      : '/test/users/list'
-                },
-                {
-                    id       : 'users',
-                    title    : 'Users',
-                    translate: 'NAV.POST.ADD',
-                    type     : 'item',
-                    icon     : 'account_box',
-                    url      : '/test/post/add'
-                },
-                {
-                    id       : 'users',
-                    title    : 'Users',
-                    translate: 'NAV.SETTINGS',
-                    type     : 'item',
-                    icon     : 'account_box',
-                    url      : '/test/settings/general'
-                },
-                {
-                    id       : 'post-types',
-                    title    : 'Post Types',
-                    translate: 'NAV.POST_TYPES',
-                    type     : 'item',
-                    icon     : 'account_box',
-                    url      : '/test/post-type/list'
-                }
-            ]
-        },
-        {
-            id       : 'post-types',
-            title    : 'Post Types',
-            translate: 'NAV.POST_TYPES',
-            type     : 'collapsable',
-            children : [
-                {
-                    id       : 'articles',
-                    title    : 'Articles',
-                    translate: 'NAV.ARTICLES.TITLE',
-                    type     : 'item',
-                    icon     : 'label',
-                    url      : '/articles'
-                },
-                {
-                    id       : 'articles-add',
-                    title    : 'Add new',
-                    translate: 'NAV.Add New',
-                    type     : 'item',
-                    icon     : 'label',
-                    url      : '/articles/add'
-                }
-            ]
-        },
-        {
-            id       : 'plugins',
-            title    : 'Plugins',
-            translate: 'NAV.PLUGINS',
-            type     : 'group',
-            icon     : 'library_add',
-            children : [
-                {
-                    id   : 'plugin-1',
-                    title: 'Plugin 1',
-                    type : 'item',
-                    url  : '/plugins/first',
-                    icon : 'library_add',
-                },
-                {
-                    id   : 'plugin-2',
-                    title: 'Plugin 2',
-                    type : 'item',
-                    url  : '/plugins/second',
-                    icon : 'library_add',
-                }
-            ]
-        },
-    ],
+    applicationMenuLinks: [],
     globalData: null,
     cmsMenus: null,
     languages: [
@@ -123,6 +22,7 @@ const initialState: SharedState = {
         }
     ],
     pluginsConfigs: null,
+    isLoading: false
 }
 
 export function sharedReducer(state = initialState, action: SharedActions.SharedActions){
@@ -156,6 +56,11 @@ export function sharedReducer(state = initialState, action: SharedActions.Shared
             ...state,
             pluginsConfigs: action.payload
           };
+        case (SharedActions.SET_IS_LOADING):
+            return {
+                ...state,
+                isLoading: action.payload
+            };
         default:
           return state;
     }

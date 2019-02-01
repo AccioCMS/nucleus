@@ -97,14 +97,6 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
     }
 
     onSave(){
-
-        // if (this.usersForm.invalid) {
-        //     this.usersForm.get('firstName').markAsTouched();
-        //     this.usersForm.get('lastName').markAsTouched();
-        //     this.usersForm.get('email').markAsTouched();
-        //     this.usersForm.get('groups').markAsTouched();
-        //     return;
-        // }
         if(this.postTypeForm.valid){
             this.saveSpinner = true;
             let data = this.postTypeForm.value;

@@ -126,29 +126,22 @@ export class NucleusComponent {
         this._unsubscribeAll = new Subject();
 
         //Check Session data
-        this.httpClient.get('/test/auth')
+        let langauges = [];
+        this.httpClient.get('/admin/get-base-data')
             .map(
                 (data) => {
-                    if(data['status'] == true){
-                        this.store.dispatch(new AuthActions.Signin(data['accessToken']));
-
-                        let langauges = [];
-                        this.httpClient.get('/admin/get-base-data')
-                            .map(
-                                (data) => {
-                                    this.store.dispatch(new SharedActions.SetLanguages(data['languages']));
-                                    this.store.dispatch(new SharedActions.SetGlobalData(data['global_data']));
-                                    this.store.dispatch(new SharedActions.SetCmsMenus(data['cmsMenus']));
-                                    this.store.dispatch(new SharedActions.SetPluginConfigs(data['pluginsConfigs']));
-                                    this.store.dispatch(new SharedActions.SetAppMenuLinks(data['applicationMenuLinks']));
-
-                                    this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
-                                    this.spinner = false;
-                                }
-                            )
-                            .subscribe();
-                    }else{
+                    if(data['status'] == false){
                         this.router.navigate(['/admin/login']);
+                    }else{
+                        this.store.dispatch(new AuthActions.Signin(data['accessToken']));
+                        this.store.dispatch(new SharedActions.SetLanguages(data['languages']));
+                        this.store.dispatch(new SharedActions.SetGlobalData(data['global_data']));
+                        this.store.dispatch(new SharedActions.SetCmsMenus(data['cmsMenus']));
+                        this.store.dispatch(new SharedActions.SetPluginConfigs(data['pluginsConfigs']));
+                        this.store.dispatch(new SharedActions.SetAppMenuLinks(data['applicationMenuLinks']));
+
+                        this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
+                        this.spinner = false;
                     }
                 }
             )

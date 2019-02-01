@@ -41,6 +41,9 @@ class BaseGeneralController extends MainController
      */
     public function getBaseData(Request $request)
     {
+        if(!\Auth::check()){
+            return response()->json(['status' => false]);
+        }
         // menu links for the application part
         $applicationMenuLinks = MenuLink::applicationMenuLinks();
         // menu links for the cms part
@@ -81,6 +84,7 @@ class BaseGeneralController extends MainController
         $languages = Language::select('name as title', 'slug as id', 'languageID')->get();
         //$request->session()->flush();
         return [
+            'status' => true,
             'languages' => $languages,
             'applicationMenuLinks' => $applicationMenuLinks,
             'cmsMenus' => $cmsMenus,

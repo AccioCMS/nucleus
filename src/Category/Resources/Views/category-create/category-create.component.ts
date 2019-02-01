@@ -26,8 +26,10 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
     private _unsubscribeAll: Subject<any>;
     breadcrumbs = ['Post Type', 'Category', 'Add New'];
     slug = '';
-    spinner: boolean = false;
+    spinner: boolean = true;
     languages = [];
+    form = { title: {}, slug: {}, parent: {}, description: {}, featuredImage: {},  isVisible: {}};
+    parentCategories: string[] = ['One', 'Two', 'Three'];
 
     public options: Object = {
         toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent',
@@ -56,63 +58,61 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
-
         this.store.select(state => state)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
-                data => (
-                    this.languages = data['shared']['languages']
-                )
+                (data) => {
+                    this.languages = data['shared']['languages'];
+                    this.spinner = false;
+                }
             );
-
     }
 
     onSave(){
-        /*if(this.categoryForm.valid){
-            this.spinner = true;
-            let data = this.categoryForm.value;
-            data.fields = [];
-            data.slug = this.slug;
+        console.log(this.form);
+        let data = {
+            form: this.form,
+            postTypeID: this.route.snapshot.params['id'],
+        };
 
-            this.httpClient.post('/admin/json/post-type/store', data)
-                .pipe(takeUntil(this._unsubscribeAll))
-                .map(
-                    (data) => {
-                        if(data['code'] == 200){
-                            this.router.navigate(['../edit/'+data['id']], {relativeTo:this.route});
+        /*this.httpClient.post('/admin/json/category/store', data)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .map(
+                (response) => {
+                    if(response['code'] != 200){
+
+                        if(response['errors']){
+                            let errors = response['errors'];
+                            this.openSnackBar(errors[Object.keys(errors)[0]], 'X', 'error', 10000);
                         }else{
-                            this.openSnackBar(data['message'], 'X', 'error', 10000);
+                            this.openSnackBar(response['message'], 'X', 'error', 10000);
                         }
+
+                    }else{
+                        this.openSnackBar(response['message'], 'X', 'success');
                     }
-                )
-                .subscribe();
-        }else{
-            Object.keys(this.categoryForm.controls).forEach(field => {
-                const control = this.categoryForm.get(field);
-                control.markAsTouched({ onlySelf: true });
-            });
-        }*/
+                    console.log(response);
+                }
+            )
+            .subscribe();*/
     }
 
     onCancel(){
         this.router.navigate(['../../list/'+this.route.snapshot.params['id']], {relativeTo:this.route});
     }
 
-    createSlug(title, index){
-        /*let name = this.categoryForm.value.name;
-        if(name != ''){
-            this.httpClient.get('/admin/en/json/post-type/check-slug/'+name)
+    createSlug(title, slug){
+        this.form.slug[slug] = "";
+        if(title != '' && title.length > 0){
+            this.httpClient.get('/admin/en/json/category/check-slug/'+this.route.snapshot.params['id']+'/'+title)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
-                    (data) => {
-                        this.categoryForm.patchValue({
-                            slug: data['slug']
-                        });
-                        this.slug  = data['slug'];
+                    (response) => {
+                        this.form.slug['en'] = response['slug'];
                     }
                 )
                 .subscribe();
-        }*/
+        }
     }
 
     openSnackBar(message: string, action: string, type: string, duration: number = 3000) {

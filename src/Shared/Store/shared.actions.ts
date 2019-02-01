@@ -5,6 +5,7 @@ export const SET_GLOBAL_DATA = 'SET_GLOBAL_DATA';
 export const SET_CMS_MENUS = 'SET_CMS_MENUS';
 export const SET_LANGUAGES = 'SET_LANGUAGES';
 export const SET_PLUGIN_CONFIGS = 'SET_PLUGIN_CONFIGS';
+export const SET_IS_LOADING = 'SET_IS_LOADING';
 
 export class SetAppMenuLinks implements Action{
     readonly type = SET_APPLICATION_MENU_LINKS;
@@ -36,4 +37,10 @@ export class SetPluginConfigs implements Action {
     constructor(public payload: object){}
 }
 
-export type SharedActions =  SetAppMenuLinks | SetGlobalData | SetCmsMenus | SetLanguages | SetPluginConfigs;
+export class SetIsLoading implements Action {
+    readonly type = SET_IS_LOADING;
+
+    constructor(public payload: object){}
+}
+
+export type SharedActions =  SetAppMenuLinks | SetGlobalData | SetCmsMenus | SetLanguages | SetPluginConfigs | SetIsLoading;
