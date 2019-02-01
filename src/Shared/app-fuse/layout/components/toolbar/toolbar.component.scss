@@ -8,17 +8,17 @@ toolbar {
     display: flex;
     flex: 0 0 auto;
     z-index: 4;
-    height: 40px !important;
+    //height: 60px !important;
 
     &.below {
         z-index: 2;
     }
+
     .mat-toolbar {
         position: relative;
-        //background: inherit !important;
         color: $text-color !important;
         background-color: $backgorund-color !important;
-        height: 40px !important;
+        height: 60px !important;
     }
 
     mat-icon {
@@ -26,9 +26,10 @@ toolbar {
     }
 
     .avatar {
-        min-width: 25px !important;
-        height: 25px !important;
+        min-width: 35px !important;
+        height: 35px !important;
         width: 30%;
+        margin: 0px !important;
     }
 
     .logo {
@@ -56,8 +57,8 @@ toolbar {
     }
 
     .user-button {
-        min-width: 100px;
-        width: 100px;
+        min-width: 40px;
+        width: 40px;
         height: 30px;
     }
 
@@ -78,7 +79,13 @@ toolbar {
         width: 40% !important;
     }
 
-    fuse-search-bar {
+    .fuse-search-a {
+
         width: 70% !important;
+        //float: right;
+        //&.expanded {
+        //
+        //    width: 70% !important;
+        //}
     }
 }

@@ -45,9 +45,21 @@
             </mat-menu>
             <!-- <div class="toolbar-separator"></div> -->
 
-            <fuse-search-bar (input)="search($event)"></fuse-search-bar>
+            <div class="fuse-search-a" [ngClass]="{'expanded':searchCollaps}" >
 
-            <!-- <div class="toolbar-separator"></div> -->
+                <fuse-search-bar (input)="search($event)" ></fuse-search-bar>
+
+            </div>
+
+             <!--<div class="toolbar-separator"></div>-->
+            <button mat-icon-button
+                    class="quick-panel-toggle-button"
+                    (click)="collapse()"
+                    aria-label="Toggle quick panel">
+                <mat-icon class="secondary-text">search</mat-icon>
+            </button>
+
+
             <button mat-button fxHide fxShow.gt-xs
                     class="language-button"
                     [matMenuTriggerFor]="languageMenu">

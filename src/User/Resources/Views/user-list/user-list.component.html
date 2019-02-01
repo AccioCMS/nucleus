@@ -115,7 +115,7 @@
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{ : selection.isSelected(row)}"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{selected : selection.isSelected(row)}"></tr>
 
                             <mat-paginator
                                 [pageSize]="[this.pageSize]"
@@ -134,7 +134,6 @@
 
                 </div>
             </div>
-
         </div>
     </div>
 </div>
