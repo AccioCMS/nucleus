@@ -15,7 +15,7 @@
             <div class="center pb-56 ps ps--active-y accio-container-1160" fuseperfectscrollbar="">
 
                 <mat-card class = "mat-card-title" *ngIf="selection.selected.length == 0">
-                    List of {{ postType | capitalize}} <span center></span>
+                    List of {{ postType | titlecase }} <span center></span>
                     <!--<mat-icon class = "table-header-icons">arrow_downward</mat-icon>-->
                 </mat-card>
                 <mat-card class="p-0" *ngIf="selection.selected.length > 0">
