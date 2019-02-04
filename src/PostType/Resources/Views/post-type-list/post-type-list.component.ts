@@ -268,6 +268,13 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                     this.loadingSpinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.loadingSpinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 

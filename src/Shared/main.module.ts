@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { TranslateModule } from '@ngx-translate/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import 'hammerjs';
 
 import { FuseModule } from './@fuse/fuse.module';
@@ -35,6 +36,7 @@ import { HttpClientModule} from "@angular/common/http";
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AuthGuard } from "../Auth/Resources/auth-guard.service";
+import {AuthInterceptor} from "../Auth/Resources/auth.interceptor";
 
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
@@ -101,7 +103,8 @@ const nucleusRoutes: Routes = [
         RouterModule,
     ],
     providers: [
-        AuthGuard
+        AuthGuard,
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     ]
 })
 export class MainModule { }

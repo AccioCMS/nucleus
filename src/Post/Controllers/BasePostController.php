@@ -36,15 +36,16 @@ class BasePostController extends MainController
     public function getAllPosts($lang, $postType)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess($postType, 'read')) {
+        /*if(!User::hasAccess($postType, 'read')) {
             return $this->noPermission();
-        }
+        }*/
 
         $defaultOrderBy = 'postID';
         $orderBy = (Input::get('order') ) ? Input::get('order') : $defaultOrderBy;
         $orderType = (Input::get('type')) ? Input::get('type') : 'DESC';
         $advancedSearch = (Input::get('advancedSearch')) ? Input::get('advancedSearch') : false;
         $categoryID = (Input::get('categoryID')) ? Input::get('categoryID') : null;
+        $pageSize = isset($_GET['pageSize']) ? $_GET['pageSize'] : Post::$rowsPerPage;
 
         // get field type in db
         try{
@@ -84,7 +85,7 @@ class BasePostController extends MainController
         }
 
         // paginate
-        $paginationResult = $queryObject->paginate(Post::$rowsPerPage);
+        $paginationResult = $queryObject->paginate($pageSize);
 
         $response = $this
             ->appendListColumnsFromEvents($postType)
@@ -153,9 +154,9 @@ class BasePostController extends MainController
 
         // check if user has permissions to access this link
         $key = ($view == 'list') ? 'read' : $view;
-        if(!User::hasAccess($postTypeSlug, $key)) {
+        /*if(!User::hasAccess($postTypeSlug, $key)) {
             return view('errors.permissions');
-        }
+        }*/
 
         return view('index');
     }
