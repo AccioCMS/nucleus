@@ -32,6 +32,7 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
     editPath: string;
     location;
     id: number;
+    mode: string = 'create';
 
     /**
      * Constructor
@@ -85,8 +86,9 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
             let data = this.postTypeForm.value;
             data.fields = [];
             data.slug = this.slug;
-            if(this.route.snapshot.params['id']){
-                data.id = this.route.snapshot.params['id'];
+            if(this.mode == 'edit'){
+                data.id = this.id;
+                data.deletedFieldsSlugs = [];
             }
 
             this.httpClient.post('/admin/json/post-type/store', data)
@@ -94,11 +96,15 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                 .map(
                     (data) => {
                         if(data['code'] == 200){
-                            //this.router.navigate(['../edit/'+data['id']], {relativeTo:this.route});
                             this.store.dispatch(new SharedActions.SetIsLoading(false));
-                            let locationT = this.location.prepareExternalUrl(this.location.path());
-                            let path = locationT.replace('create', 'edit/'+data['id']);
-                            this.location.go(path);
+
+                            let locationPath = this.location.prepareExternalUrl(this.location.path());
+                            locationPath = locationPath.replace('create', 'edit/'+data['id']);
+                            this.location.go(locationPath);
+                            this.mode = 'edit';
+                            this.id = data['id'];
+
+                            this.openSnackBar(data['message'], 'X', 'success', 2000);
                         }else{
                             this.openSnackBar(data['message'], 'X', 'error', 10000);
                         }
@@ -128,7 +134,7 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
 
     createSlug(title, index){
         let name = this.postTypeForm.value.name;
-        if(name != ''){
+        if(name != '' && this.mode == 'create'){
             this.httpClient.get('/admin/en/json/post-type/check-slug/'+name)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
