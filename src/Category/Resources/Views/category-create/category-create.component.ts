@@ -9,11 +9,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {MatSnackBar} from '@angular/material';
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
 import * as fromShared from '../../../../Shared/Store/shared.reducers';
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'category-create',
@@ -88,15 +89,22 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
                         }else{
                             this.openSnackBar(response['message'], 'X', 'error', 10000);
                         }
-                        this.saveSpinner = false;
-
                     }else{
                         this.router.navigate(['../../list/'+this.route.snapshot.params['id']], {relativeTo: this.route});
                         this.openSnackBar(response['message'], 'X', 'success');
 
                     }
+
+                    this.saveSpinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.saveSpinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
@@ -114,6 +122,12 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
                         this.form.slug[slug] = response['slug'];
                     }
                 )
+                .catch((error: any) => {
+                    var message = error.message+' \n '+error.error.message;
+                    this.openSnackBar(message, 'X', 'error', 30000);
+
+                    return Observable.throw(error.message);
+                })
                 .subscribe();
         }
     }
@@ -127,6 +141,12 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
                         this.parentCategories = response['data'];
                     }
                 )
+                .catch((error: any) => {
+                    var message = error.message+' \n '+error.error.message;
+                    this.openSnackBar(message, 'X', 'error', 30000);
+
+                    return Observable.throw(error.message);
+                })
                 .subscribe();
         }else{
             this.parentCategories = [];

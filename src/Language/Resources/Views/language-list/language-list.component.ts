@@ -13,14 +13,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 
 import { Store } from '@ngrx/store';
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
-import {DeleteMupltipleLanguages} from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'language-list',
@@ -68,6 +67,13 @@ export class LanguageListComponent implements OnInit, OnDestroy
                     this.spinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.spinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
@@ -104,9 +110,16 @@ export class LanguageListComponent implements OnInit, OnDestroy
                     }else{
                         this.openSnackBar(response['message'], 'X', 'error', 10000);
                     }
-                    this.deleteSpinner = false;
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
@@ -125,7 +138,7 @@ export class LanguageListComponent implements OnInit, OnDestroy
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
-                this.deleteSpinner = true;
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
                 this.delete(id, index);
             }
         });
@@ -156,7 +169,7 @@ export class LanguageListComponent implements OnInit, OnDestroy
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
-                this.deleteSpinner = true;
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
 
                 let selectedData = this.selection.selected;
                 var keyArray = selectedData.map(function(item) { return item["languageID"]; });
@@ -178,9 +191,17 @@ export class LanguageListComponent implements OnInit, OnDestroy
                             }else{
                                 this.openSnackBar(response['message'], 'X', 'error', 10000);
                             }
-                            this.deleteSpinner = false;
+
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }
                     )
+                    .catch((error: any) => {
+                        var message = error.message+' \n '+error.error.message;
+                        this.openSnackBar(message, 'X', 'error', 30000);
+
+                        this.store.dispatch(new SharedActions.SetIsLoading(false));
+                        return Observable.throw(error.message);
+                    })
                     .subscribe();
             }
         });

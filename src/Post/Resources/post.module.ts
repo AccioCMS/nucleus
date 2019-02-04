@@ -8,20 +8,20 @@ import { FuseSharedModule } from '../../Shared/@fuse/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { PostListComponent } from './Views/post-list/post-list.component';
-import { NewPostComponent } from './Views/post-new/post-new.component';
+import { PostCreateComponent } from './Views/post-create/post-create.component';
 
 import { SharedModule } from "../../Shared/shared.module";
 import { AuthInterceptor } from '../../Auth/Resources/auth.interceptor';
 
 @NgModule({
   declarations: [
-    PostListComponent,
-    NewPostComponent
+      PostCreateComponent,
+      PostListComponent
   ],
   imports: [
     SharedModule,
     PostRoutingModule,
-    
+
     MatButtonModule,
     MatCheckboxModule,
     MatFormFieldModule,
@@ -31,7 +31,7 @@ import { AuthInterceptor } from '../../Auth/Resources/auth.interceptor';
     TranslateModule,
     FuseSharedModule,
 
-    FroalaEditorModule.forRoot(), 
+    FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
   ],
   providers: [

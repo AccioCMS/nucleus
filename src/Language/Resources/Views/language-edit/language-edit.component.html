@@ -8,9 +8,6 @@
     [cancelBtnData]="{ text: 'Cancel', icon: ''}"
 >
 </nucleus-template-header>
-<div class="spinner" *ngIf="saveSpinner">
-    <mat-spinner color="accent" [diameter]="60"></mat-spinner>
-</div>
 
 <div class="accio-content center ps ps--active-y d-block" fuseperfectscrollbar="">
     <mat-progress-bar mode="indeterminate" class="settings-progress-bar" *ngIf="spinner"></mat-progress-bar>

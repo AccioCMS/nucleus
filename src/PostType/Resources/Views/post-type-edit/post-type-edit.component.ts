@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {MatSnackBar} from '@angular/material';
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
 import { Store } from '@ngrx/store';
@@ -95,8 +95,16 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
                     });
                     this.slug = details['slug'];
                     this.spinner = false;
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
@@ -121,6 +129,13 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
                         this.store.dispatch(new SharedActions.SetIsLoading(false));
                     }
                 )
+                .catch((error: any) => {
+                    var message = error.message+' \n '+error.error.message;
+                    this.openSnackBar(message, 'X', 'error', 30000);
+
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
+                    return Observable.throw(error.message);
+                })
                 .subscribe();
         }else{
             Object.keys(this.postTypeForm.controls).forEach(field => {

@@ -12,8 +12,9 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import * as fromShared from '../../../../Shared/Store/shared.reducers';
 
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'general-settings',
@@ -46,7 +47,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private store: Store<fromShared.SharedState>,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -92,6 +93,12 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
                     this.spinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                return Observable.throw(error.message);
+            })
             .subscribe();
 
        this.store.select(state => state)
@@ -105,7 +112,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
     }
 
     onSave(){
-        this.saveSpinner = true;
+        this.store.dispatch(new SharedActions.SetIsLoading(true));
         let data = {
             settingsType: 'general',
             form: this.settingsForm.value
@@ -123,9 +130,16 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
                     }else{
                         this.openSnackBar(response['message'], 'X', 'success');
                     }
-                    this.saveSpinner = false;
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 

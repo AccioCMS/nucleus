@@ -39,7 +39,7 @@ import { AuthGuard } from "../Auth/Resources/auth-guard.service";
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
-    { path: 'admin/en', component: NucleusComponent, /*canActivate: [AuthGuard],*/ children: [
+    { path: 'admin/:lang', component: NucleusComponent, /*canActivate: [AuthGuard],*/ children: [
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
         { path: 'user', loadChildren: () => UserModule },
@@ -49,7 +49,7 @@ const nucleusRoutes: Routes = [
         { path: 'post-type', loadChildren: () => PostTypeModule },
         { path: 'post-type/category', loadChildren: () => CategoryModule },
         { path: 'post-type/tag', loadChildren: () => TagModule },
-        { path: 'post', loadChildren: () => PostModule },
+        { path: 'posts/:post_type', loadChildren: () => PostModule },
         { path: 'settings', loadChildren: () => SettingsModule },
     ] }
 ];

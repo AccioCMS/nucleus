@@ -8,9 +8,12 @@ import { locale as turkish } from './i18n/tr';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 import {MatSnackBar} from "@angular/material";
+
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'analytics',
@@ -34,7 +37,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -64,13 +68,19 @@ export class AnalyticsComponent implements OnInit, OnDestroy
                     this.spinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                return Observable.throw(error.message);
+            })
             .subscribe();
 
         this.onChanges();
     }
 
     onSave(){
-        this.saveSpinner = true;
+        this.store.dispatch(new SharedActions.SetIsLoading(true));
         let data = {
             settingsType: 'analytics',
             form: this.analyticsForm.value
@@ -88,9 +98,16 @@ export class AnalyticsComponent implements OnInit, OnDestroy
                     }else{
                         this.openSnackBar(response['message'], 'X', 'success');
                     }
-                    this.saveSpinner = false;
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 

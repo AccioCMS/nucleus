@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Location } from '@angular/common';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
@@ -10,8 +11,11 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {MatSnackBar} from '@angular/material';
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
+
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'post-type-create',
@@ -25,6 +29,9 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
     postTypeForm: FormGroup;
     slug = '';
     spinner: boolean = false;
+    editPath: string;
+    location;
+    id: number;
 
     /**
      * Constructor
@@ -37,13 +44,16 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
         private httpClient: HttpClient,
         private router: Router,
         private route:ActivatedRoute,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>,
+        location: Location
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+        this.location = location;
     }
 
     ngOnInit(){
@@ -70,22 +80,37 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
 
     onSave(){
         if(this.postTypeForm.valid){
-            this.spinner = true;
+            //this.spinner = true;
+            this.store.dispatch(new SharedActions.SetIsLoading(true));
             let data = this.postTypeForm.value;
             data.fields = [];
             data.slug = this.slug;
+            if(this.route.snapshot.params['id']){
+                data.id = this.route.snapshot.params['id'];
+            }
 
             this.httpClient.post('/admin/json/post-type/store', data)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (data) => {
                         if(data['code'] == 200){
-                            this.router.navigate(['../edit/'+data['id']], {relativeTo:this.route});
+                            //this.router.navigate(['../edit/'+data['id']], {relativeTo:this.route});
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
+                            let locationT = this.location.prepareExternalUrl(this.location.path());
+                            let path = locationT.replace('create', 'edit/'+data['id']);
+                            this.location.go(path);
                         }else{
                             this.openSnackBar(data['message'], 'X', 'error', 10000);
                         }
                     }
                 )
+                .catch((error: any) => {
+                    var message = error.message+' \n '+error.error.message;
+                    this.openSnackBar(message, 'X', 'error', 30000);
+
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
+                    return Observable.throw(error.message);
+                })
                 .subscribe();
         }else{
             Object.keys(this.postTypeForm.controls).forEach(field => {
@@ -114,6 +139,12 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                         this.slug  = data['slug'];
                     }
                 )
+                .catch((error: any) => {
+                    var message = error.message+' \n '+error.error.message;
+                    this.openSnackBar(message, 'X', 'error', 30000);
+
+                    return Observable.throw(error.message);
+                })
                 .subscribe();
         }
     }

@@ -380,7 +380,7 @@ class BaseCategoryController extends MainController
     {
         $menuLinksList = MenuLink::where('belongsToID', $id)->where('belongsTo', 'category')->get();
 
-        $langSlug = App::getLocale();
+        $langSlug = \App::getLocale();
         if($menuLinksList->count()) {
             foreach ($menuLinksList as $menuLink){
                 $updateLabel = false;
@@ -412,9 +412,9 @@ class BaseCategoryController extends MainController
     public function detailsJSON($lang, $id)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Categories', 'update')) {
+        /*if(!User::hasAccess('Categories', 'update')) {
             return $this->noPermission();
-        }
+        }*/
 
         $category = Category::find($id);
         $featuredImage = Media::find($category->featuredImageID);

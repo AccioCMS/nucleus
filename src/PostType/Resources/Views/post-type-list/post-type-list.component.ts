@@ -13,10 +13,12 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 import {MatDialog, MatDialogRef, MatSort, MatPaginator} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'post-type-list',
@@ -49,7 +51,8 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         private router: Router,
         private route:ActivatedRoute,
         public dialog: MatDialog,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -76,6 +79,13 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                     this.spinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.spinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
@@ -107,9 +117,16 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                     }else{
                         this.openSnackBar(response['message'], 'X', 'error', 10000);
                     }
-                    this.deleteSpinner = false;
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
@@ -132,7 +149,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
-                this.deleteSpinner = true;
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
                 this.delete(id, index);
             }
         });
@@ -163,7 +180,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
-                this.deleteSpinner = true;
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
 
                 let selectedData = this.selection.selected;
                 var keyArray = selectedData.map(function(item) { return item["postTypeID"]; });
@@ -183,9 +200,16 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                             }else{
                                 this.openSnackBar(response['message'], 'X', 'error', 10000);
                             }
-                            this.deleteSpinner = false;
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }
                     )
+                    .catch((error: any) => {
+                        var message = error.message+' \n '+error.error.message;
+                        this.openSnackBar(message, 'X', 'error', 30000);
+
+                        this.store.dispatch(new SharedActions.SetIsLoading(false));
+                        return Observable.throw(error.message);
+                    })
                     .subscribe();
             }
         });
@@ -208,6 +232,13 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                     this.loadingSpinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.loadingSpinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 

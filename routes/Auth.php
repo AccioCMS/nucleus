@@ -3,6 +3,10 @@
 /**
  * Auth routes
  */
+
+Route::get('auth/{any}', function(){
+    return view('index');
+});
 Route::group(
     ['as' => 'backend.auth.','namespace' => 'App\Http\Controllers\Backend\Auth','prefix' => Config::get('project')['adminPrefix']], function () {
 

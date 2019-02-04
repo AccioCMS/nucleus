@@ -9,8 +9,11 @@ import {MatSnackBar} from '@angular/material';
 
 import { HttpClient } from '@angular/common/http';
 
-import { Subject } from "rxjs/index";
+import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
+
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'permalink',
@@ -33,7 +36,8 @@ export class PermalinkComponent implements OnInit, OnDestroy
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private httpClient: HttpClient,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -60,11 +64,17 @@ export class PermalinkComponent implements OnInit, OnDestroy
                     this.spinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
     onSave(){
-        this.saveSpinner = true;
+        this.store.dispatch(new SharedActions.SetIsLoading(true));
         this.httpClient.post('admin/json/settings/store-permalinks', this.data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
@@ -77,9 +87,16 @@ export class PermalinkComponent implements OnInit, OnDestroy
                     }else{
                         this.openSnackBar(response['message'], 'X', 'success');
                     }
-                    this.saveSpinner = false;
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 

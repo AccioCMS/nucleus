@@ -13,6 +13,9 @@ import {MatSnackBar} from '@angular/material';
 import { Subject } from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
+
 @Component({
     selector   : 'language-edit',
     templateUrl: './language-edit.component.html',
@@ -37,8 +40,9 @@ export class LanguageEditComponent implements OnInit, OnDestroy
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private router: Router,
-        private route:ActivatedRoute,
-        public snackBar: MatSnackBar
+        private route: ActivatedRoute,
+        public snackBar: MatSnackBar,
+        private store: Store<any>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -77,7 +81,7 @@ export class LanguageEditComponent implements OnInit, OnDestroy
     }
 
     onSave(){
-        this.saveSpinner = true;
+        this.store.dispatch(new SharedActions.SetIsLoading(true));
         let data = this.languageForm.getRawValue();
         data.id = this.id;
         this.httpClient.post('/admin/json/language/store', data)
@@ -85,11 +89,13 @@ export class LanguageEditComponent implements OnInit, OnDestroy
             .map(
                 (response) => {
                     if(response['code'] == 200){
+                        this.openSnackBar(response['message'], 'X', 'success', 2000);
                         this.router.navigate(['../../list'], {relativeTo: this.route});
                     }else{
                         this.openSnackBar(response['message'], 'X', 'error', 10000);
-                        this.saveSpinner = false;
                     }
+
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
             .subscribe();

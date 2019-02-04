@@ -86,7 +86,7 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
 
     onSave(){
         if(this.languageForm.valid){
-            this.spinner = true;
+            this.store.dispatch(new SharedActions.SetIsLoading(true));
             let data = this.languageForm.value;
             data.slug = this.slug;
             data.nativeName = this.nativeName;
@@ -99,6 +99,7 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
                             let storeLang = { id: this.slug, title: data.name, languageID: response['id']};
                             this.store.dispatch(new SharedActions.AddLanguage(storeLang));
                             this.router.navigate(['../list'], {relativeTo:this.route});
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }else{
                             if(response['errors']){
                                 let errors = response['errors'];
@@ -106,7 +107,7 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
                             }else{
                                 this.openSnackBar(response['message'], 'X', 'error', 10000);
                             }
-                            this.spinner = false;
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }
                     }
                 )

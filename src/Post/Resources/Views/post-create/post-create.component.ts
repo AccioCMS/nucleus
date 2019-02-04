@@ -10,11 +10,11 @@ import { HttpClient } from '@angular/common/http';
 import 'rxjs/Rx';
 
 @Component({
-    selector   : 'post-new',
-    templateUrl: './post-new.component.html',
-    styleUrls  : ['./post-new.component.scss']
+    selector   : 'post-create',
+    templateUrl: './post-create.component.html',
+    styleUrls  : ['./post-create.component.scss']
 })
-export class NewPostComponent
+export class PostCreateComponent
 {
     breadcrumbs = ['Post', 'New Post'];
     postForm: FormGroup;
