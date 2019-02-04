@@ -34,14 +34,14 @@ export interface Users {
 
 
 @Component({
-    selector   : 'user-list',
-    templateUrl: './user-list.component.html',
-    styleUrls  : ['./user-list.component.scss'],
+    selector   : 'tag-list',
+    templateUrl: './tag-list.component.html',
+    styleUrls  : ['./tag-list.component.scss'],
     animations   : fuseAnimations,
     providers: [UsersService]
 })
 
-export class UserListComponent
+export class TagListComponent
 {
     /**
      * Constructor
@@ -272,7 +272,6 @@ export class UserListComponent
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
-                    console.log(response);
                     this.dataSource = new MatTableDataSource<any>(response['data']);
                     this.loadingSpinner = false;
                 }

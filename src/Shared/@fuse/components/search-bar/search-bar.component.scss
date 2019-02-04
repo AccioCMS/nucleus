@@ -26,8 +26,27 @@ $background-color : #3C82D8;
             background-color: $background-color;
             position: relative !important;
             //bottom: 15% !important;
-            height: 90% !important;
-            width: 90% !important;
+            height: 100% !important;
+            width: 100% !important;
+            -webkit-transition: background-color .3s ease-in-out;
+            -moz-transition: background-color .3s ease-in-out ;
+            -o-transition: background-color .3s ease-in-out;
+            transition: background-color .3s ease-in-out;
+        }
+
+        input:focus {
+            background-color:#fff;
+        }
+        input:focus::-webkit-input-placeholder {
+            color: #c0c0c0;
+        }
+
+        input:focus:-ms-input-placeholder { /* Internet Explorer*/
+            color: #c0c0c0;
+        }
+
+        input:focus::-ms-input-placeholder { /* Microsoft Edge */
+            color: #c0c0c0;
         }
 
         label {

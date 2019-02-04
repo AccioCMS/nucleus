@@ -41,8 +41,6 @@ toolbar {
         }
     }
 
-
-
     //.user-button,
     fuse-search-bar,
     .language-button,
@@ -55,6 +53,26 @@ toolbar {
             height: 40px;
         }
     }
+
+    .fuse-search-a > fuse-search-bar {
+        width: 0% !important;
+        -webkit-transition: width 1s ease-in-out,visibility 0.5s linear, opacity 0.5s linear;
+        -moz-transition: width 1s ease-in-out , visibility 0.5s linear, opacity 0.5s linear;
+        -o-transition: width 1s ease-in-out, visibility 0.5s linear, opacity 0.5s linear;
+        transition: width 1s ease-in-out,visibility 0.5s linear,  opacity 0.5s linear;
+        float: right !important;
+        overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
+    }
+    .fuse-search-a.search_expanded > fuse-search-bar {
+        visibility: visible;
+        opacity: 1;
+        width: 100% !important;
+        float: right !important;
+    }
+
+    //margin-right: 20px;
 
     .user-button {
         min-width: 40px;
@@ -76,7 +94,7 @@ toolbar {
         }
     }
     .toolbar-right-side {
-        width: 40% !important;
+        width: 50% !important;
     }
 
     .fuse-search-a {

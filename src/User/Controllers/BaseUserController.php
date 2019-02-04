@@ -77,7 +77,7 @@ class BaseUserController extends MainController
      * @param  string $lang Language slug (ex. en)
      * @return array
      * */
-    public function getAll($lang = "",$page=0,$orderBy = "userID",$orderType = "DESC ")
+    public function getAll($lang = "",$page=0,$orderBy = "userID",$orderType = "DESC")
     {
         // check if user has permissions to access this link
 //        if(!User::hasAccess('User', 'read')) {
@@ -85,8 +85,9 @@ class BaseUserController extends MainController
 //        }
 
 //        $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
+//        $orderType = (isset($_GET['order'])) ? $orderType = $_GET['order'] : 'DESC';
         $page = (isset($_GET['page'])) ? $page = $_GET['page'] : '';
-
+//        return $orderType;
         $size = 10;
         if($page){
             $size = (isset($_GET['size'])) ? $size = $_GET['size'] : '';
@@ -102,27 +103,6 @@ class BaseUserController extends MainController
 //        $users->withPath('custom/url');
     }
 
-
-    public function getAllPagginated($lang = "",$page=0 , $size=10,$orderBy = "userID",$orderType = "DESC ")
-    {
-        // check if user has permissions to access this link
-//        if(!User::hasAccess('User', 'read')) {
-//            return $this->noPermission();
-//        }
-
-//        $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
-//        $orderType = (isset($_GET['type'])) ? $orderType = $_GET['type'] : 'DESC';
-        return $size;
-
-        return DB::table('users')
-            ->leftJoin('media', 'users.profileImageID', '=', 'media.mediaID')
-            ->select("users.userID", "users.email", "users.firstName", "users.lastName", "users.slug", "users.gravatar", "media.url", "media.filename", "media.fileDirectory")
-            ->orderBy($orderBy, $orderType)
-            ->paginate($size)
-            ->withPath('admin/en/user/list');
-
-//        $users->withPath('custom/url');
-    }
 
 
     /**
