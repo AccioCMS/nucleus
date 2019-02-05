@@ -26,10 +26,15 @@ class BaseTagController extends MainController
      */
     public function getAllByPostType($lang = "", $postTypeID)
     {
+
+        if(isset($_GET['pageSize'])){
+            $pageSize = $_GET['pageSize'];
+        }
+
         $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'tagID';
         $orderType = (isset($_GET['type'])) ? $orderType = $_GET['type'] : 'DESC';
         // get data
-        return Tag::where('postTypeID', $postTypeID)->orderBy($orderBy, $orderType)->paginate(Tag::$rowsPerPage);
+        return Tag::where('postTypeID', $postTypeID)->orderBy($orderBy, $orderType)->paginate($pageSize);
     }
 
     /**
@@ -115,9 +120,9 @@ class BaseTagController extends MainController
     public function store(Request $request)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Tags', 'create')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('Tags', 'create')) {
+//            return $this->noPermission();
+//        }
 
         $validatorData = [
             'title' => 'required',
@@ -125,32 +130,35 @@ class BaseTagController extends MainController
             'slug' => 'required|max:500|unique:tags',
         ];
 
-        if(isset($request->formData['id'])) {
+
+//        return $this->response($request, 400, null, false, false, true, $validator->errors());
+
+        if(isset($request['id'])) {
             // Update Tag
-            $tags = Tag::findOrFail($request->formData['id']);
+            $tags = Tag::findOrFail($request['id']);
             $validatorData['slug'] = 'required';
         }else{
             $tags = new Tag();
             $tags->createdByUserID = Auth::user()->userID;
-            $tags->postTypeID = $request->formData['postTypeID'];
+            $tags->postTypeID = $request['postTypeID'];
         }
 
-        // validation
-        $validator = Validator::make($request->formData, $validatorData, []);
-        // check validation
-        if ($validator->fails()) {
-            return $this->response("Please check all required fields!", 400, null, false, false, true, $validator->errors());
-        }
+//        // validation
+//        $validator = Validator::make($request->formData, $validatorData, []);
+//        // check validation
+//        if ($validator->fails()) {
+//            return $this->response("Please check all required fields!", 400, null, false, false, true, $validator->errors());
+//        }
 
-        $tags->title         = $request->formData['title'];
-        $tags->description   = $request->formData['description'];
-        $tags->slug          = $request->formData['slug'];
-        $tags->featuredImageID = ($request->formData['featuredImage']  !== 0 ? $request->formData['featuredImage'] : null);
+        $tags->title         = $request['title'];
+        $tags->description   = $request['description'];
+        $tags->slug          = $request['slug'];
+        $tags->featuredImageID = ($request['featuredImage']  !== 0 ? $request['featuredImage'] : null);
 
         // return results
         if ($tags->save()) {
-            $redirect = $this->redirect($request->formData['redirect'], $tags->tagID, $request->formData['postTypeID']);
-            $result = $this->response('Tag is saved', 200, $redirect['id'], $redirect['view'], $redirect['url']);
+//            $redirect = $this->redirect($request['redirect'], $tags->tagID, $request-['postTypeID']);
+            $result = $this->response('Tag is saved', 200);
         }else{
             $result = $this->response('Internal server error. Please try again later', 500);
         }
@@ -202,9 +210,9 @@ class BaseTagController extends MainController
     public function detailsJSON($lang, $id)
     {
         // check if user has permissions to access this link
-        if(!User::hasAccess('Tags', 'update')) {
-            return $this->noPermission();
-        }
+//        if(!User::hasAccess('Tags', 'update')) {
+//            return $this->noPermission();
+//        }
 
         $tags = Tag::find($id);
         $media = Media::find($tags->featuredImageID);

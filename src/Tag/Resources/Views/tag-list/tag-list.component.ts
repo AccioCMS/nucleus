@@ -1,224 +1,161 @@
-import { Component,ViewChild } from '@angular/core';
+import {Component, OnInit, Inject, ViewChild, OnDestroy} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
-import { locale as english } from './i18n/en';
-import { locale as turkish } from './i18n/tr';
+import { locale as english } from '../../i18n/en';
+import { locale as turkish } from '../../i18n/tr';
 
+import { DataSource, SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material';
 
-import { DataSource  ,SelectionModel} from '@angular/cdk/collections';
-import { MatTableDataSource ,MatTable,MatPaginator} from '@angular/material';
-
-import { UsersService } from "../../users.service";
-
-import { fuseAnimations } from '../../../../Shared/@fuse/animations';
-
-
-import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {ActivatedRoute, Router} from "@angular/router";
-import {AccioDialogComponent} from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA,MatSort} from '@angular/material';
-
+import {MatDialog, MatDialogRef, MatSort, MatPaginator} from '@angular/material';
 import {MatSnackBar} from '@angular/material';
-import {takeUntil} from "rxjs/operators";
-export interface Users {
-    checkbox : number;
-    firstName: string;
-    email: string;
-    phone: string;
-    jobtitle: string;
-    asd: string
-}
+import {Observable, Subject} from "rxjs/index";
+import { takeUntil } from 'rxjs/operators';
 
+import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'tag-list',
     templateUrl: './tag-list.component.html',
-    styleUrls  : ['./tag-list.component.scss'],
-    animations   : fuseAnimations,
-    providers: [UsersService]
+    styleUrls  : ['./tag-list.component.scss']
 })
-
-export class TagListComponent
+export class TagListComponent implements OnInit, OnDestroy
 {
+    private _unsubscribeAll: Subject<any>;
+    displayedColumns: string[] = ['select', 'tagID', 'title', 'slug', 'buttons'];
+    dataSource = new MatTableDataSource<any>([]);
+    selection = new SelectionModel<any>(true, []);
+    breadcrumbs = ['Tags', 'List'];
+    spinner: boolean = true;
+    deleteSpinner: boolean = false;
+    loadingSpinner: boolean = false;
+    totalSize: number = 0;
+    pageSize: number = 10;
+    id: number;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+
     /**
      * Constructor
      *
      * @param {FuseTranslationLoaderService} _fuseTranslationLoaderService
      */
-    public users = [];
-    private _unsubscribeAll: Subject<any>;
-    dataSource = new MatTableDataSource<any>([]);
-
-    selection = new SelectionModel<any>(true, []);
-    spinner: boolean = true;
-    breadcrumbs = ['Users', 'List'];
-    order: boolean = false;
-    orderBy: string;
-    orderType: string;
-    direction: string;
-    loadingSpinner: boolean = false;
-    totalPages: number;
-    pageIndex: number;
-    pageSize: string = '10';
-    selectedIndex:number;
-    displayedColumns: string[] = ['checkbox','userID','firstName', 'email', 'phone', 'jobtitle','buttons'];
-
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _userService : UsersService,
         private httpClient: HttpClient,
-        private route:ActivatedRoute,
         private router: Router,
+        private route:ActivatedRoute,
         public dialog: MatDialog,
-        public snackBar: MatSnackBar
+        public snackBar: MatSnackBar,
+        private store: Store<any>
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatTable) table: MatTable<any>;
-    @ViewChild(MatSort) sort: MatSort;
     ngOnInit(){
-        if(this.route.snapshot.queryParamMap.get('order')){
-            // console.log(this.route.snapshot.queryParamMap.get('order'));
-            this.httpClient.get('/admin/en/json/user/get-all/'+this.route.snapshot.queryParamMap.get('order')+'/'+this.route.snapshot.queryParamMap.get('type'))
-                .pipe(takeUntil(this._unsubscribeAll))
-                .map(
-                    (response) => {
-                        this.dataSource = new MatTableDataSource<any>(response['data']);
-                        this.totalPages = response['total'];
-                        this.pageIndex = response['current_page'];
-                        this.spinner = false;
-                    }
-                )
-                .subscribe();
-        }else if(this.route.snapshot.queryParamMap.get('page')) {
-            if(this.route.snapshot.queryParamMap.get('size')){
-                this.pageSize = this.route.snapshot.queryParamMap.get('size');
-            }
+        let params = '?pageSize='+this.pageSize;
 
-            this.httpClient.get('admin/en/json/user/get-all/?page=' +this.route.snapshot.queryParamMap.get('page')+"&size="+this.pageSize)
-                .pipe(takeUntil(this._unsubscribeAll))
-                .map(
+        this.id = this.route.snapshot.params['id'];
 
-                    (response) => {
-
-                        this.dataSource = new MatTableDataSource<any>(response['data']);
-                        this.totalPages = response['total'];
-                        this.pageIndex = response['current_page'];
-                        this.loadingSpinner = false;
-                        console.log(this.totalPages);
-                    }
-                )
-                .subscribe();
+        if (this.route.snapshot.queryParams['page']){
+            params += '&page='+this.route.snapshot.queryParams['page'];
         }
-        else{
-            // this.spinner = true;
-            this.httpClient.get('/admin/en/json/user/get-all')
-                .pipe(takeUntil(this._unsubscribeAll))
-                .map(
-                    (response) => {
-                        this.dataSource = new MatTableDataSource<any>(response['data']);
-                        this.totalPages = response['total'];
-                            this.spinner = false;
-                    }
-                )
-                .subscribe();
+        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
+            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
+        this.httpClient.get('/admin/en/json/tags/get-all/'+this.id+params)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .map(
+                (response) => {
 
-        // this.dataSource.paginator = this.paginator;
+                    this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.totalSize = response['total'];
+                    this.spinner = false;
+                }
+            )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
 
+                this.spinner = false;
+                return Observable.throw(error.message);
+            })
+            .subscribe();
+    }
+
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+
+    delete(id, index){
+        this.httpClient.get('/admin/en/json/post-type/delete/'+id)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .map(
+                (response) => {
+
+                    if(response['code'] == 200){
+                        let newData = this.dataSource.data;
+                        newData.splice(index, 1);
+                        this.dataSource = new MatTableDataSource<any>(newData);
+                        this.openSnackBar(response['message'], 'X', 'success');
+                    }else{
+                        this.openSnackBar(response['message'], 'X', 'error', 10000);
+                    }
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
+                }
+            )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
+            .subscribe();
     }
 
     edit(id){
-        this.router.navigate(['../edit/'+id], {relativeTo: this.route});
+        this.router.navigate(['admin/en/post-type/tag/edit/'+id], );
     }
 
+    addNew(){
+        this.router.navigate(['/create'], {relativeTo: this.route});
+    }
 
     openDialog(id, index): void {
         const dialogRef = this.dialog.open(AccioDialogComponent, {
             width: '400px',
             data: {
                 title: 'Delete',
-                text: 'Are you sure that you want to delete this User?'
+                text: 'Are you sure that you want to delete this Tag?'
             }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
                 this.delete(id, index);
             }
         });
-    }
-
-
-    delete(id, index){
-        this.spinner = true;
-        this.httpClient.get('admin/en/json/user/delete/'+id)
-            .pipe(takeUntil(this._unsubscribeAll))
-            .map(
-                (response) => {
-                    this.openSnackBar(response['message'], 'X', 'success');
-                    if(response['code'] == 200){
-                        let newData = this.dataSource.data;
-                        newData.splice(index, 1);
-                        this.dataSource = new MatTableDataSource<any>(newData);
-                        this.spinner = false;
-                    }
-                }
-            )
-            .subscribe();
-    }
-
-
-    bulkDelete(){
-        const dialogRef = this.dialog.open(AccioDialogComponent, {
-            width: '400px',
-            data: {
-                title: 'Delete',
-                text: 'Are you sure that you want to delete these Users?'
-            }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if(result == 'confirm'){
-                this.spinner = true;
-
-                let selectedData = this.selection.selected;
-
-                var keyArray = selectedData.map(function(item) { return item["userID"]; });
-                // console.log(keyArray);
-                let data = { ids: keyArray };
-
-                this.httpClient.post('/admin/json/user/bulk-delete', data)
-                    .map(
-                        (response) => {
-                            // console.log(data);
-                            if(response['code'] == 200){
-                                this.removeSelection();
-                                this.openSnackBar(response['message'], 'X', 'success');
-
-                                let newData = this.dataSource.data;
-                                newData = newData.filter(item => !keyArray.includes(item.userID) );
-                                this.dataSource = new MatTableDataSource<any>(newData);
-                            }else{
-                                this.openSnackBar(response['message'], 'X', 'error', 10000);
-                            }
-                            this.spinner = false;
-                        }
-                    )
-                    .subscribe();
-            }
-        });
-    }
-
-    removeSelection(){
-        this.selection.clear();
     }
 
     openSnackBar(message: string, action: string, type: string, duration: number = 3000) {
@@ -235,65 +172,115 @@ export class TagListComponent
         });
     }
 
+    bulkDelete(){
+        const dialogRef = this.dialog.open(AccioDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Delete',
+                text: 'Are you sure that you want to delete these Tags?'
+            }
+        });
 
-    addNew(){
-        this.router.navigate(['../add/'], {relativeTo: this.route});
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == 'confirm'){
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
+
+                let selectedData = this.selection.selected;
+                var keyArray = selectedData.map(function(item) { return item["tagID"]; });
+                let data = { ids: keyArray };
+
+                this.httpClient.post('/admin/json/post-type/bulk-delete', data)
+                    .pipe(takeUntil(this._unsubscribeAll))
+                    .map(
+                        (response) => {
+                            if(response['code'] == 200){
+                                this.removeSelection();
+                                this.openSnackBar(response['message'], 'X', 'success');
+
+                                let newData = this.dataSource.data;
+                                newData = newData.filter(item => !keyArray.includes(item.tagID) );
+                                this.dataSource = new MatTableDataSource<any>(newData);
+                            }else{
+                                this.openSnackBar(response['message'], 'X', 'error', 10000);
+                            }
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
+                        }
+                    )
+                    .catch((error: any) => {
+                        var message = error.message+' \n '+error.error.message;
+                        this.openSnackBar(message, 'X', 'error', 30000);
+
+                        this.store.dispatch(new SharedActions.SetIsLoading(false));
+                        return Observable.throw(error.message);
+                    })
+                    .subscribe();
+            }
+        });
     }
 
-    setSelected(id){
-        this.selectedIndex = id;
-        console.log(id);
+    removeSelection(){
+        this.selection.clear();
     }
 
-
-    /** Whether the number of selected elements matches the total number of rows. */
-    isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
-    }
-
-
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-    masterToggle() {
-        this.isAllSelected() ?
-            this.selection.clear() :
-            this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-
-
-    sortTable(event) {
+    customSort(event){
         this.loadingSpinner = true;
-        this.spinner = false;
-        this.router.navigate(["/admin/en/user/list"],{queryParams: { order: event['active'],type: event['direction']}});
-        this.order = true;
 
-        this.httpClient.get('admin/en/json/user/get-all/'+event['active']+"/"+event['direction'])
+        this.router.navigate(['../../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
+
+        this.httpClient.get('/admin/en/json/post-type/get-all?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.paginator.pageIndex = 0;
                     this.loadingSpinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.loadingSpinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
-    onPageChange(event){
-        if(event['pageSize']){
-            this.pageSize = event['pageSize'];
+    onPaginateChange(event){
+
+        // console.log(event);
+        this.loadingSpinner = true;
+        let params = this.id+'?pageSize='+this.paginator.pageSize+'&page='+(event.pageIndex + 1);
+        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
+            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+            this.router.navigate(['./'],
+                {
+                    relativeTo: this.route,
+                    queryParams: {
+                        page: (event.pageIndex + 1),
+                        order: this.route.snapshot.queryParams['order'],
+                        type: this.route.snapshot.queryParams['type']
+                    }
+                });
+        }else{
+            this.router.navigate(['../../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
         }
 
-        this.router.navigate(["/admin/en/user/list"],{queryParams: { page: event['pageIndex'] +1 ,size: event['pageSize'] }});
-        this.httpClient.get('admin/en/json/user/get-all/?page='+(event['pageIndex'] +1)+"&size="+event['pageSize'] )
+        this.httpClient.get('/admin/en/json/tags/get-all/'+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
-                    console.log(response);
                     this.dataSource = new MatTableDataSource<any>(response['data']);
                     this.loadingSpinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.loadingSpinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 
@@ -301,15 +288,4 @@ export class TagListComponent
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
     }
-
-
-}
-
-
-export interface IUser
-{
-    id : number,
-    Name : string,
-    Lastname : string
-
 }

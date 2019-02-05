@@ -62,9 +62,14 @@ export class UserListComponent
     loadingSpinner: boolean = false;
     totalPages: number;
     pageIndex: number;
+    totalSize: number;
     pageSize: string = '10';
     selectedIndex:number;
     displayedColumns: string[] = ['checkbox','userID','firstName', 'email', 'phone', 'jobtitle','buttons'];
+
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    // @ViewChild(MatTable) table: MatTable<any>;
+    // @ViewChild(MatSort) sort: MatSort;
 
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
@@ -80,59 +85,36 @@ export class UserListComponent
         this._unsubscribeAll = new Subject();
     }
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatTable) table: MatTable<any>;
-    @ViewChild(MatSort) sort: MatSort;
+
     ngOnInit(){
-        if(this.route.snapshot.queryParamMap.get('order')){
-            // console.log(this.route.snapshot.queryParamMap.get('order'));
-            this.httpClient.get('/admin/en/json/user/get-all/'+this.route.snapshot.queryParamMap.get('order')+'/'+this.route.snapshot.queryParamMap.get('type'))
-                .pipe(takeUntil(this._unsubscribeAll))
-                .map(
-                    (response) => {
-                        this.dataSource = new MatTableDataSource<any>(response['data']);
-                        this.totalPages = response['total'];
-                        this.pageIndex = response['current_page'];
-                        this.spinner = false;
-                    }
-                )
-                .subscribe();
-        }else if(this.route.snapshot.queryParamMap.get('page')) {
-            if(this.route.snapshot.queryParamMap.get('size')){
-                this.pageSize = this.route.snapshot.queryParamMap.get('size');
-            }
 
-            this.httpClient.get('admin/en/json/user/get-all/?page=' +this.route.snapshot.queryParamMap.get('page')+"&size="+this.pageSize)
-                .pipe(takeUntil(this._unsubscribeAll))
-                .map(
 
-                    (response) => {
+        let params = '?size='+this.pageSize;
 
-                        this.dataSource = new MatTableDataSource<any>(response['data']);
-                        this.totalPages = response['total'];
-                        this.pageIndex = response['current_page'];
-                        this.loadingSpinner = false;
-                        console.log(this.totalPages);
-                    }
-                )
-                .subscribe();
+        if (this.route.snapshot.queryParams['page']){
+            params += '&page='+this.route.snapshot.queryParams['page'];
         }
-        else{
-            // this.spinner = true;
-            this.httpClient.get('/admin/en/json/user/get-all')
-                .pipe(takeUntil(this._unsubscribeAll))
-                .map(
-                    (response) => {
-                        this.dataSource = new MatTableDataSource<any>(response['data']);
-                        this.totalPages = response['total'];
-                            this.spinner = false;
-                    }
-                )
-                .subscribe();
+        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
+            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
 
-        // this.dataSource.paginator = this.paginator;
+        this.httpClient.get('/admin/en/json/user/get-all'+params)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .map(
+                (response) => {
+                    this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.totalSize = response['total'];
+                    this.spinner = false;
+                }
+            )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
 
+                this.spinner = false;
+                return Observable.throw(error.message);
+            })
+            .subscribe();
     }
 
     edit(id){
@@ -264,37 +246,77 @@ export class UserListComponent
 
     sortTable(event) {
         this.loadingSpinner = true;
-        this.spinner = false;
-        this.router.navigate(["/admin/en/user/list"],{queryParams: { order: event['active'],type: event['direction']}});
-        this.order = true;
+        // this.spinner = false;
+        // console.log(event['direction']);
+        this.router.navigate(["../list"],{ relativeTo: this.route, queryParams: { order: event['active'],type: event['direction']}});
+        // this.order = true;
 
-        this.httpClient.get('admin/en/json/user/get-all/'+event['active']+"/"+event['direction'])
+        this.httpClient.get('/admin/en/json/user/get-all?size='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
                     console.log(response);
                     this.dataSource = new MatTableDataSource<any>(response['data']);
+                    this.paginator.pageIndex = 0;
                     this.loadingSpinner = false;
                 }
             )
             .subscribe();
+
+
     }
 
     onPageChange(event){
-        if(event['pageSize']){
-            this.pageSize = event['pageSize'];
+        // if(event['pageSize']){
+        //     this.pageSize = event['pageSize'];
+        // }
+        this.loadingSpinner = true;
+
+        let params = '?size='+this.paginator.pageSize+'&page='+(event.pageIndex + 1);
+        // this.router.navigate(["/admin/en/user/list"],{queryParams: { page: event['pageIndex'] +1 ,size: event['pageSize'] }});
+        this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
+        // this.httpClient.get('admin/en/json/user/get-all/?page='+(event['pageIndex'] +1)+"&size="+event['pageSize'] )
+        //     .pipe(takeUntil(this._unsubscribeAll))
+        //     .map(
+        //         (response) => {
+        //             console.log(response);
+        //             this.dataSource = new MatTableDataSource<any>(response['data']);
+        //             this.loadingSpinner = false;
+        //         }
+        //     )
+        //     .subscribe();
+
+
+        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
+            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+            this.router.navigate(['./'],
+                {
+                    relativeTo: this.route,
+                    queryParams: {
+                        page: (event.pageIndex + 1),
+                        order: this.route.snapshot.queryParams['order'],
+                        type: this.route.snapshot.queryParams['type']
+                    }
+                });
+        }else{
+            this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
         }
 
-        this.router.navigate(["/admin/en/user/list"],{queryParams: { page: event['pageIndex'] +1 ,size: event['pageSize'] }});
-        this.httpClient.get('admin/en/json/user/get-all/?page='+(event['pageIndex'] +1)+"&size="+event['pageSize'] )
+        this.httpClient.get('/admin/en/json/user/get-all'+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
-                    console.log(response);
                     this.dataSource = new MatTableDataSource<any>(response['data']);
                     this.loadingSpinner = false;
                 }
             )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.loadingSpinner = false;
+                return Observable.throw(error.message);
+            })
             .subscribe();
     }
 

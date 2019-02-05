@@ -1,0 +1,80 @@
+<div class="page-layout blank" fusePerfectScrollbar>
+    <nucleus-template-header
+        (saveClicked)="onSave()"
+        (cancelClicked)="onCancel()"
+        [breadcrumbs]="breadcrumbs"
+        [showSaveBtn]="true"
+        [saveBtnData]="{ text: 'Save', icon: 'save'}"
+        [showCancelBtn]="true"
+        [cancelBtnData]="{ text: 'Cancel', icon: ''}"
+    >
+    </nucleus-template-header>
+
+   <!-- <div class="spinner" *ngIf="saveSpinner">
+        <mat-spinner color="accent" [diameter]="60"></mat-spinner>
+    </div>-->
+
+    <div class="accio-container">
+        <div class="content-center">
+            <div class="accio-container-850" fuseperfectscrollbar="">
+
+                <div class="accio-content center pb-56 ps ps--active-y d-block">
+                    <!--<mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>-->
+                    <form fxLayout="column" fxLayoutAlign="start"
+                          fxFlex="1 0 auto" name="postTypeForm" [formGroup]="tagForm" *ngIf="!spinner" class="p-24">
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                            <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
+                                <mat-label>title</mat-label>
+                                <input matInput formControlName="title" required>
+                                <mat-icon matSuffix class="secondary-text">label</mat-icon>
+                                <mat-error>Name is required!</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
+                                <mat-label>Slug</mat-label>
+                                <input matInput formControlName="slug" required>
+                                <mat-error>Slug is required!</mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                        <mat-label>Description</mat-label>
+                        <div fxLayout="row" fxLayoutAlign="center"  >
+                            <div [froalaEditor] formControlName="description" fxFlex="95" ></div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="accio-container-300" fuseperfectscrollbar="">
+                <form name="postTypeForm" [formGroup]="tagForm" *ngIf="!spinner">
+
+                    <div class="expansion-panel-seperator">
+                        <mat-accordion>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="pr-sm-32">visibility</mat-icon>
+                                        Visibility
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">-->
+                                    <!--<mat-slide-toggle class="accio-slide-toggle" formControlName="isVisible">Visible</mat-slide-toggle>-->
+                                <!--</div>-->
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

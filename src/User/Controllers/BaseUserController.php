@@ -77,22 +77,23 @@ class BaseUserController extends MainController
      * @param  string $lang Language slug (ex. en)
      * @return array
      * */
-    public function getAll($lang = "",$page=0,$orderBy = "userID",$orderType = "DESC")
+    public function getAll($lang = "")
     {
         // check if user has permissions to access this link
 //        if(!User::hasAccess('User', 'read')) {
 //            return $this->noPermission();
 //        }
 
-//        $orderBy = (isset($_GET['order'])) ? $orderBy = $_GET['order'] : 'userID';
-//        $orderType = (isset($_GET['order'])) ? $orderType = $_GET['order'] : 'DESC';
+        $orderBy = (isset($_GET['order'])) ? $_GET['order'] : 'userID';
+
+        $orderType = (isset($_GET['type'])) ? $_GET['type'] : 'DESC';
+
         $page = (isset($_GET['page'])) ? $page = $_GET['page'] : '';
-//        return $orderType;
+
         $size = 10;
-        if($page){
-            $size = (isset($_GET['size'])) ? $size = $_GET['size'] : '';
-//            return $_GET['size'];
-        }
+
+        $size = (isset($_GET['size'])) ? $size = $_GET['size'] : $size;
+
         return DB::table('users')
             ->leftJoin('media', 'users.profileImageID', '=', 'media.mediaID')
             ->select("users.userID", "users.email", "users.firstName", "users.lastName", "users.slug", "users.gravatar", "media.url", "media.filename", "media.fileDirectory")
