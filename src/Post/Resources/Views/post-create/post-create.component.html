@@ -10,7 +10,13 @@
     >
     </nucleus-template-header>
     <div class="accio-container">
-            <div class="content-center">
+            <div class="content-center d-block">
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20 p-16">
+                    <mat-tab-group fxFlex="100">
+                        <mat-tab label="English"></mat-tab>
+                        <mat-tab label="Albanian"></mat-tab>
+                    </mat-tab-group>
+                </div>
                 <form name="postForm" [formGroup]="postForm">
                     <div class="accio-container-1160 item-title-container" fuseperfectscrollbar="">
                         <mat-form-field class="example-full-width" fxFlex="100" class="pr-4">
@@ -26,7 +32,7 @@
                     <div class="accio-container-300" fuseperfectscrollbar="">
                         <div class="expansion-panel-seperator">
                             <mat-accordion>
-                                <mat-expansion-panel>
+                                <mat-expansion-panel class="d-block">
                                     <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <mat-icon class="pr-sm-32">notes</mat-icon>
@@ -34,17 +40,18 @@
                                     </mat-panel-title>
                                     </mat-expansion-panel-header>
 
-                                    <mat-form-field>
+                                    <mat-form-field class="full-width">
                                         <mat-select placeholder="Categories" formControlName="postCategory" multiple>
-                                            <mat-option *ngFor="let category of categories" [value]="category">{{category}}</mat-option>
+                                            <mat-option *ngFor="let category of categories" [value]="category.categoryID">
+                                                {{ category.title.en }}
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <mat-divider></mat-divider>
 
-                                    <mat-form-field>
-
+                                    <mat-form-field class="full-width">
                                         <mat-select placeholder="Tags" formControlName="postTag" multiple>
-                                                <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
+                                            <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </mat-expansion-panel>
@@ -61,7 +68,13 @@
                                     </mat-panel-title>
                                     </mat-expansion-panel-header>
 
-                                    <p>Lorem Ipsum</p>
+                                    <mat-form-field fxFlex="100">
+                                        <mat-select placeholder="Author">
+                                            <mat-option *ngFor="let user of users" [value]="user">
+                                                {{ user.firstName+' '+user.lastName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
                                 </mat-expansion-panel>
                             </mat-accordion>
                         </div>
@@ -76,10 +89,10 @@
                                     </mat-panel-title>
                                     </mat-expansion-panel-header>
 
-                                    <mat-form-field>
+                                    <mat-form-field fxFlex="100">
                                         <mat-select placeholder="Status">
                                             <mat-option *ngFor="let status of statuses" [value]="status">
-                                                {{ status }}
+                                                {{ status | titlecase }}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>

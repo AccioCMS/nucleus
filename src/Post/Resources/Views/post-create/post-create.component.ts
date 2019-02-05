@@ -1,26 +1,34 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
 import { locale as english } from './i18n/en';
 import { locale as turkish } from './i18n/tr';
 
+import { ActivatedRoute } from "@angular/router";
+
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/Rx';
+import {takeUntil} from "rxjs/internal/operators";
+import {Subject} from "rxjs/index";
 
 @Component({
     selector   : 'post-create',
     templateUrl: './post-create.component.html',
     styleUrls  : ['./post-create.component.scss']
 })
-export class PostCreateComponent
+export class PostCreateComponent implements OnInit, OnDestroy
 {
+    private _unsubscribeAll: Subject<any>;
     breadcrumbs = ['Post', 'New Post'];
     postForm: FormGroup;
-    categories = ['Apple', 'Orange', 'Bannana'];
-    tags = ['Movie', 'Fun', 'Sport'];
-    statuses = ['Published', 'Draft'];
+    categories = [];
+    tags = [];
+    statuses = ['published', 'draft', 'pending'];
+    users: [];
+    mainRouteParams;
+    userID;
 
     public options: Object = {
         toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent',
@@ -36,10 +44,14 @@ export class PostCreateComponent
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private _formBuilder: FormBuilder,
-        private httpClient: HttpClient
+        private httpClient: HttpClient,
+        private route: ActivatedRoute
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
 
         this.postForm = this._formBuilder.group({
             title : ['', Validators.required],
@@ -50,6 +62,23 @@ export class PostCreateComponent
             postCategory: [''],
             postTag: [''],
         });
+
+
+    }
+
+    ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
+
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/post/json/get-data-for-create/post_articles')
+            .pipe(takeUntil(this._unsubscribeAll))
+            .map(
+                (response) => {
+                   // console.log(response);
+                    this.categories = response['categories'];
+                    this.users = response['users'];
+                    this.userID = response['createdByUserID'];
+                }
+            ).subscribe();
     }
 
     onSave(){
@@ -60,12 +89,16 @@ export class PostCreateComponent
                 const control = this.postForm.get(field);
                 control.markAsTouched({ onlySelf: true });
             });
-
             //this.openSnackBar('Please fill out the required fields.', 'X', 'error', 10000);
         }
     }
 
     onCancel(){
         console.log('Cancel clicked');
+    }
+
+    ngOnDestroy(){
+        this._unsubscribeAll.next();
+        this._unsubscribeAll.complete();
     }
 }
