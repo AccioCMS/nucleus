@@ -41,7 +41,7 @@ import {AuthInterceptor} from "../Auth/Resources/auth.interceptor";
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
-    { path: 'admin/:lang', component: NucleusComponent, /*canActivate: [AuthGuard],*/ children: [
+    { path: ':adminPrefix/:lang', component: NucleusComponent, /*canActivate: [AuthGuard],*/ children: [
         { path: '', component: DashboardComponent },
         { path: 'fuse', loadChildren: () => SampleModule },
         { path: 'user', loadChildren: () => UserModule },

@@ -8,6 +8,8 @@ import { locale as turkish } from '../../i18n/tr';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
 
+import { ActivatedRoute } from "@angular/router";
+
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import * as fromShared from '../../../../Shared/Store/shared.reducers';
@@ -36,6 +38,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
     themes: [];
     spinner: boolean = true;
     saveSpinner: boolean = false;
+    mainRouteParams;
 
     /**
      * Constructor
@@ -48,6 +51,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
         private httpClient: HttpClient,
         private store: Store<fromShared.SharedState>,
         public snackBar: MatSnackBar,
+        private route: ActivatedRoute
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -57,6 +61,8 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.parent.snapshot.params;
+
         this.settingsForm = this._formBuilder.group({
             siteTitle : ['', Validators.required],
             adminEmail  : ['', [Validators.required, Validators.email]],
@@ -71,7 +77,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
             mobileActiveTheme: [''],
         });
 
-        this.httpClient.get('/admin/en/json/settings/get-settings')
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/settings/get-settings')
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -118,7 +124,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
             form: this.settingsForm.value
         };
 
-        this.httpClient.post('/admin/json/settings/store', data)
+        this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/settings/store', data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

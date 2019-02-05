@@ -518,8 +518,8 @@ class BasePostController extends MainController
      * */
     public function bulkDelete(Request $request)
     {
-        $postType = $request->all()[0];
-        $ids = $request->all()[1];
+        $postType = $request->postType;
+        $ids = $request->ids;
 
         // if there are no item selected
         if (count($ids) <= 0) {
@@ -549,9 +549,9 @@ class BasePostController extends MainController
     private function deletePost($id, $postType)
     {
         // check if user has permissions to access this link
-        if (! User::hasAccess($postType, 'delete', $id, true)) {
+        /*if (! User::hasAccess($postType, 'delete', $id, true)) {
             return $this->noPermission();
-        }
+        }*/
 
         // Check if this post type has posts
         // Post type should not be able to be deleted if it has posts

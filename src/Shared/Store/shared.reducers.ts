@@ -14,13 +14,7 @@ const initialState: SharedState = {
     applicationMenuLinks: [],
     globalData: null,
     cmsMenus: null,
-    languages: [
-        {
-            id   : 'en',
-            title: 'English',
-            flag : 'us'
-        }
-    ],
+    languages: [],
     pluginsConfigs: null,
     isLoading: false
 }

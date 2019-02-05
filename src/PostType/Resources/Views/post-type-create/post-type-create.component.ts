@@ -33,6 +33,7 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
     location;
     id: number;
     mode: string = 'create';
+    mainRouteParams;
 
     /**
      * Constructor
@@ -58,6 +59,8 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
+
         this.postTypeForm = this._formBuilder.group({
             name : ['', Validators.required],
             slug   : [
@@ -91,7 +94,7 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                 data.deletedFieldsSlugs = [];
             }
 
-            this.httpClient.post('/admin/json/post-type/store', data)
+            this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/post-type/store', data)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (data) => {

@@ -37,6 +37,7 @@ export class PostListComponent implements OnInit, OnDestroy
     totalSize: number = 0;
     pageSize: number = 25;
     postType: string;
+    mainRouteParams;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -62,6 +63,7 @@ export class PostListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
         let name = this.route.snapshot.params['post_type'];
         this.postType = name.replace("post_", "");
 
@@ -73,7 +75,7 @@ export class PostListComponent implements OnInit, OnDestroy
         if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
             params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
-        this.httpClient.get('/admin/en/json/posts/get-all/'+this.route.snapshot.params['post_type']+''+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/posts/get-all/'+this.route.snapshot.params['post_type']+''+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -118,7 +120,7 @@ export class PostListComponent implements OnInit, OnDestroy
         this.loadingSpinner = true;
         this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
 
-        this.httpClient.get('/admin/en/json/posts/get-all/'+this.route.snapshot.params['post_type']+'?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/posts/get-all/'+this.route.snapshot.params['post_type']+'?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -155,7 +157,7 @@ export class PostListComponent implements OnInit, OnDestroy
             this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
         }
 
-        this.httpClient.get('/admin/en/json/posts/get-all/'+this.route.snapshot.params['post_type']+''+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/posts/get-all/'+this.route.snapshot.params['post_type']+''+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -185,6 +187,96 @@ export class PostListComponent implements OnInit, OnDestroy
         this.snackBar.open(message, action, {
             duration: duration,
             panelClass: bgClass,
+        });
+    }
+
+    openDialog(id, index): void {
+        const dialogRef = this.dialog.open(AccioDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Delete',
+                text: 'Are you sure that you want to delete this Post Type?'
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == 'confirm'){
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
+                this.delete(id, index);
+            }
+        });
+    }
+
+    delete(id, index){
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/posts/delete/'+this.route.snapshot.params['post_type']+'/'+id)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .map(
+                (response) => {
+
+                    if(response['code'] == 200){
+                        let newData = this.dataSource.data;
+                        newData.splice(index, 1);
+                        this.dataSource = new MatTableDataSource<any>(newData);
+                        this.openSnackBar(response['message'], 'X', 'success');
+                    }else{
+                        this.openSnackBar(response['message'], 'X', 'error', 10000);
+                    }
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
+                }
+            )
+            .catch((error: any) => {
+                var message = error.message+' \n '+error.error.message;
+                this.openSnackBar(message, 'X', 'error', 30000);
+
+                this.store.dispatch(new SharedActions.SetIsLoading(false));
+                return Observable.throw(error.message);
+            })
+            .subscribe();
+    }
+
+    bulkDelete(){
+        const dialogRef = this.dialog.open(AccioDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Delete',
+                text: 'Are you sure that you want to delete these Post Types?'
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if(result == 'confirm'){
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
+
+                let selectedData = this.selection.selected;
+                var keyArray = selectedData.map(function(item) { return item["postID"]; });
+                let data = { ids: keyArray, postType: this.route.snapshot.params['post_type'] };
+
+                this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/posts/bulk-delete', data)
+                    .pipe(takeUntil(this._unsubscribeAll))
+                    .map(
+                        (response) => {
+                            if(response['code'] == 200){
+                                this.removeSelection();
+                                this.openSnackBar(response['message'], 'X', 'success');
+
+                                let newData = this.dataSource.data;
+                                newData = newData.filter(item => !keyArray.includes(item.postID) );
+                                this.dataSource = new MatTableDataSource<any>(newData);
+                            }else{
+                                this.openSnackBar(response['message'], 'X', 'error', 10000);
+                            }
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
+                        }
+                    )
+                    .catch((error: any) => {
+                        var message = error.message+' \n '+error.error.message;
+                        this.openSnackBar(message, 'X', 'error', 30000);
+
+                        this.store.dispatch(new SharedActions.SetIsLoading(false));
+                        return Observable.throw(error.message);
+                    })
+                    .subscribe();
+            }
         });
     }
 

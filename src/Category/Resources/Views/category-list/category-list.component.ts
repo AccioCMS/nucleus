@@ -39,6 +39,7 @@ export class CategoryListComponent implements OnInit, OnDestroy
     totalSize: number = 0;
     pageSize: number = 10;
     postTypeID: number;
+    mainRouteParams;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -64,6 +65,8 @@ export class CategoryListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
+
         let params = '?pageSize='+this.pageSize;
 
         if (this.route.snapshot.queryParams['page']){
@@ -74,7 +77,7 @@ export class CategoryListComponent implements OnInit, OnDestroy
         }
 
         this.postTypeID = this.route.snapshot.params['id'];
-        this.httpClient.get('admin/en/json/category/get-tree/'+this.postTypeID+''+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+''+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -108,7 +111,7 @@ export class CategoryListComponent implements OnInit, OnDestroy
     }
 
     delete(id, index){
-        this.httpClient.get('/admin/en/json/category/delete/'+id)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/delete/'+id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -189,7 +192,7 @@ export class CategoryListComponent implements OnInit, OnDestroy
                 var keyArray = selectedData.map(function(item) { return item["categoryID"]; });
                 let data = { ids: keyArray };
 
-                this.httpClient.post('/admin/json/category/bulk-delete', data)
+                this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/category/bulk-delete', data)
                     .pipe(takeUntil(this._unsubscribeAll))
                     .map(
                         (response) => {
@@ -239,7 +242,7 @@ export class CategoryListComponent implements OnInit, OnDestroy
             this.router.navigate(['./'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
         }
 
-        this.httpClient.get('/admin/en/json/category/get-tree/'+this.postTypeID+'?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+'?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -277,7 +280,7 @@ export class CategoryListComponent implements OnInit, OnDestroy
             this.router.navigate(['./'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
         }
 
-        this.httpClient.get('/admin/en/json/category/get-tree/'+this.postTypeID+''+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+''+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

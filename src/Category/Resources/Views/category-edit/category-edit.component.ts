@@ -30,6 +30,7 @@ export class CategoryEditComponent implements OnInit, OnDestroy
     parentCategories: [] = [];
     postTypeID: number;
     spinner: boolean = false;
+    mainRouteParams;
 
     public options: Object = {
         toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent',
@@ -58,6 +59,7 @@ export class CategoryEditComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
         this.id = this.route.snapshot.params['id'];
 
         this.store.select(state => state)
@@ -68,7 +70,7 @@ export class CategoryEditComponent implements OnInit, OnDestroy
                 }
             );
 
-        this.httpClient.get('/admin/en/json/category/details/'+this.id)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/details/'+this.id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -101,7 +103,7 @@ export class CategoryEditComponent implements OnInit, OnDestroy
             redirect: "save"
         };
 
-        this.httpClient.post<any>('/admin/json/category/store', data)
+        this.httpClient.post<any>('/'+this.mainRouteParams['adminPrefix']+'/json/category/store', data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

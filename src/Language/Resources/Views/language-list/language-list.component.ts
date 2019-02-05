@@ -35,6 +35,7 @@ export class LanguageListComponent implements OnInit, OnDestroy
     breadcrumbs = ['Settings', 'Languages'];
     spinner: boolean = true;
     deleteSpinner: boolean = false;
+    mainRouteParams;
 
     /**
      * Constructor
@@ -59,7 +60,9 @@ export class LanguageListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
-        this.httpClient.get('/admin/en/json/language/get-all')
+        this.mainRouteParams = this.route.parent.parent.parent.parent.snapshot.params;
+
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/language/get-all')
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -96,7 +99,7 @@ export class LanguageListComponent implements OnInit, OnDestroy
     }
 
     delete(id, index){
-        this.httpClient.get('/admin/en/json/language/delete/'+id)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/language/delete/'+id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -175,7 +178,7 @@ export class LanguageListComponent implements OnInit, OnDestroy
                 var keyArray = selectedData.map(function(item) { return item["languageID"]; });
                 let data = { ids: keyArray };
 
-                this.httpClient.post('/admin/json/language/bulk-deletes', data)
+                this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/language/bulk-deletes', data)
                     .pipe(takeUntil(this._unsubscribeAll))
                     .map(
                         (response) => {

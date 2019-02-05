@@ -30,6 +30,7 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
     id: number;
     spinner: boolean = true;
     saveSpinner: boolean = false;
+    mainRouteParams;
 
     /**
      * Constructor
@@ -53,6 +54,8 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
+
         this.postTypeForm = this._formBuilder.group({
             name : ['', Validators.required],
             slug   : [
@@ -75,7 +78,7 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
 
         this.id = this.route.snapshot.params['id'];
 
-        this.httpClient.get('/admin/en/json/post-type/details/'+this.id)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/details/'+this.id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (data) => {
@@ -117,7 +120,7 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
             data.id = this.id;
             data.deletedFieldsSlugs = [];
 
-            this.httpClient.post('/admin/json/post-type/store', data)
+            this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/post-type/store', data)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (data) => {

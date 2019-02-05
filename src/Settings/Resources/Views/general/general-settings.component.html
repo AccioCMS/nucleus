@@ -66,7 +66,7 @@
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                <mat-form-field fxFlex="100">
+                <mat-form-field fxFlex="50" class="pr-8">
                     <mat-select formControlName="homepageID" placeholder="Home Page">
                         <mat-option
                             *ngFor="let page of pages"
@@ -76,10 +76,8 @@
                     </mat-select>
                     <mat-error>Home Page is required!</mat-error>
                 </mat-form-field>
-            </div>
 
-            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                <mat-form-field fxFlex="100">
+                <mat-form-field fxFlex="50" class="pl-8">
                     <mat-select formControlName="defaultLanguage" placeholder="Default Language">
                         <mat-option
                             *ngFor="let language of languages"
@@ -90,6 +88,10 @@
                     <mat-error>Default Language is required!</mat-error>
                 </mat-form-field>
             </div>
+
+            <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+            </div>-->
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
