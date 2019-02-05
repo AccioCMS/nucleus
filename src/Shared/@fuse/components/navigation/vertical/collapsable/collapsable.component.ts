@@ -141,7 +141,12 @@ export class FuseNavVerticalCollapsableComponent implements OnInit, OnDestroy
 
 
     checkExpand(){
-        if(this.item.id == 'post-types' && this._router.url.indexOf('post-type') > -1 && this._router.url.indexOf('category') == -1){
+        if(
+            this.item.id == 'post-types'
+            && this._router.url.indexOf('post-type') > -1
+            && this._router.url.indexOf('category') == -1
+            && this._router.url.indexOf('tag') == -1
+        ){
 
             this.expand();
         }else if(this.item.id == 'users' && this._router.url.indexOf('user') > -1){

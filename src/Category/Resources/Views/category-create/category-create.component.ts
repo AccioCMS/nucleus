@@ -32,6 +32,7 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
     languages = [];
     form = { title: {}, slug: {}, parent: {}, description: {}, featuredImage: {},  isVisible: {}};
     parentCategories: [] = [];
+    mainRouteParams;
 
     public options: Object = {
         toolbarButtons: ['undo', 'redo' , '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent',
@@ -60,6 +61,8 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
+
         this.store.select(state => state)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
@@ -77,7 +80,7 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
             postTypeID: this.route.snapshot.params['id'],
         };
 
-        this.httpClient.post('/admin/json/category/store', data)
+        this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/category/store', data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -115,7 +118,7 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
     createSlug(title, slug){
         this.form.slug[slug] = "";
         if(typeof title !== 'undefined' && title.length > 0){
-            this.httpClient.get('/admin/en/json/category/check-slug/'+this.route.snapshot.params['id']+'/'+title)
+            this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/check-slug/'+this.route.snapshot.params['id']+'/'+title)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (response) => {
@@ -134,7 +137,7 @@ export class CategoryCreateComponent implements OnInit, OnDestroy
 
     searchCategories(value: string){
         if(value.length > 1){
-            this.httpClient.get('/admin/en/json/category/'+this.route.snapshot.params['id']+'/search/'+value)
+            this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['adminPrefix']+'/json/category/'+this.route.snapshot.params['id']+'/search/'+value)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (response) => {

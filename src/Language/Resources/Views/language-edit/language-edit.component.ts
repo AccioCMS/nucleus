@@ -29,6 +29,7 @@ export class LanguageEditComponent implements OnInit, OnDestroy
     breadcrumbs = ['Settings', 'Languages', 'Edit Language'];
     spinner: boolean = true;
     saveSpinner: boolean = false;
+    mainRouteParams;
 
     /**
      * Constructor
@@ -52,6 +53,8 @@ export class LanguageEditComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.parent.parent.snapshot.params;
+
         this.languageForm = this._formBuilder.group({
             name : [{value: '', disabled: true}, Validators.required],
             nativeName: [{ value : '', disabled: true}, Validators.required],
@@ -62,7 +65,7 @@ export class LanguageEditComponent implements OnInit, OnDestroy
 
         this.id = this.route.snapshot.params['id'];
 
-        this.httpClient.get('/admin/en/json/language/details/'+this.id)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/language/details/'+this.id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -84,7 +87,7 @@ export class LanguageEditComponent implements OnInit, OnDestroy
         this.store.dispatch(new SharedActions.SetIsLoading(true));
         let data = this.languageForm.getRawValue();
         data.id = this.id;
-        this.httpClient.post('/admin/json/language/store', data)
+        this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/language/store', data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

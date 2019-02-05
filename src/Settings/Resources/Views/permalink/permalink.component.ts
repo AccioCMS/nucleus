@@ -8,6 +8,7 @@ import { locale as turkish } from '../../i18n/tr';
 import {MatSnackBar} from '@angular/material';
 
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from "@angular/router";
 
 import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
@@ -27,6 +28,7 @@ export class PermalinkComponent implements OnInit, OnDestroy
     spinner: boolean = true;
     saveSpinner: boolean = false;
     data = {};
+    mainRouteParams;
 
     /**
      * Constructor
@@ -37,7 +39,8 @@ export class PermalinkComponent implements OnInit, OnDestroy
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
         private httpClient: HttpClient,
         public snackBar: MatSnackBar,
-        private store: Store<any>
+        private store: Store<any>,
+        private route: ActivatedRoute
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -47,7 +50,9 @@ export class PermalinkComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
-        this.httpClient.get('/admin/en/json/settings/get-permalinks')
+        this.mainRouteParams = this.route.parent.parent.parent.snapshot.params;
+
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/settings/get-permalinks')
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -75,7 +80,7 @@ export class PermalinkComponent implements OnInit, OnDestroy
 
     onSave(){
         this.store.dispatch(new SharedActions.SetIsLoading(true));
-        this.httpClient.post('admin/json/settings/store-permalinks', this.data)
+        this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/settings/store-permalinks', this.data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

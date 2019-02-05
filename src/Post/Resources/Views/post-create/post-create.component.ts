@@ -40,6 +40,7 @@ export class PostCreateComponent
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+
         this.postForm = this._formBuilder.group({
             title : ['', Validators.required],
             content   : [
@@ -52,13 +53,16 @@ export class PostCreateComponent
     }
 
     onSave(){
-        this.httpClient.get('/admin/get-base-data')
-            .map(
-                (data) => {
-                    console.log(data);
-                }
-            )
-            .subscribe();
+        if(this.postForm.valid){
+            console.log('Valid Field');
+        }else{
+            Object.keys(this.postForm.controls).forEach(field => {
+                const control = this.postForm.get(field);
+                control.markAsTouched({ onlySelf: true });
+            });
+
+            //this.openSnackBar('Please fill out the required fields.', 'X', 'error', 10000);
+        }
     }
 
     onCancel(){

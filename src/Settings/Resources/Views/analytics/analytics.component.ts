@@ -12,6 +12,8 @@ import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 import {MatSnackBar} from "@angular/material";
 
+import { ActivatedRoute } from "@angular/router";
+
 import { Store } from "@ngrx/store";
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
@@ -27,6 +29,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy
     breadcrumbs = ['Settings', 'Analytics'];
     spinner: boolean = true;
     saveSpinner: boolean = false;
+    mainRouteParams;
 
     /**
      * Constructor
@@ -38,7 +41,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         public snackBar: MatSnackBar,
-        private store: Store<any>
+        private store: Store<any>,
+        private route: ActivatedRoute
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -48,13 +52,15 @@ export class AnalyticsComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.parent.snapshot.params;
+
         this.analyticsForm = this._formBuilder.group({
             trackingCode : [''],
             useTagManager : [false],
             tagManager : [{value: '', disabled: true }]
         });
 
-        this.httpClient.get('/admin/en/json/settings/get-settings')
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/settings/get-settings')
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -86,7 +92,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy
             form: this.analyticsForm.value
         };
 
-        this.httpClient.post('/admin/json/settings/store', data)
+        this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/settings/store', data)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

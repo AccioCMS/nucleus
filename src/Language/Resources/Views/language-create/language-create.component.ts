@@ -34,6 +34,7 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
     breadcrumbs = ['Settings', 'Languages', 'New Language'];
     spinner: boolean = false;
     loadingSpinner: boolean = true;
+    mainRouteParams;
 
     /**
      * Constructor
@@ -57,6 +58,7 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.parent.parent.snapshot.params;
         this.languageList = LanguageList.LANGUAGES;
 
         this.languageForm = this._formBuilder.group({
@@ -91,7 +93,7 @@ export class LanguageCreateComponent implements OnInit, OnDestroy
             data.slug = this.slug;
             data.nativeName = this.nativeName;
 
-            this.httpClient.post('/admin/json/language/store', data)
+            this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/language/store', data)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(
                     (response) => {

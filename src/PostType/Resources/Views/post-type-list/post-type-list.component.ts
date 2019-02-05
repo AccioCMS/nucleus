@@ -37,6 +37,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     loadingSpinner: boolean = false;
     totalSize: number = 0;
     pageSize: number = 10;
+    mainRouteParams;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -62,6 +63,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     }
 
     ngOnInit(){
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
         let params = '?pageSize='+this.pageSize;
 
         if (this.route.snapshot.queryParams['page']){
@@ -70,7 +72,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
             params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
-        this.httpClient.get('/admin/en/json/post-type/get-all'+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all'+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -104,7 +106,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     }
 
     delete(id, index){
-        this.httpClient.get('/admin/en/json/post-type/delete/'+id)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/delete/'+id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -223,7 +225,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         this.loadingSpinner = true;
         this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
 
-        this.httpClient.get('/admin/en/json/post-type/get-all?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -260,7 +262,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
             this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
         }
 
-        this.httpClient.get('/admin/en/json/post-type/get-all'+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all'+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
