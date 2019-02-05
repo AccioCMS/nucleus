@@ -42,11 +42,12 @@
                 <div class="content">
 
                     <mat-card class = 'p-0 mat-card-content'  >
-                        <mat-progress-bar mode="indeterminate" color="accent"  *ngIf="loadingSpinner"></mat-progress-bar>
-                        <div class="content-disabled" *ngIf="loadingSpinner"></div>
-                        <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 p-16" (matSortChange)="sortTable($event)"   *ngIf="!loadingSpinner">
+                        <mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>
+                        <div class="content-disabled" *ngIf="loadingSpinner">
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        </div>
+                        <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 p-16"  *ngIf="!spinner"  (matSortChange)="sortTable($event)" >
                             <!-- Checkbox Column -->
-
                                 <!-- Checkbox Column -->
                                 <ng-container matColumnDef="checkbox">
                                     <th mat-header-cell *matHeaderCellDef>
@@ -115,15 +116,14 @@
 
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'selected' : selection.isSelected(row)}"></tr>
-                
+
                         </table>
-                        <mat-paginator
-                            [pageSize]="[this.pageSize]"
-                            [pageSizeOptions]="[5, 10, 20]"
-                            [showFirstLastButtons]="true"
-                            [length]='[totalPages]'
-                            [pageIndex] = '[pageIndex]'
-                            (page)="onPageChange($event)"
+
+
+                        <mat-paginator [length]="totalSize"
+                                       [pageSize]="pageSize"
+                                       (page)="onPageChange($event)"
+                                       [pageSizeOptions]="[5, 10, 25, 50]"
                         >
                         </mat-paginator>
                     </mat-card>

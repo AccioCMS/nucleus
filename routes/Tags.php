@@ -5,7 +5,14 @@
  */
 
 Route::group(
-    ['middleware' => ['auth:api'], 'as' => 'backend.tag.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+    ['as' => 'backend.postType.', 'namespace' => '\App\Http\Controllers\Backend', 'prefix' => Config::get('project')['adminPrefix']], function () {
+
+
+
+
+    Route::get('/{lang}/post-type/tag/list/{id}', 'TagController@index')->name('index');
+    Route::get('/{lang}/post-type/tag/edit/{id}', 'TagController@index')->name('index');
+    Route::group(['middleware' => ['auth:api']], function (){
         /**
          * GET
          */
@@ -24,5 +31,7 @@ Route::group(
         Route::post('/json/tags/store', 'TagController@store')->name('store');
         Route::post('/json/tags/storeUpdate', 'TagController@storeUpdate')->name('storeUpdate');
         Route::post('/json/tags/sort', 'TagController@sort')->name('sort');
-    }
+    });
+
+}
 );

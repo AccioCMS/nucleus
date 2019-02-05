@@ -1,4 +1,4 @@
-<div class="page-layout blank blank" fusePerfectScrollbar>
+<div class="page-layout blank" fusePerfectScrollbar>
     <nucleus-template-header
         (saveClicked)="addNew()"
         (cancelClicked)="onCancel()"
@@ -9,26 +9,29 @@
         [cancelBtnData]="{ text: '', icon: ''}"
     >
     </nucleus-template-header>
+
+    <div class="spinner" *ngIf="deleteSpinner">
+        <mat-spinner color="accent" [diameter]="60"></mat-spinner>
+    </div>
+
     <div class="accio-container">
         <div class="content-center">
-            <!--<mat-spinner color="accent" class="center" [diameter]="30" *ngIf="spinner"></mat-spinner>-->
+            <div class="center pb-56 ps ps--active-y accio-container-850" fuseperfectscrollbar="">
 
-            <div class="center p-24 pb-56 pr-sm-92 ps ps--active-y accio-container-1160" fuseperfectscrollbar="" >
                 <mat-card class = "mat-card-title" *ngIf="selection.selected.length == 0">
-                    <span >Users and Permissions</span>
-
+                    Tags <span center></span>
+                    <!--<mat-icon class = "table-header-icons">arrow_downward</mat-icon>-->
                 </mat-card>
                 <mat-card class="p-0" *ngIf="selection.selected.length > 0">
-                    <div class="multi-selected-box  main-list p-16">
+                    <div class="multi-selected-box main-list p-16">
                         <h2 class="m-0">
                             <span>{{ selection.selected.length }}</span>
-                            Users selected
+                            Tags selected
                         </h2>
                         <button mat-icon-button (click)="removeSelection()">X</button>
                         <mat-icon (click)="bulkDelete()">delete</mat-icon>
                     </div>
                 </mat-card>
-
                 <!--<mat-card>-->
                 <div class = "filter mat-card" >
                     <mat-chip-list>
@@ -40,97 +43,83 @@
                 </div>
 
                 <div class="content">
+                    <mat-card class = 'p-0 mat-card-content'>
+                        <mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>
+                        <div class="content-disabled" *ngIf="loadingSpinner">
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        </div>
 
-                    <mat-card class = 'p-0 mat-card-content'  >
-                        <mat-progress-bar mode="indeterminate" color="accent"  *ngIf="loadingSpinner"></mat-progress-bar>
-                        <div class="content-disabled" *ngIf="loadingSpinner"></div>
-                        <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 p-16" (matSortChange)="sortTable($event)"   *ngIf="!loadingSpinner">
+                        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 p-16" *ngIf="!spinner" (matSortChange)="customSort($event)">
                             <!-- Checkbox Column -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                  [checked]="selection.hasValue() && isAllSelected()"
+                                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                  class="accio-checkbox">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                                  (change)="$event ? selection.toggle(row) : null"
+                                                  [checked]="selection.isSelected(row)"
+                                                  class="accio-checkbox">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
 
-                                <!-- Checkbox Column -->
-                                <ng-container matColumnDef="checkbox">
-                                    <th mat-header-cell *matHeaderCellDef>
-                                        <mat-checkbox (change)="$event ? masterToggle() : null"
-                                                      [checked]="selection.hasValue() && isAllSelected()"
-                                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
-                                        </mat-checkbox>
-                                    </th>
-                                    <td mat-cell *matCellDef="let row"  >
-                                        <mat-checkbox (click)="$event.stopPropagation()"
-                                                      (change)="$event ? selection.toggle(row) : null"
-                                                      [checked]="selection.isSelected(row)"
-                                        >
-                                        </mat-checkbox>
-                                    </td>
-                                </ng-container>
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="tagID">
+                                <th mat-header-cell *matHeaderCellDef  mat-sort-header disableClear='true'> ID. </th>
+                                <td mat-cell *matCellDef="let element" > {{element.tagID}} </td>
+                            </ng-container>
 
-                                <!-- Position Column -->
-                                <ng-container matColumnDef="userID">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear='true'> ID </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.userID}} </td>
-                                </ng-container>
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="title">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear='true'> Name </th>
+                                <td mat-cell *matCellDef="let element" (click)="edit(element.title)"> {{element.title}} </td>
+                            </ng-container>
 
-                                <!-- Position Column -->
-                                <ng-container matColumnDef="firstName" >
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear='true' > Name </th>
-                                    <td mat-cell *matCellDef="let element" (click)="edit(element.userID)"> {{element.firstName}} </td>
-                                </ng-container>
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="slug">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear='true'> Slug </th>
+                                <td mat-cell *matCellDef="let element"> {{element.slug}} </td>
+                            </ng-container>
 
-                                <!-- Email Column &ndasjh;&gt; -->
-                                <ng-container matColumnDef="email">
-                                    <th mat-header-cell *matHeaderCellDef  mat-sort-header disableClear='true' > Email </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-                                </ng-container>
+                            <!-- Buttons Column -->
+                            <ng-container matColumnDef="buttons">
+                                <th mat-header-cell *matHeaderCellDef class="actions-column"></th>
 
-                                <!-- Weight Column -->
-                                <ng-container matColumnDef="phone">
-                                    <th mat-header-cell *matHeaderCellDef  mat-sort-header disableClear='true' > Phone </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
-                                </ng-container>
+                                <td mat-cell *matCellDef="let element; let i = index" class="actions-column-btn">
+                                    <button mat-button [matMenuTriggerFor]="menu">
+                                        <mat-icon class="secondary-text">more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="edit(element.tagID)">Edit</button>
+                                        <button mat-menu-item (click)="openDialog(element.tagID, i)">Delete</button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
 
-                                <!-- Symbol Column -->
-                                <ng-container matColumnDef="jobtitle">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear='true' > Job title </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.jobtitle}} </td>
-                                </ng-container>
-                                <!-- Buttons Column -->
-                                <ng-container matColumnDef="buttons">
-                                    <th mat-header-cell *matHeaderCellDef class="actions-column">Actions</th>
-
-                                    <td mat-cell *matCellDef="let element; let i = index" class="actions-column-btn">
-
-                                        <button mat-button >
-                                            <mat-icon class="secondary-text">star_border</mat-icon>
-                                        </button>
-
-                                        <button mat-button [matMenuTriggerFor]="menu">
-                                            <mat-icon class="secondary-text">more_vert</mat-icon>
-                                        </button>
-                                        <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="edit(element.userID)">Edit</button>
-                                            <button mat-menu-item (click)="openDialog(element.userID, i)">Delete</button>
-                                        </mat-menu>
-                                    </td>
-                                </ng-container>
-
-                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'selected' : selection.isSelected(row)}"></tr>
-                
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{selected: selection.isSelected(row)}">
+                            </tr>
                         </table>
-                        <mat-paginator
-                            [pageSize]="[this.pageSize]"
-                            [pageSizeOptions]="[5, 10, 20]"
-                            [showFirstLastButtons]="true"
-                            [length]='[totalPages]'
-                            [pageIndex] = '[pageIndex]'
-                            (page)="onPageChange($event)"
+
+                        <mat-paginator [length]="totalSize"
+                                       [pageSize]="pageSize"
+                                       (page)="pageEvent = $event; onPaginateChange($event)"
+                                       [pageSizeOptions]="[5, 10, 25, 50]"
                         >
                         </mat-paginator>
-                    </mat-card>
 
+                    </mat-card>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+
+
