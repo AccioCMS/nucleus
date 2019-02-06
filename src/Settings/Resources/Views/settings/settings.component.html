@@ -14,24 +14,16 @@
                                 <a class="nav-link" matRipple [routerLink]="'general'"
                                     [routerLinkActive]="['active', 'settings-nav-active']">
                                     <mat-icon class="nav-link-icon">settings</mat-icon>
-                                    <span>General</span>
+                                    <span>{{ 'general' | translate }}</span>
                                 </a>
                             </div>
-
-                            <!--<div class="nav-item" >
-                                <a class="nav-link" matRipple [routerLink]="'post-type'"
-                                    [routerLinkActive]="['active', 'settings-nav-active']">
-                                    <mat-icon class="nav-link-icon">label</mat-icon>
-                                    <span>Post Types</span>
-                                </a>
-                            </div>-->
 
                             <div class="nav-item" >
                                 <a class="nav-link" matRipple [routerLink]="'language'"
                                     [routerLinkActive]="['active', 'settings-nav-active']"
                                    [routerLinkActiveOptions]="{exact: false}">
                                     <mat-icon class="nav-link-icon">language</mat-icon>
-                                    <span>Languages</span>
+                                    <span>{{ 'languages' | translate }}</span>
                                 </a>
                             </div>
 
@@ -39,7 +31,7 @@
                                 <a class="nav-link" matRipple [routerLink]="'permalinks'"
                                    [routerLinkActive]="['active', 'settings-nav-active']">
                                     <mat-icon class="nav-link-icon">link</mat-icon>
-                                    <span>Permalinks</span>
+                                    <span>{{ 'permalinks' | translate }}</span>
                                 </a>
                             </div>
 
@@ -47,11 +39,11 @@
                                 <a class="nav-link" matRipple [routerLink]="'analytics'"
                                     [routerLinkActive]="['active', 'settings-nav-active']">
                                     <mat-icon class="nav-link-icon">insert_chart</mat-icon>
-                                    <span>Analytics</span>
+                                    <span>{{ 'analytics' | translate }}</span>
                                 </a>
                             </div>
 
-                            <div class="nav-subheader">PLUGINS</div>
+                            <div class="nav-subheader">{{ 'plugins' | translate | uppercase }}</div>
 
                             <div class="nav-item" >
                                 <a class="nav-link" matRipple [routerLink]="'starred'"

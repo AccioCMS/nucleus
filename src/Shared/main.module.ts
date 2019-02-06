@@ -24,6 +24,7 @@ import { PostModule } from '../Post/Resources/post.module';
 import { PostTypeModule } from '../PostType/Resources/post-type.module';
 import { SettingsModule } from '../Settings/Resources/settings.module';
 import { TagModule } from '../Tag/Resources/tag.module';
+import { LabelModule } from '../Label/Resources/label.module';
 
 import { DashboardComponent } from "./App/Dashboard/daashboard.component";
 import { LoginComponent } from "../Auth/Resources/Views/login/login.component";
@@ -94,6 +95,7 @@ const nucleusRoutes: Routes = [
         PostTypeModule,
         SettingsModule,
         TagModule,
+        LabelModule,
         BrowserModule,
         HttpClientModule
     ],

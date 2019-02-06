@@ -9,6 +9,7 @@ use App\Models\MenuLink;
 use App\Models\Settings;
 use App\Models\Plugin;
 use App\Models\PostType;
+use App\Models\Label;
 use Illuminate\Support\Facades\Session;
 
 class BaseGeneralController extends MainController
@@ -82,6 +83,23 @@ class BaseGeneralController extends MainController
 
         // all languages
         $languages = Language::select('name as title', 'slug as id', 'languageID')->get();
+
+        $labels = Label::where('module', 'general')->get();
+
+        $labelItems = [];
+        foreach($languages as $language){
+            $item = [];
+            $item['lang'] = $language->id;
+
+            $values = new \stdClass;
+            foreach ($labels as $label){
+                $values->{$label->labelKey} = $label->value->{$language->id};
+            }
+            $item['data'] = $values;
+
+            $labelItems[] = $item;
+        }
+
         //$request->session()->flush();
         return [
             'status' => true,
@@ -91,6 +109,7 @@ class BaseGeneralController extends MainController
             'auth' => $user,
             'pluginsConfigs' => $pluginsConfigs,
             'global_data' => $globalData,
+            'labels' => $labelItems,
             'accessToken' => session('accessToken')
         ];
     }

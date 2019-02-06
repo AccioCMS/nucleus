@@ -536,13 +536,13 @@ trait MenuLinkTrait
             [
                 'id'       => 'apps-group',
                 'title'    =>  'Applications',
-                'translate'=>  'NAV.APPLICATIONS',
+                'translate'=>  'applications',
                 'type'     =>  'group',
                 'children' => [
                     [
                         'id' => 'menu',
                         'title'    =>  'Menu',
-                        'translate'=>  'NAV.MENU',
+                        'translate'=>  'menu',
                         'icon' => 'notes',
                         'type'     => 'item',
                         'url' => self::removeDomainFromLink(action(Routes::backend("MenuController@single"), ['lang' =>  App::getLocale(), 'view' => 'list', 'menuID' => Menu::getPrimaryMenuID()])),
@@ -551,7 +551,7 @@ trait MenuLinkTrait
                     [
                         'id'       => 'users',
                         'title'    =>  'Users',
-                        'translate'=>  'NAV.USERS',
+                        'translate'=>  'users',
                         'icon' => 'group',
                         'type'     =>  'collapsable',
                         'access' => User::hasAccess("User", "read"),
@@ -559,7 +559,7 @@ trait MenuLinkTrait
                             [
                                 'id'       => 'user-list',
                                 'title'   => 'List',
-                                'translate'=> 'NAV.LIST',
+                                'translate'=> 'list',
                                 'type'     => 'item',
                                 'icon'     => 'notes',
                                 'url'      => self::removeDomainFromLink(action(Routes::backend("UserController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
@@ -567,7 +567,7 @@ trait MenuLinkTrait
                             [
                                 'id'       => 'user-add',
                                 'title'   => 'Add New',
-                                'translate'=> 'NAV.ADD-NEW',
+                                'translate'=> 'add-new',
                                 'type'     => 'item',
                                 'icon'     => 'add_box',
                                 'url' => self::removeDomainFromLink(action(Routes::backend("UserController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
@@ -576,7 +576,7 @@ trait MenuLinkTrait
                             [
                                 'id'       => 'user-permissions',
                                 'title'   => 'Permissions',
-                                'translate'=> 'NAV.PERMISSIONS',
+                                'translate'=> 'permissions',
                                 'type'     => 'item',
                                 'icon'     => 'visibility_off',
                                 'url' => self::removeDomainFromLink(action(Routes::backend("PermissionController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
@@ -587,7 +587,7 @@ trait MenuLinkTrait
                     [
                         'id'       => 'post-types',
                         'title'    =>  'Post Types',
-                        'translate'=>  'NAV.POST_TYPES',
+                        'translate'=>  'post-types',
                         'icon' => 'label',
                         'type'     =>  'collapsable',
                         'access' => User::hasAccess("PostType", "read"),
@@ -595,7 +595,7 @@ trait MenuLinkTrait
                             [
                                 'id'       => 'post-type-list',
                                 'title'   => 'List',
-                                'translate'=> 'NAV.LIST',
+                                'translate'=> 'list',
                                 'type'     => 'item',
                                 'icon'     => 'notes',
                                 'url'      => self::removeDomainFromLink(action(Routes::backend("PostTypeController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
@@ -604,7 +604,7 @@ trait MenuLinkTrait
                             [
                                 'id'       => 'post-type-add',
                                 'title'   => 'Add New',
-                                'translate'=> 'NAV.ADD-NEW',
+                                'translate'=> 'add-new',
                                 'type'     => 'item',
                                 'icon'     => 'add_box',
                                 'url'      => self::removeDomainFromLink(action(Routes::backend("PostTypeController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
@@ -615,7 +615,7 @@ trait MenuLinkTrait
                     [
                         'id'       => 'custom-fields',
                         'title'    =>  'Custom Fields',
-                        'translate'=>  'NAV.CUSTOM-FIELDS',
+                        'translate'=>  'custom-fields',
                         'icon' => 'add_box',
                         'type'     =>  'collapsable',
                         'access' => User::hasAccess("CustomField", "read"),
@@ -623,7 +623,7 @@ trait MenuLinkTrait
                             [
                                 'id'       => 'custom-fields-list',
                                 'title'   => 'List',
-                                'translate'=> 'NAV.LIST',
+                                'translate'=> 'list',
                                 'type'     => 'item',
                                 'icon'     => 'notes',
                                 'url' => self::removeDomainFromLink(action(Routes::backend("CustomFieldController@index"), ['lang' =>  App::getLocale(), 'view' => 'list'])),
@@ -632,7 +632,7 @@ trait MenuLinkTrait
                             [
                                 'id'       => 'custom-fields-add',
                                 'title'   => 'Add New',
-                                'translate'=> 'NAV.ADD-NEW',
+                                'translate'=> 'add-new',
                                 'type'     => 'item',
                                 'icon'     => 'add_box',
                                 'url' =>  self::removeDomainFromLink(action(Routes::backend("CustomFieldController@index"), ['lang' =>  App::getLocale(), 'view' => 'create'])),
@@ -644,7 +644,7 @@ trait MenuLinkTrait
                     [
                         'id' => 'media',
                         'title'    =>  'Media',
-                        'translate'=>  'NAV.MEDIA',
+                        'translate'=>  'media',
                         'icon' => 'perm_media',
                         'type'     => 'item',
                         'url' => self::removeDomainFromLink(action(Routes::backend("MediaController@index"), ['lang' =>  App::getLocale(), 'view' => 'library'])),
@@ -653,7 +653,7 @@ trait MenuLinkTrait
                     [
                         'id' => 'settings',
                         'title'    =>  'Settings',
-                        'translate'=>  'NAV.SETTINGS',
+                        'translate'=>  'settings',
                         'icon' => 'settings',
                         'type'     => 'item',
                         'url' => self::removeDomainFromLink(action(Routes::backend("SettingsController@index"), ['lang' =>  App::getLocale(), 'view' => ''])),
@@ -668,7 +668,7 @@ trait MenuLinkTrait
         $tmpPostTypes = [
             'id'       => 'post-types-group',
             'title'    =>  'Post Types',
-            'translate'=>  'NAV.POST_TYPES',
+            'translate'=>  'post-types',
             'type'     =>  'group',
             'children' => []
         ];
@@ -690,7 +690,7 @@ trait MenuLinkTrait
                     [
                         'id'       => 'post-'.$postType['slug'].'-list',
                         'title'   => 'List',
-                        'translate'=> 'NAV.LIST',
+                        'translate'=> 'list',
                         'type'     => 'item',
                         'icon'     => 'notes',
                         'access' => User::hasAccess($postType['slug'], "read"),
@@ -699,7 +699,7 @@ trait MenuLinkTrait
                     [
                         'id'       => 'post-'.$postType['slug'].'-add',
                         'title'   => 'Add New',
-                        'translate'=> 'NAV.ADD-NEW',
+                        'translate'=> 'add-new',
                         'type'     => 'item',
                         'icon'     => 'add_box',
                         'url' => self::removeDomainFromLink(action(Routes::backend("PostController@postsIndex"), ['lang' =>  App::getLocale(), 'post_type' => $postType['slug'], 'view' => 'create' ])),
@@ -712,7 +712,7 @@ trait MenuLinkTrait
                 $tmpCats = [
                     'id'       => 'post-'.$postType['slug'].'-categories',
                     'title'   => 'Categories',
-                    'translate'=> 'NAV.CATEGORIES',
+                    'translate'=> 'categories',
                     'type'     => 'item',
                     'icon'     => 'notes',
                     'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'category/list', 'id' => $postType['postTypeID'] ])),
@@ -727,7 +727,7 @@ trait MenuLinkTrait
                 $tmpTags = [
                     'id'       => 'post-'.$postType['slug'].'-tags',
                     'title'   => 'Tags',
-                    'translate'=> 'NAV.TAGS',
+                    'translate'=> 'tags',
                     'type'     => 'item',
                     'icon'     => 'notes',
                     'url' => self::removeDomainFromLink(action(Routes::backend("PostTypeController@single"), ['lang' =>  App::getLocale(), 'view' => 'tag/list', 'id' => $postType['postTypeID'] ])),
@@ -750,7 +750,7 @@ trait MenuLinkTrait
             $tmpPluginLinks = [
                 'id'       => 'plugins',
                 'title'    =>  'Plugins',
-                'translate'=>  'NAV.PLUGINS',
+                'translate'=>  'plugins',
                 'type'     =>  'group',
                 'children' => [],
                 'access' => User::hasAccess("Plugin", "read"),

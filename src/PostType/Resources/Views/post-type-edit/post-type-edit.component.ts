@@ -1,9 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
-
-import { locale as english } from '../../i18n/en';
-import { locale as turkish } from '../../i18n/tr';
+import { TranslateService } from '@ngx-translate/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -16,6 +14,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
+
 @Component({
     selector   : 'post-type-edit',
     templateUrl: './post-type-edit.component.html',
@@ -24,7 +25,7 @@ import * as SharedActions from "../../../../Shared/Store/shared.actions";
 export class PostTypeEditComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
-    breadcrumbs = ['Post Type', 'Edit'];
+    breadcrumbs = ['post-type', 'edit'];
     postTypeForm: FormGroup;
     slug = '';
     id: number;
@@ -39,6 +40,8 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _labelService: LabelService,
+        private translate: TranslateService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private router: Router,
@@ -47,15 +50,33 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
         private store: Store<any>
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
-
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
+        this.id = this.route.snapshot.params['id'];
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        let loadLangs = this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    let labels = data['label']['postTypeLabels'];
+                    if(labels.length > 0){
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(labels);
+                        this.getData();
+                    }else{
+                        this.getLabels('postType');
+                    }
+                }
+            );
+        loadLangs.unsubscribe();
+    }
+
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
+        this.getData();
     }
 
     ngOnInit(){
-        this.mainRouteParams = this.route.parent.parent.snapshot.params;
-
         this.postTypeForm = this._formBuilder.group({
             name : ['', Validators.required],
             slug   : [
@@ -75,9 +96,9 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
             isFeaturedVideoRequired  : [false],
             fields  : []
         });
+    }
 
-        this.id = this.route.snapshot.params['id'];
-
+    getData(){
         this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/details/'+this.id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
@@ -125,9 +146,9 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
                 .map(
                     (data) => {
                         if(data['code'] == 200){
-                            this.openSnackBar(data['message'], 'X', 'success');
+                            this.openSnackBar(this.translate.instant(data['message']), 'X', 'success');
                         }else{
-                            this.openSnackBar(data['message'], 'X', 'error', 10000);
+                            this.openSnackBar(this.translate.instant(data['message']), 'X', 'error', 10000);
                         }
                         this.store.dispatch(new SharedActions.SetIsLoading(false));
                     }
@@ -146,7 +167,7 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
                 control.markAsTouched({ onlySelf: true });
             });
 
-            this.openSnackBar('Please fill out the required fields.', 'X', 'error', 10000);
+            this.openSnackBar(this.translate.instant('fill-required-fields'), 'X', 'error', 10000);
         }
     }
 

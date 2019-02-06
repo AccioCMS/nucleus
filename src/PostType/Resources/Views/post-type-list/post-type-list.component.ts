@@ -1,9 +1,7 @@
 import {Component, OnInit, Inject, ViewChild, OnDestroy} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
-
-import { locale as english } from '../../i18n/en';
-import { locale as turkish } from '../../i18n/tr';
+import { TranslateService } from '@ngx-translate/core';
 
 import { DataSource, SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
@@ -20,6 +18,9 @@ import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-
 import { Store } from "@ngrx/store";
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
+
 @Component({
     selector   : 'post-type-list',
     templateUrl: './post-type-list.component.html',
@@ -31,7 +32,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     displayedColumns: string[] = ['select', 'postTypeID', 'name', 'slug', 'buttons'];
     dataSource = new MatTableDataSource<any>([]);
     selection = new SelectionModel<any>(true, []);
-    breadcrumbs = ['Post Types', 'List'];
+    breadcrumbs = ['post-types', 'list'];
     spinner: boolean = true;
     deleteSpinner: boolean = false;
     loadingSpinner: boolean = false;
@@ -48,6 +49,8 @@ export class PostTypeListComponent implements OnInit, OnDestroy
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _labelService: LabelService,
+        private translate: TranslateService,
         private httpClient: HttpClient,
         private router: Router,
         private route:ActivatedRoute,
@@ -56,16 +59,33 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         private store: Store<any>
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
-
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        let loadLangs = this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    let labels = data['label']['postTypeLabels'];
+                    if(labels.length > 0){
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(labels);
+                        this.getData();
+                    }else{
+                        this.getLabels('postType');
+                    }
+                }
+            );
+        loadLangs.unsubscribe();
     }
 
-    ngOnInit(){
-        this.mainRouteParams = this.route.parent.parent.snapshot.params;
-        let params = '?pageSize='+this.pageSize;
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
+        this.getData();
+    }
 
+    getData(){
+        let params = '?pageSize='+this.pageSize;
         if (this.route.snapshot.queryParams['page']){
             params += '&page='+this.route.snapshot.queryParams['page'];
         }
@@ -89,6 +109,10 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                 return Observable.throw(error.message);
             })
             .subscribe();
+    }
+
+    ngOnInit(){
+
     }
 
     /** Whether the number of selected elements matches the total number of rows. */
@@ -115,9 +139,9 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
                         this.dataSource = new MatTableDataSource<any>(newData);
-                        this.openSnackBar(response['message'], 'X', 'success');
+                        this.openSnackBar(this.translate.instant(response['message']), 'X', 'success');
                     }else{
-                        this.openSnackBar(response['message'], 'X', 'error', 10000);
+                        this.openSnackBar(this.translate.instant(response['message']), 'X', 'error', 10000);
                     }
                     this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
@@ -144,8 +168,8 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         const dialogRef = this.dialog.open(AccioDialogComponent, {
             width: '400px',
             data: {
-                title: 'Delete',
-                text: 'Are you sure that you want to delete this Post Type?'
+                title: 'delete',
+                text: 'delete-question'
             }
         });
 
@@ -175,8 +199,8 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         const dialogRef = this.dialog.open(AccioDialogComponent, {
             width: '400px',
             data: {
-                title: 'Delete',
-                text: 'Are you sure that you want to delete these Post Types?'
+                title: 'delete',
+                text: 'bulk-delete-question'
             }
         });
 
@@ -188,19 +212,19 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                 var keyArray = selectedData.map(function(item) { return item["postTypeID"]; });
                 let data = { ids: keyArray };
 
-                this.httpClient.post('/admin/json/post-type/bulk-delete', data)
+                this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/post-type/bulk-delete', data)
                     .pipe(takeUntil(this._unsubscribeAll))
                     .map(
                         (response) => {
                             if(response['code'] == 200){
                                 this.removeSelection();
-                                this.openSnackBar(response['message'], 'X', 'success');
+                                this.openSnackBar(this.translate.instant(response['message']), 'X', 'success');
 
                                 let newData = this.dataSource.data;
                                 newData = newData.filter(item => !keyArray.includes(item.postTypeID) );
                                 this.dataSource = new MatTableDataSource<any>(newData);
                             }else{
-                                this.openSnackBar(response['message'], 'X', 'error', 10000);
+                                this.openSnackBar(this.translate.instant(response['message']), 'X', 'error', 10000);
                             }
                             this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }
