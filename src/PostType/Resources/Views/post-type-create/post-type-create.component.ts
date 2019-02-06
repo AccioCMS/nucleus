@@ -2,9 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Location } from '@angular/common';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
-
-import { locale as english } from '../../i18n/en';
-import { locale as turkish } from '../../i18n/sq';
+import { TranslateService } from '@ngx-translate/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -17,6 +15,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from "@ngrx/store";
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
+
 @Component({
     selector   : 'post-type-create',
     templateUrl: './post-type-create.component.html',
@@ -25,7 +26,7 @@ import * as SharedActions from "../../../../Shared/Store/shared.actions";
 export class PostTypeCreateComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
-    breadcrumbs = ['Post Type', 'Add New'];
+    breadcrumbs = ['post-type', 'add-new'];
     postTypeForm: FormGroup;
     slug = '';
     spinner: boolean = false;
@@ -42,25 +43,44 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _labelService: LabelService,
+        private translate: TranslateService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private router: Router,
         private route:ActivatedRoute,
         public snackBar: MatSnackBar,
         private store: Store<any>,
-        location: Location
+        location: Location,
+
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
         this.location = location;
+
+        let loadLangs = this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    let labels = data['label']['postTypeLabels'];
+                    if(labels.length > 0){
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(labels);
+                    }else{
+                        this.getLabels('postType');
+                    }
+                }
+            );
+        loadLangs.unsubscribe();
+    }
+
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
     }
 
     ngOnInit(){
-        this.mainRouteParams = this.route.parent.parent.snapshot.params;
-
         this.postTypeForm = this._formBuilder.group({
             name : ['', Validators.required],
             slug   : [
@@ -107,9 +127,9 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                             this.mode = 'edit';
                             this.id = data['id'];
 
-                            this.openSnackBar(data['message'], 'X', 'success', 2000);
+                            this.openSnackBar(this.translate.instant(data['message']), 'X', 'success', 2000);
                         }else{
-                            this.openSnackBar(data['message'], 'X', 'error', 10000);
+                            this.openSnackBar(this.translate.instant(data['message']), 'X', 'error', 10000);
                         }
                     }
                 )
@@ -126,8 +146,7 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                 const control = this.postTypeForm.get(field);
                 control.markAsTouched({ onlySelf: true });
             });
-
-            this.openSnackBar('Please fill out the required fields.', 'X', 'error', 10000);
+            this.openSnackBar(this.translate.instant('fill-required-fields'), 'X', 'error', 10000);
         }
     }
 

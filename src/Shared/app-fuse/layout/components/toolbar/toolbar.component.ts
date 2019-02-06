@@ -12,7 +12,8 @@ import { navigation } from '../../../navigation/navigation';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import * as AuthActions from "../../../../../Auth/Resources/Store/auth.actions";
-import { Router } from '@angular/router';
+
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector     : 'toolbar',
@@ -49,7 +50,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private _translateService: TranslateService,
         private httpClient: HttpClient,
         private store: Store<any>,
-        private router:Router
+        private router:Router,
+        private route: ActivatedRoute
     )
     {
         // Set the defaults
@@ -196,5 +198,17 @@ export class ToolbarComponent implements OnInit, OnDestroy
                 }
             )
             .subscribe();
+    }
+
+    /**
+     * Redirect when language is changed
+     *
+     */
+    languageChanged(langID){
+        let currentLangID = this.route.snapshot.params.lang;
+        let url = this.router.url;
+        url = url.replace(currentLangID, langID);
+
+        this.router.navigate([url]);
     }
 }

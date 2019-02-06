@@ -4,17 +4,13 @@
         (cancelClicked)="onCancel()"
         [breadcrumbs]="breadcrumbs"
         [showSaveBtn]="true"
-        [saveBtnData]="{ text: 'Save', icon: 'save'}"
+        [saveBtnData]="{ text: 'save', icon: 'save'}"
         [showCancelBtn]="true"
-        [cancelBtnData]="{ text: 'Cancel', icon: ''}"
+        [cancelBtnData]="{ text: 'cancel', icon: ''}"
     >
     </nucleus-template-header>
 
-   <!-- <div class="spinner" *ngIf="saveSpinner">
-        <mat-spinner color="accent" [diameter]="60"></mat-spinner>
-    </div>-->
-
-    <div class="accio-container">
+   <div class="accio-container">
         <div class="content-center">
             <div class="accio-container-850" fuseperfectscrollbar="">
 
@@ -24,21 +20,20 @@
                           fxFlex="1 0 auto" name="postTypeForm" [formGroup]="postTypeForm" *ngIf="!spinner" class="p-24">
 
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
                             <mat-form-field appearance="outline" fxFlex="100" class="pr-4">
-                                <mat-label>Name</mat-label>
+                                <mat-label>{{ 'name' | translate }}</mat-label>
                                 <input matInput formControlName="name" required>
                                 <mat-icon matSuffix class="secondary-text">label</mat-icon>
-                                <mat-error>Name is required!</mat-error>
+                                <mat-error>{{ 'name' | translate }} {{ 'is-required' | translate }}!</mat-error>
                             </mat-form-field>
                         </div>
+
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <mat-form-field appearance="outline" fxFlex="100" class="pl-4">
-                                <mat-label>Slug</mat-label>
+                                <mat-label>{{ 'slug' | translate }}</mat-label>
                                 <input matInput formControlName="slug" required>
-                                <mat-error>Slug is required!</mat-error>
+                                <mat-error>{{ 'slug' | translate }} {{ 'is-required' | translate }}!</mat-error>
                             </mat-form-field>
-
                         </div>
 
                     </form>
@@ -54,12 +49,12 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <mat-icon class="pr-sm-32">visibility</mat-icon>
-                                        Visibility
+                                        {{ 'visibility' | translate}}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
 
                                 <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                    <mat-slide-toggle class="accio-slide-toggle" formControlName="isVisible">Visible</mat-slide-toggle>
+                                    <mat-slide-toggle class="accio-slide-toggle" formControlName="isVisible">{{ 'visible' | translate}}</mat-slide-toggle>
                                 </div>
                             </mat-expansion-panel>
                         </mat-accordion>
@@ -71,16 +66,16 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <mat-icon class="pr-sm-32">notes</mat-icon>
-                                        Categories
+                                        {{ 'categories' | translate}}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasCategories">Has categories</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasCategories">{{ 'has-category' | translate}}</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isCategoryRequired">Is category required</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isCategoryRequired">{{ 'is-category-required' | translate}}</mat-slide-toggle>
                                     </div>
                                 </div>
                             </mat-expansion-panel>
@@ -89,16 +84,16 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <mat-icon class="pr-sm-32">notes</mat-icon>
-                                        Tags
+                                        {{ 'tags' | translate}}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasTags">Has tags</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasTags">{{ 'has-tag' | translate}}</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isTagRequired">Is tag required</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isTagRequired">{{ 'is-tag-required' | translate}}</mat-slide-toggle>
                                     </div>
                                 </div>
                             </mat-expansion-panel>
@@ -111,16 +106,16 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <mat-icon class="pr-sm-32">perm_media</mat-icon>
-                                        Image
+                                        {{ 'image' | translate}}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasFeaturedImage">Has Featured image</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasFeaturedImage">{{ 'featured-image' | translate}}</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isFeaturedImageRequired">Is Featured image required
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isFeaturedImageRequired">{{ 'is-featured-image-required' | translate}}
                                         </mat-slide-toggle>
                                     </div>
                                 </div>
@@ -130,16 +125,16 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <mat-icon class="pr-sm-32">videocam</mat-icon>
-                                        Video
+                                        {{ 'video' | translate}}
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasFeaturedVideo">Has Featured video</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="hasFeaturedVideo">{{ 'featured-video' | translate}}</mat-slide-toggle>
                                     </div>
 
                                     <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isFeaturedVideoRequired">Is Featured video required</mat-slide-toggle>
+                                        <mat-slide-toggle class="accio-slide-toggle" formControlName="isFeaturedVideoRequired">{{ 'is-featured-video-required' | translate}}</mat-slide-toggle>
                                     </div>
                                 </div>
                             </mat-expansion-panel>

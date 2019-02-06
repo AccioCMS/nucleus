@@ -19,8 +19,9 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import * as SharedActions from '../Store/shared.actions';
 import * as AuthActions from '../../Auth/Resources/Store/auth.actions';
+import * as LabelActions from '../../Label/Resources/Store/label.actions';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {SetAppMenuLinks} from "../Store/shared.actions";
 
 @Component({
@@ -33,6 +34,7 @@ export class NucleusComponent {
     navigation: any;
     spinner: boolean = true;
     isLoading: boolean = false;
+    routeParams;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -60,9 +62,11 @@ export class NucleusComponent {
         private _platform: Platform,
         private httpClient: HttpClient,
         private store: Store<any>,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     )
     {
+        this.routeParams = this.route.snapshot.params;
         // Get default navigation
         this.navigation = navigation;
 
@@ -74,15 +78,6 @@ export class NucleusComponent {
 
         // Add languages
         //this._translateService.addLangs(['en', 'tr']);
-
-        // Set the default language
-        this._translateService.setDefaultLang('en');
-
-        // Set the navigation translations
-        this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
-
-        // Use a language
-        this._translateService.use('en');
 
         /**
          * ----------------------------------------------------------------------------------------------------
@@ -141,7 +136,22 @@ export class NucleusComponent {
                         this.store.dispatch(new SharedActions.SetPluginConfigs(data['pluginsConfigs']));
                         this.store.dispatch(new SharedActions.SetAppMenuLinks(data['applicationMenuLinks']));
 
+                        this.store.dispatch(new LabelActions.SetGeneralLabels(data['labels']));
+
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(data['labels']);
+
                         this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
+
+
+                        // Set the default language
+                        this._translateService.setDefaultLang(this.routeParams['lang']);
+
+                        // Set the navigation translations
+                        //this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
+
+                        // Use a language
+                        this._translateService.use(this.routeParams['lang']);
+
                         this.spinner = false;
                     }
                 }

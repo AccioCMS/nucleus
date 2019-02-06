@@ -119,12 +119,12 @@ class BasePostTypeController extends MainController
 
         $res = $this->deletePostType($id);
         if($res && is_bool($res)) {
-            return $this->response('Post Type is successfully deleted');
+            return $this->response('delete-successfull');
         }
         if($res && !is_bool($res)) {
             return $res;
         }
-        return $this->response('Post Type could not be deleted. Please try again later or contact your Administrator!', 500);
+        return $this->response('not-deleted', 500);
     }
 
 
@@ -151,13 +151,13 @@ class BasePostTypeController extends MainController
         foreach($request->ids as $id){
             $res = $this->deletePostType($id);
             if(!$res) {
-                return $this->response('Post Type could not be deleted. Please try again later or contact your Administrator!', 500);
+                return $this->response('not-deleted', 500);
             }
             if(!is_bool($res)) {
                 return $res;
             }
         }
-        return $this->response('Selected post types are successfully deleted', 200);
+        return $this->response('bulk-delete-successfull', 200);
     }
 
     /**
@@ -295,7 +295,7 @@ class BasePostTypeController extends MainController
 
         // if validation fails return json response
         if ($validator->fails()) {
-            return $this->response("Please check all required fields!", 400, null, false, false, true, $validator->errors());
+            return $this->response("fill-required-fields", 400, null, false, false, true, $validator->errors());
         }
 
         if(isset($request->id)) {
@@ -359,9 +359,9 @@ class BasePostTypeController extends MainController
             }
 
             $redirectParams = parent::redirectParams($request->redirect, 'post-type', $postType->postTypeID);
-            return $this->response('Post Type stored', 200, $postType->postTypeID, $redirectParams['view'], $redirectParams['redirectUrl']);
+            return $this->response('post-type-stored', 200, $postType->postTypeID, $redirectParams['view'], $redirectParams['redirectUrl']);
         }else{
-            return $this->response('Post Type is not stored. Internal sever error', 500);
+            return $this->response('post-type-not-stored', 500);
         }
     }
 

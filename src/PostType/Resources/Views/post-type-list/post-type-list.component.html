@@ -19,14 +19,13 @@
             <div class="center p-4 pb-56 ps ps--active-y accio-container-850" fuseperfectscrollbar="">
 
                 <mat-card class = "mat-card-title" *ngIf="selection.selected.length == 0">
-                    Post Types <span center></span>
-                    <!--<mat-icon class = "table-header-icons">arrow_downward</mat-icon>-->
+                    {{ 'post-types' | translate }} <span center></span>
                 </mat-card>
                 <mat-card class="p-0" *ngIf="selection.selected.length > 0">
                     <div class="multi-selected-box main-list p-16">
                         <h2 class="m-0">
                             <span>{{ selection.selected.length }}</span>
-                            Post Types selected
+                            {{ 'selected' | translate }}
                         </h2>
                         <button mat-icon-button (click)="removeSelection()">X</button>
                         <mat-icon (click)="bulkDelete()">delete</mat-icon>
@@ -36,7 +35,7 @@
                 <div class = "filter mat-card" >
                     <mat-chip-list>
 
-                        <mat-chip color="primary" selected><mat-icon >add</mat-icon>  Add filter</mat-chip>
+                        <mat-chip color="primary" selected><mat-icon >add</mat-icon>  {{ 'add-filter' | translate }}</mat-chip>
 
                     </mat-chip-list>
 
