@@ -2,9 +2,6 @@ import {Component, OnInit, Inject, ViewChild, OnDestroy} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
-import { locale as english } from '../../i18n/en';
-import { locale as turkish } from '../../i18n/tr';
-
 import { DataSource, SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
 
@@ -19,6 +16,10 @@ import { takeUntil } from 'rxjs/operators';
 import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-dialog.component";
 import { Store } from "@ngrx/store";
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
+
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
+import 'rxjs/add/operator/toPromise';
 
 @Component({
     selector   : 'post-type-list',
@@ -48,6 +49,7 @@ export class PostTypeListComponent implements OnInit, OnDestroy
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _labelService: LabelService,
         private httpClient: HttpClient,
         private router: Router,
         private route:ActivatedRoute,
@@ -56,16 +58,33 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         private store: Store<any>
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
-
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+
+        this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    let labels = data['label']['postTypeLabels'];
+
+                    if(labels.length > 0){
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(labels);
+                    }else{
+                        this.getLabels('postType');
+                    }
+                }
+            );
     }
 
-    ngOnInit(){
-        this.mainRouteParams = this.route.parent.parent.snapshot.params;
-        let params = '?pageSize='+this.pageSize;
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
+        this.getData();
+    }
 
+    getData(){
+        let params = '?pageSize='+this.pageSize;
         if (this.route.snapshot.queryParams['page']){
             params += '&page='+this.route.snapshot.queryParams['page'];
         }
@@ -89,6 +108,10 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                 return Observable.throw(error.message);
             })
             .subscribe();
+    }
+
+    ngOnInit(){
+
     }
 
     /** Whether the number of selected elements matches the total number of rows. */

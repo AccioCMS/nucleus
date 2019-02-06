@@ -35,6 +35,9 @@ import { AccioDialogComponent } from './App/accio-dialog/accio-dialog.component'
 import { StoreModule } from "@ngrx/store";
 import { sharedReducer } from './Store/shared.reducers';
 
+import { FuseSharedModule } from './@fuse/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
+
 @NgModule({
     declarations: [
         NucleusTemplateHeaderComponent,
@@ -42,6 +45,8 @@ import { sharedReducer } from './Store/shared.reducers';
     ],
     imports: [
         CommonModule,
+        FuseSharedModule,
+        TranslateModule,
         //Material
         MatButtonModule,
         MatCheckboxModule,

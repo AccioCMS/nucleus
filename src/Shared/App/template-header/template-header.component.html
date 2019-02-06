@@ -10,8 +10,8 @@
                     *ngFor="let breadcrumb of breadcrumbs; let i = index"
                     >
                     <span class="ng-tns-c53-92 header-breadcrumb-item">
-                        <b *ngIf="(breadcrumbs.length - 1) == i">{{ breadcrumb }}</b>
-                        <span *ngIf="(breadcrumbs.length - 1) > i">{{ breadcrumb }}</span>
+                        <b *ngIf="(breadcrumbs.length - 1) == i">{{ breadcrumb | translate }}</b>
+                        <span *ngIf="(breadcrumbs.length - 1) > i">{{ breadcrumb | translate }}</span>
                     </span>
                     <mat-icon
                         class="separator mat-icon ng-tns-c53-92 material-icons mat-icon-no-color ng-star-inserted"
@@ -35,7 +35,7 @@
                 mat-raised-button
                 class="cancel-button mat-raised-button ng-tns-c39-37 ng-star-inserted">
                 <mat-icon *ngIf="cancelBtnData.icon != ''">{{ cancelBtnData.icon }}</mat-icon>
-                {{ cancelBtnData.text }}
+                {{ cancelBtnData.text | translate }}
             </button>
             <button
                 *ngIf="showSaveBtn"
@@ -44,7 +44,7 @@
                 color="accent"
                 class="save-product-button mat-raised-button ng-tns-c39-37 ng-star-inserted btn-accio-confirm">
                 <mat-icon>{{ saveBtnData.icon }}</mat-icon>
-                {{ saveBtnData.text }}
+                {{ saveBtnData.text | translate }}
             </button>
         </div>
     </div>

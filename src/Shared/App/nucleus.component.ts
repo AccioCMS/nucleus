@@ -73,7 +73,7 @@ export class NucleusComponent {
         this._fuseNavigationService.setCurrentNavigation('main');
 
         // Add languages
-        this._translateService.addLangs(['en', 'tr']);
+        //this._translateService.addLangs(['en', 'tr']);
 
         // Set the default language
         this._translateService.setDefaultLang('en');

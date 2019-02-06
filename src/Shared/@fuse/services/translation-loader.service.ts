@@ -7,6 +7,11 @@ export interface Locale
     data: Object;
 }
 
+export interface LocaleAccio{
+    lang: any,
+    data: any
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -35,6 +40,17 @@ export class FuseTranslationLoaderService
     loadTranslations(...args: Locale[]): void
     {
         const locales = [...args];
+
+        locales.forEach((locale) => {
+            // use setTranslation() with the third argument set to true
+            // to append translations instead of replacing them
+            this._translateService.setTranslation(locale.lang, locale.data, true);
+        });
+    }
+
+    loadTranslationsAccio(args: LocaleAccio[]): void
+    {
+        const locales = args;
 
         locales.forEach((locale) => {
             // use setTranslation() with the third argument set to true
