@@ -22,6 +22,7 @@ import * as SharedActions from "../../../../Shared/Store/shared.actions";
     templateUrl: './post-type-create.component.html',
     styleUrls  : ['./post-type-create.component.scss']
 })
+
 export class PostTypeCreateComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
@@ -93,7 +94,6 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                 data.id = this.id;
                 data.deletedFieldsSlugs = [];
             }
-
             this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/json/post-type/store', data)
                 .pipe(takeUntil(this._unsubscribeAll))
                 .map(

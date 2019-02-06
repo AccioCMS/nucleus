@@ -16,7 +16,7 @@
                     <div class="accio-container-850" fuseperfectscrollbar="">
 
                         <div class="accio-content center  pb-56 ps ps--active-y d-block">
-                            <mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>
+                            <!--<mat-progress-bar mode="indeterminate" *ngIf="spinner"></mat-progress-bar>-->
                             <form fxLayout="column" fxLayoutAlign="start"
                                   fxFlex="1 0 auto" name="exampleForm" [formGroup]="usersForm" class="p-24" *ngIf="!spinner">
 
@@ -129,6 +129,12 @@
                                             </mat-form-field>
 
                                         </div>
+
+                                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                            <mat-slide-toggle class="accio-slide-toggle" formControlName="isActive">Is Active
+                                            </mat-slide-toggle>
+                                        </div>
+
 
 
                                     </form>

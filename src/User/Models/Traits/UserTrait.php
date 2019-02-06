@@ -494,31 +494,25 @@ trait UserTrait
         if(config('app.env') == 'production' && $bypassPermissionCheck) {
             $bypassPermissionCheck = false;
         }
-
         // check if a user has permissions to access this link
 //        if(!$bypassPermissionCheck) {
 //            if (!self::hasAccess('user', 'update') && !self::hasAccess('user', 'create')) {
 //                return false;
 //            }
 //        }
-
         // First delete all previous relations
         RoleRelation::where('userID', $this->userID)->delete();
-
         $roles = [];
-
         // in case int is given
         if(is_numeric($groups)) {
             $groups = [$groups];
         }
-
         foreach ($groups as $groupID){
             $roles[] = [
               'userID' => $this->userID,
               'groupID' => (isset($groupID['groupID']) ? $groupID['groupID'] : $groupID)
             ];
         }
-
         if(RoleRelation::insert($roles)) {
             return true;
         }

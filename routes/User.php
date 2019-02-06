@@ -33,8 +33,6 @@ Route::group(
             //get all ordered
             Route::get('/{lang}/json/user/get-all/{orderby}/{type}', 'UserController@getAll')->name('getAll');
 
-
-
             Route::any('/{lang}/user/get/{id}','UserController@detailsJSON')->name('detailsJSON');
 
             Route::any('/api/user/store', '\App\Http\Controllers\Backend\UserController@store')->name('store');
@@ -63,7 +61,7 @@ Route::group(
 
             Route::post('/json/user/store', 'UserController@store')->name('store');
             Route::post('/json/user/storeUpdate', 'UserController@c')->name('storeUpdate');
-            Route::post('/json/user/bulk-delete', 'UserController@bulkDelete')->name('bulkDelete');
+            Route::post('{lang}/json/user/bulk-delete', 'UserController@bulkDelete')->name('bulkDelete');
             Route::post('/json/user/resetPassword', 'UserController@resetPassword')->name('resetPassword');
             Route::post('/json/user/advanced-search-results', 'UserController@getAdvancedSearchFieldsResults')->name('getAdvancedSearchFieldsResults');
         });

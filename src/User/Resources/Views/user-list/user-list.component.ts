@@ -66,7 +66,7 @@ export class UserListComponent
     pageSize: string = '10';
     selectedIndex:number;
     displayedColumns: string[] = ['checkbox','userID','firstName', 'email', 'phone', 'jobtitle','buttons'];
-
+    mainRouteParams;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     // @ViewChild(MatTable) table: MatTable<any>;
     // @ViewChild(MatSort) sort: MatSort;
@@ -87,7 +87,7 @@ export class UserListComponent
 
 
     ngOnInit(){
-
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
 
         let params = '?size='+this.pageSize;
 
@@ -98,7 +98,7 @@ export class UserListComponent
             params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
         }
 
-        this.httpClient.get('/admin/en/json/user/get-all'+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/user/get-all'+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -116,11 +116,6 @@ export class UserListComponent
             })
             .subscribe();
     }
-
-    edit(id){
-        this.router.navigate(['../edit/'+id], {relativeTo: this.route});
-    }
-
 
     openDialog(id, index): void {
         const dialogRef = this.dialog.open(AccioDialogComponent, {
@@ -141,7 +136,7 @@ export class UserListComponent
 
     delete(id, index){
         this.spinner = true;
-        this.httpClient.get('admin/en/json/user/delete/'+id)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/user/delete/'+id)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -177,10 +172,10 @@ export class UserListComponent
                 // console.log(keyArray);
                 let data = { ids: keyArray };
 
-                this.httpClient.post('/admin/json/user/bulk-delete', data)
+                this.httpClient.post('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/user/bulk-delete', data)
                     .map(
                         (response) => {
-                            // console.log(data);
+                            console.log(data);
                             if(response['code'] == 200){
                                 this.removeSelection();
                                 this.openSnackBar(response['message'], 'X', 'success');
@@ -219,8 +214,14 @@ export class UserListComponent
 
 
     addNew(){
-        this.router.navigate(['../add/'], {relativeTo: this.route});
+        this.router.navigate(['../create'], {relativeTo: this.route});
     }
+
+
+    edit(id){
+        this.router.navigate(['../edit/'+id], {relativeTo: this.route});
+    }
+
 
     setSelected(id){
         this.selectedIndex = id;
@@ -251,7 +252,7 @@ export class UserListComponent
         this.router.navigate(["../list"],{ relativeTo: this.route, queryParams: { order: event['active'],type: event['direction']}});
         // this.order = true;
 
-        this.httpClient.get('/admin/en/json/user/get-all?size='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/user/get-all?size='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -302,7 +303,7 @@ export class UserListComponent
             this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
         }
 
-        this.httpClient.get('/admin/en/json/user/get-all'+params)
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/user/get-all'+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

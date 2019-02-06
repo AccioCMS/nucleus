@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+import { Location } from '@angular/common';
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
 import { locale as english } from './i18n/en';
@@ -13,22 +14,14 @@ import { UsersService } from "../../users.service";
 import { fuseAnimations } from '../../../../Shared/@fuse/animations';
 import { HttpClient } from '@angular/common/http';
 
-// import {MatSnackBar} from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 
 import { FormBuilder, FormGroup, Validators ,FormControl} from '@angular/forms';
 import * as AuthActions from "../../../../Auth/Resources/Store/auth.actions";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material";
-
-export interface Users {
-    checkbox : number;
-    name: string;
-    email: string;
-    phone: string;
-    jobtitle: string;
-    asd: string
-}
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 @Component({
     selector   : 'user-create',
@@ -47,19 +40,23 @@ export class UserCreateComponent
      */
     // public users = [];
 
-    public users = [];
-    public email: string = "";
-    public firstName: string = "";
-    public lastName: string = "";
-    public phone: string = "";
-    public street: string = "";
-    public country: string = "";
-    public about: string = "";
-    public isActive: number = 1;
-    public groups: string[];
-
+    users = [];
+    id: number;
+    email: string = "";
+    firstName: string = "";
+    lastName: string = "";
+    phone: string = "";
+    street: string = "";
+    country: string = "";
+    about: string = "";
+    isActive: number = 1;
+    groups: string[];
+    mode: string = 'create';
+    location;
+    // isActive : boolean;
 
     breadcrumbs = ['Users', 'New User'];
+
 
     spinner: boolean = true;
     // public groups: string[];
@@ -87,8 +84,9 @@ export class UserCreateComponent
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private router: Router,
-        public snackBar: MatSnackBar
-
+        public snackBar: MatSnackBar,
+        private store: Store<any>,
+        location: Location
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
@@ -104,43 +102,60 @@ export class UserCreateComponent
             country: [''],
             groups: [''],
             about   : [''],
+            isActive : [this.isActive]
         });
         this.spinner = false;
+
+        // this._unsubscribeAll = new Subject();
+        this.location = location;
+
+
+
     }
 
     onSave(){
 
         if(this.usersForm.valid) {
-            this.spinner = true;
-            let formData = this.usersForm.value;
-            console.log(formData);
-            let data = {
-                'user': {
-                    email: this.usersForm.get('email').value,
-                    password: this.usersForm.get('password').value,
-                    confpassword: this.usersForm.get('confpassword').value,
-                    lastName: this.usersForm.get('lastName').value,
-                    firstName: this.usersForm.get('firstName').value,
-                    phone: this.usersForm.get('phone').value,
-                    street: this.usersForm.get('street').value,
-                    country: this.usersForm.get('country').value,
-                    about: this.usersForm.get('about').value,
-                    groups: this.usersForm.get('groups').value
-                }
-            };
+            this.store.dispatch(new SharedActions.SetIsLoading(true));
+            // this.spinner = true;
+            let data = this.usersForm.value;
+            // console.log(formData);
 
+            data.fields = [];
+            if(this.mode == 'edit'){
+                data.id = this.id;
+                data.isActive = this.isActive;
+            }else{
+                this.breadcrumbs = ['Users', 'Update User'];
+            }
+
+            console.log(data.isActive);
             this.httpClient.post('admin/api/user/store', data)
                 .map(
                     (data) => {
-                        // console.log(data);
+
                         if (data['code'] == 200) {
+                            // this.isActive  = data['details'].isActive;
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
+                            let locationPath = this.location.prepareExternalUrl(this.location.path());
+                            locationPath = locationPath.replace('create', 'edit/'+data['id']);
+                            this.location.go(locationPath);
+                            this.mode = 'edit';
+                            this.id = data['id'];
                             this.openSnackBar(data['message'], 'X', 'success');
                             this.spinner = false;
+
                         } else {
                             this.openSnackBar(data['message'], 'X', 'error', 10000);
                         }
                     }
-                )
+                ) .catch((error: any) => {
+                        var message = error.message+' \n '+error.error.message;
+                        this.openSnackBar(message, 'X', 'error', 30000);
+
+                        this.store.dispatch(new SharedActions.SetIsLoading(false));
+                        return Observable.throw(error.message);
+                    })
                 .subscribe();
         }else{
             Object.keys(this.usersForm.controls).forEach(field => {

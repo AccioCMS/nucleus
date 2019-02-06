@@ -149,21 +149,21 @@ class BaseUserController extends MainController
         ];
 
 
-//        return $request['password'];
+//        return $request['email'];
 
-        if(isset($request->user['id'])) {
+        if(isset($request['id'])) {
             // update user
-            $user = App\Models\User::findOrFail($request->user['id']);
-            $user->isActive = $request->user['isActive'];
-            $currentID = $request->user['id'];
-            if($user->email == $request->user['email']) {
-                unset($validatorFields->user['email']);
+            $user = App\Models\User::findOrFail($request['id']);
+            $user->isActive = $request['isActive'];
+            $currentID = $request['id'];
+            if($user->email == $request['email']) {
+                unset($validatorFields['email']);
             }
         }else{
             // Create user
             $user = new User();
             $user->createdByUserID = 21;
-            $user->password = Hash::make($request->user['password']);
+            $user->password = Hash::make($request['password']);
             $user->isActive = 1;
             $currentID = 0;
 
@@ -179,27 +179,27 @@ class BaseUserController extends MainController
 //        }
 
         // if image is not set make it 0
-        if (!isset($request->user['profileImageID']) || $request->user['profileImageID'] == "") {
+        if (!isset($request['profileImageID']) || $request['profileImageID'] == "") {
             $profileImageID = null;
         }else{
-            $profileImageID = $request->user['profileImageID'];
+            $profileImageID = $request['profileImageID'];
         }
 
         // Store data
-        $user->email = $request->user['email'];
-        $user->firstName = $request->user['firstName'];
-        $user->lastName = $request->user['lastName'];
-        $user->phone = $request->user['phone'];
-        $user->street = $request->user['street'];
-        $user->country = $request->user['country'];
-        $user->slug = parent::generateSlug($request->user['firstName']." ".$request->user['lastName'], 'users', 'userID', '', $currentID, false);
+        $user->email = $request['email'];
+        $user->firstName = $request['firstName'];
+        $user->lastName = $request['lastName'];
+        $user->phone = $request['phone'];
+        $user->street = $request['street'];
+        $user->country = $request['country'];
+        $user->slug = parent::generateSlug($request['firstName']." ".$request['lastName'], 'users', 'userID', '', $currentID, false);
         $user->about = $request['about'];
         $user->profileImageID = $profileImageID;
-        $user->gravatar = User::getGravatarFromEmail($request->user['email']);
+        $user->gravatar = User::getGravatarFromEmail($request['email']);
 
         if($user->save()) {
             // Add roles permissions
-            $user->assignRoles($request->user['groups']);
+            $user->assignRoles($request['groups']);
             $redirectParams = parent::redirectParams($request->redirect, 'user', $user->userID);
             $result = $this->response('User stored successfully', 200, $user->userID, $redirectParams['view'], $redirectParams['redirectUrl']);
             $result['data'] = $user;
@@ -210,7 +210,6 @@ class BaseUserController extends MainController
         }
         return $result;
     }
-
 
     /**
      * Change users profile image.
