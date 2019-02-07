@@ -13,9 +13,13 @@ import {MatSnackBar} from '@angular/material';
 import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 
-import { Store } from '@ngrx/store';
+
+import { Store } from "@ngrx/store";
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
+import {Location} from "@angular/common";
 @Component({
     selector   : 'tag-edit',
     templateUrl: './tag-edit.component.html',
@@ -31,7 +35,7 @@ export class TagEditComponent implements OnInit, OnDestroy
     spinner: boolean = true;
     saveSpinner: boolean = false;
     postTypeID : number;
-
+    mainRouteParams;
     /**
      * Constructor
      *
@@ -44,7 +48,8 @@ export class TagEditComponent implements OnInit, OnDestroy
         private router: Router,
         private route:ActivatedRoute,
         public snackBar: MatSnackBar,
-        private store: Store<any>
+        private store: Store<any>,
+        location: Location,
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);

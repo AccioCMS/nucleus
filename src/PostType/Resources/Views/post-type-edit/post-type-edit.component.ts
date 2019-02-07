@@ -117,6 +117,7 @@ export class PostTypeEditComponent implements OnInit, OnDestroy
                         hasFeaturedVideo  : details['hasFeaturedVideo'] == 1 ? true : false,
                         isFeaturedVideoRequired  : details['isFeaturedVideoRequired'] == 1 ? true : false,
                     });
+
                     this.slug = details['slug'];
                     this.spinner = false;
                     this.store.dispatch(new SharedActions.SetIsLoading(false));
