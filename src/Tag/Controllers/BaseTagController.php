@@ -123,7 +123,7 @@ class BaseTagController extends MainController
 //        if(!User::hasAccess('Tags', 'create')) {
 //            return $this->noPermission();
 //        }
-
+//        return $request;
         $validatorData = [
             'title' => 'required',
             'postTypeID' => 'required',
@@ -296,6 +296,9 @@ class BaseTagController extends MainController
      */
     public function getSlug($lang, $postTypeID, $slug)
     {
-        return parent::generateSlug($slug, 'tags', 'tagID', '', 0, false);
+
+        $slug =  parent::generateSlug($slug, 'tags', 'tagID', '', 0, false);
+
+        return response()->json(['slug' => $slug]);
     }
 }

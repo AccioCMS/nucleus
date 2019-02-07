@@ -7,12 +7,14 @@ import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, 
 
 import { TagListComponent } from "./Views/tag-list/tag-list.component";
 import { TagEditComponent } from "./Views/tag-edit/tag-edit.component";
+import { TagCreateComponent } from "./Views/tag-create/tag-create.component";
 import { TagRoutingModule } from "./tag-routing.module";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 @NgModule({
   declarations: [
       TagListComponent,
-      TagEditComponent
+      TagEditComponent,
+      TagCreateComponent
   ],
   imports: [
     TagRoutingModule,

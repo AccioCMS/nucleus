@@ -138,7 +138,7 @@ export class TagListComponent implements OnInit, OnDestroy
     }
 
     addNew(){
-        this.router.navigate(['/create'], {relativeTo: this.route});
+        this.router.navigate(['../../create/'+this.id], {relativeTo: this.route});
     }
 
     openDialog(id, index): void {

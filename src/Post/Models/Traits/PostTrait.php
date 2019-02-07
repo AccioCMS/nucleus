@@ -1077,7 +1077,6 @@ trait PostTrait
         $count = 0;
         $found = true;
         $originalSlug = str_slug($title, $delimiter);
-
         while($found){
             if($count != 0) {
                 $slug = $originalSlug.$delimiter.$count;
