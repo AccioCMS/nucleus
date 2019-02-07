@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
-
-import { locale as english } from '../../i18n/en';
-import { locale as turkish } from '../../i18n/tr';
+import { TranslateService } from '@ngx-translate/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
@@ -17,6 +15,8 @@ import * as fromShared from '../../../../Shared/Store/shared.reducers';
 import {Observable, Subject} from "rxjs/index";
 import { takeUntil } from 'rxjs/operators';
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
 
 @Component({
     selector   : 'general-settings',
@@ -27,7 +27,7 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
     settingsForm: FormGroup;
-    breadcrumbs = ['Settings', 'General'];
+    breadcrumbs = ['settings', 'general'];
     pages: [];
     languages: [];
     userGroups: [];
@@ -47,6 +47,8 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _labelService: LabelService,
+        private translate: TranslateService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         private store: Store<fromShared.SharedState>,
@@ -54,15 +56,12 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
         private route: ActivatedRoute
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
-
+        this.mainRouteParams = this.route.parent.parent.parent.snapshot.params;
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(){
-        this.mainRouteParams = this.route.parent.parent.parent.snapshot.params;
-
         this.settingsForm = this._formBuilder.group({
             siteTitle : ['', Validators.required],
             adminEmail  : ['', [Validators.required, Validators.email]],
@@ -77,6 +76,37 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
             mobileActiveTheme: [''],
         });
 
+       this.store.select(state => state)
+           .pipe(takeUntil(this._unsubscribeAll))
+           .subscribe(
+            data => (
+                this.languages = data['shared']['languages']
+            )
+        );
+
+        let loadLangs = this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    let labels = data['label']['settingsLabels'];
+                    if(labels.length > 0){
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(labels);
+                        this.getData();
+                    }else{
+                        this.getLabels('settings');
+                    }
+                }
+            );
+        loadLangs.unsubscribe();
+
+    }
+
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
+        this.getData();
+    }
+
+    getData(){
         this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/settings/get-settings')
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
@@ -106,15 +136,6 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
                 return Observable.throw(error.message);
             })
             .subscribe();
-
-       this.store.select(state => state)
-           .pipe(takeUntil(this._unsubscribeAll))
-           .subscribe(
-            data => (
-                this.languages = data['shared']['languages']
-            )
-        );
-
     }
 
     onSave(){
@@ -134,7 +155,8 @@ export class GeneralSettingsComponent implements OnInit, OnDestroy
                             this.openSnackBar(errors[Object.keys(errors)[0]], 'X', 'error', 10000);
                         }
                     }else{
-                        this.openSnackBar(response['message'], 'X', 'success');
+                        this.store.dispatch(new SharedActions.SetSiteTitle(this.settingsForm.value.siteTitle));
+                        this.openSnackBar(this.translate.instant(response['message']), 'X', 'success');
                     }
                     this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }

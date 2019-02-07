@@ -3,9 +3,9 @@
     (cancelClicked)="onCancel()"
     [breadcrumbs]="breadcrumbs"
     [showSaveBtn]="true"
-    [saveBtnData]="{ text: 'Save', icon: 'save'}"
+    [saveBtnData]="{ text: 'save', icon: 'save'}"
     [showCancelBtn]="false"
-    [cancelBtnData]="{ text: 'Cancel', icon: ''}"
+    [cancelBtnData]="{ text: 'cancel', icon: ''}"
 >
 </nucleus-template-header>
 
@@ -13,7 +13,7 @@
 <div class="accio-content center pb-56 ps ps--active-y d-block">
     <mat-progress-bar mode="indeterminate" class="settings-progress-bar" *ngIf="spinner"></mat-progress-bar>
 
-    <div class="h2 mb-24 p-16">Site Settings</div>
+    <div class="h2 mb-24 p-16">{{ 'site-settings' | translate }}</div>
 
     <form fxLayout="column" fxLayoutAlign="start"
         fxFlex="1 0 auto" name="settingsForm" [formGroup]="settingsForm" class="p-16">
@@ -22,17 +22,17 @@
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                 <mat-form-field appearance="outline" fxFlex="50" class="pr-4">
-                    <mat-label>Site Title</mat-label>
+                    <mat-label>{{ 'site-title' | translate }}</mat-label>
                     <input matInput formControlName="siteTitle" required>
                     <mat-icon matSuffix class="secondary-text">title</mat-icon>
-                    <mat-error>Site Title is required!</mat-error>
+                    <mat-error>{{ 'site-title' | translate }} {{ 'is-required' | translate }}!</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" fxFlex="70" class="pr-4">
-                    <mat-label>Admin Email</mat-label>
+                    <mat-label>{{ 'admin-email' | translate }}</mat-label>
                     <input matInput formControlName="adminEmail" required>
                     <mat-icon matSuffix class="secondary-text">account_circle</mat-icon>
-                    <mat-error>Admin Email is required!</mat-error>
+                    <mat-error>{{ 'admin-email' | translate }} {{ 'is-required' | translate }}!</mat-error>
                 </mat-form-field>
 
             </div>
@@ -40,63 +40,59 @@
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                 <mat-form-field fxFlex="100">
-                    <mat-select formControlName="defaultUserRole" placeholder="Default User Role">
+                    <mat-select formControlName="defaultUserRole" placeholder="{{ 'default-user-role' | translate}}">
                         <mat-option
                             *ngFor="let userGroup of userGroups"
                             [value]="userGroup.slug">
                             {{ userGroup.name }}
                         </mat-option>
                     </mat-select>
-                    <mat-error>User Group is required!</mat-error>
+                    <mat-error>{{ 'default-user-role' | translate}} {{ 'is-required' | translate }}!</mat-error>
                 </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                 <mat-form-field fxFlex="100">
-                    <mat-select formControlName="timezone" placeholder="Timezone">
+                    <mat-select formControlName="timezone" placeholder="{{ 'timezone' | translate}}">
                         <mat-option
                             *ngFor="let timezone of timezoneOptions"
                             [value]="timezone">
                             {{ timezone }}
                         </mat-option>
                     </mat-select>
-                    <mat-error>Timezone is required!</mat-error>
+                    <mat-error>{{ 'timezone' | translate}} {{ 'is-required' | translate }}!</mat-error>
                 </mat-form-field>
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                 <mat-form-field fxFlex="50" class="pr-8">
-                    <mat-select formControlName="homepageID" placeholder="Home Page">
+                    <mat-select formControlName="homepageID" placeholder="{{ 'home-page' | translate}} ">
                         <mat-option
                             *ngFor="let page of pages"
                             [value]="page.postID">
                             {{ page.title }}
                         </mat-option>
                     </mat-select>
-                    <mat-error>Home Page is required!</mat-error>
+                    <mat-error>{{ 'home-page' | translate}} {{ 'is-required' | translate }}!</mat-error>
                 </mat-form-field>
 
                 <mat-form-field fxFlex="50" class="pl-8">
-                    <mat-select formControlName="defaultLanguage" placeholder="Default Language">
+                    <mat-select formControlName="defaultLanguage" placeholder="{{ 'default-language' | translate }}">
                         <mat-option
                             *ngFor="let language of languages"
                             [value]="language.languageID">
                             {{ language.title }}
                         </mat-option>
                     </mat-select>
-                    <mat-error>Default Language is required!</mat-error>
+                    <mat-error>{{ 'default-language' | translate}} {{ 'is-required' | translate }}!</mat-error>
                 </mat-form-field>
             </div>
-
-            <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-
-            </div>-->
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
 
                 <mat-form-field fxFlex="100">
-                    <mat-select formControlName="activeTheme" placeholder="Active Theme">
+                    <mat-select formControlName="activeTheme" placeholder="{{ 'active-theme' | translate}}">
                         <mat-option
                             *ngFor="let theme of themes"
                             [value]="theme">
@@ -107,7 +103,7 @@
             </div>
 
             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
-                <mat-slide-toggle class="accio-slide-toggle" formControlName="activateMobileTheme">Activate Mobile Theme</mat-slide-toggle>
+                <mat-slide-toggle class="accio-slide-toggle" formControlName="activateMobileTheme">{{ 'activate-mobile-theme' | translate}}</mat-slide-toggle>
             </div>
         </ng-container>
     </form>

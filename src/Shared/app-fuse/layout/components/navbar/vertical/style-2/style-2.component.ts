@@ -8,6 +8,9 @@ import { FuseNavigationService } from '../../../../../../@fuse/components/naviga
 import { FusePerfectScrollbarDirective } from '../../../../../../@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import { FuseSidebarService } from '../../../../../../@fuse/components/sidebar/sidebar.service';
 
+import { Store } from "@ngrx/store";
+import * as SharedActions from "../../../../../../Store/shared.actions";
+
 @Component({
     selector     : 'navbar-vertical-style-2',
     templateUrl  : './style-2.component.html',
@@ -18,6 +21,7 @@ export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
 {
     fuseConfig: any;
     navigation: any;
+    siteTitle: string;
 
     // Private
     private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
@@ -35,11 +39,21 @@ export class NavbarVerticalStyle2Component implements OnInit, OnDestroy
         private _fuseConfigService: FuseConfigService,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseSidebarService: FuseSidebarService,
-        private _router: Router
+        private _router: Router,
+        private store: Store<any>
     )
     {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+
+        this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    this.siteTitle = data['shared']['globalData']['settings']['siteTitle'];
+                }
+            );
     }
 
     // -----------------------------------------------------------------------------------------------------

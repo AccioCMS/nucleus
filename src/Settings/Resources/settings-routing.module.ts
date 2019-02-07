@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { SettingsComponent } from './Views/settings/settings.component';
 import { AnalyticsComponent } from './Views/analytics/analytics.component';
 import { GeneralSettingsComponent } from './Views/general/general-settings.component';
-import { PostTypeListComponent } from './Views/post-types/post-type-list.component';
 import { PermalinkComponent } from './Views/permalink/permalink.component';
 
 import {LanguageModule} from "../../Language/Resources/language.module";
@@ -15,7 +14,6 @@ const userRoutes: Routes = [
         { path: 'general', component: GeneralSettingsComponent },
         { path: 'analytics', component: AnalyticsComponent },
         { path: 'language', loadChildren: () => LanguageModule },
-        { path: 'post-type', component: PostTypeListComponent },
         { path: 'permalinks', component: PermalinkComponent },
     ]}
 ];

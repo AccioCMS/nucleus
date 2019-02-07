@@ -45,6 +45,8 @@ export class LabelService{
                         this.store.dispatch(new LabelActions.SetTagLabels(response['data']));
                     }else if(module == 'users'){
                         this.store.dispatch(new LabelActions.SetUserLabels(response['data']));
+                    }else if(module == 'language'){
+                        this.store.dispatch(new LabelActions.SetLanguageLabels(response['data']));
                     }
                 }
             );

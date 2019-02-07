@@ -10,6 +10,7 @@ export const SET_IS_LOADING = 'SET_IS_LOADING';
 export const ADD_LANGUAGE = 'ADD_LANGUAGE';
 export const DELETE_LANGUAGE = 'DELETE_LANGUAGE';
 export const DELETE_MULTIPLE_LANGUAGES = 'DELETE_MULTIPLE_LANGUAGES';
+export const SET_SITE_TITLE = 'SET_SITE_TITLE';
 
 export class SetAppMenuLinks implements Action{
     readonly type = SET_APPLICATION_MENU_LINKS;
@@ -66,6 +67,12 @@ export class DeleteMupltipleLanguages implements Action {
     constructor(public payload: any[]){}
 }
 
+export class SetSiteTitle implements Action {
+    readonly type = SET_SITE_TITLE;
+
+    constructor(public payload: string){}
+}
+
 export type SharedActions =
     SetAppMenuLinks |
     SetGlobalData |
@@ -75,4 +82,5 @@ export type SharedActions =
     SetIsLoading |
     AddLanguage |
     DeleteLanguage |
-    DeleteMupltipleLanguages;
+    DeleteMupltipleLanguages |
+    SetSiteTitle;

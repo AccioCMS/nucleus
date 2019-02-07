@@ -61,7 +61,9 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
         // Set the private defaults
         this._unsubscribeAll = new Subject();
         this.location = location;
+    }
 
+    ngOnInit(){
         let loadLangs = this.store.select(state => state)
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(
@@ -75,13 +77,7 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
                 }
             );
         loadLangs.unsubscribe();
-    }
 
-    async getLabels(module: string){
-        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
-    }
-
-    ngOnInit(){
         this.postTypeForm = this._formBuilder.group({
             name : ['', Validators.required],
             slug   : [
@@ -101,6 +97,10 @@ export class PostTypeCreateComponent implements OnInit, OnDestroy
             isFeaturedVideoRequired  : [false],
             fields  : []
         });
+    }
+
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
     }
 
     onSave(){

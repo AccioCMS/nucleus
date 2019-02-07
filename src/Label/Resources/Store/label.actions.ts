@@ -7,6 +7,7 @@ export const SET_USER_LABELS = 'SET_USER_LABELS';
 export const SET_POST_LABELS = 'SET_POST_LABELS';
 export const SET_CATEGORY_LABELS = 'SET_CATEGORY_LABELS';
 export const SET_TAG_LABELS = 'SET_TAG_LABELS';
+export const SET_LANGUAGE_LABELS = 'SET_LANGUAGE_LABELS';
 
 export class SetGeneralLabels implements Action{
     readonly type = SET_GENERAL_LABELS;
@@ -50,6 +51,12 @@ export class SetTagLabels implements Action{
     constructor(public payload: []){}
 }
 
+export class SetLanguageLabels implements Action{
+    readonly type = SET_LANGUAGE_LABELS;
+
+    constructor(public payload: []){}
+}
+
 export type LabelActions =
     SetGeneralLabels |
     SetSettingsLabels |
@@ -57,4 +64,5 @@ export type LabelActions =
     SetUserLabels |
     SetPostLabels |
     SetCategoryLabels |
-    SetTagLabels;
+    SetTagLabels |
+    SetLanguageLabels;

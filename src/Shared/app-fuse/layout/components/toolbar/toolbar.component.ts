@@ -12,8 +12,10 @@ import { navigation } from '../../../navigation/navigation';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import * as AuthActions from "../../../../../Auth/Resources/Store/auth.actions";
+import * as SharedActions from "../../../../Store/shared.actions";
 
 import { Router, ActivatedRoute } from '@angular/router';
+import * as LabelActions from "../../../../../Label/Resources/Store/label.actions";
 
 @Component({
     selector     : 'toolbar',
@@ -177,11 +179,30 @@ export class ToolbarComponent implements OnInit, OnDestroy
      */
     setLanguage(lang): void
     {
+        this.store.dispatch(new SharedActions.SetIsLoading(true));
         // Set the selected language for the toolbar
         this.selectedLanguage = lang;
 
-        // Use the selected language for translations
-        this._translateService.use(lang.id);
+        let routeParams = this.route.snapshot.params;
+
+        this.httpClient.get('/'+routeParams['adminPrefix']+'/update-language/'+lang.id)
+            .map(
+                (data) => {
+                    if(data['status'] == true){
+                        this.store.dispatch(new SharedActions.SetAppMenuLinks(data['applicationMenuLinks']));
+                    }else{
+                        this.router.navigate(['/'+routeParams['adminPrefix']+'/login']);
+                    }
+                    this._translateService.use(lang.id);
+
+                    let url = this.router.url;
+                    url = url.replace(routeParams['lang'], lang.id);
+                    this.router.navigate(['/'+routeParams['adminPrefix']+'/'+lang.id+'/update-language'], {queryParams: {'url': url}});
+
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
+                }
+            )
+            .subscribe();
     }
 
 
@@ -198,17 +219,5 @@ export class ToolbarComponent implements OnInit, OnDestroy
                 }
             )
             .subscribe();
-    }
-
-    /**
-     * Redirect when language is changed
-     *
-     */
-    languageChanged(langID){
-        let currentLangID = this.route.snapshot.params.lang;
-        let url = this.router.url;
-        url = url.replace(currentLangID, langID);
-
-        this.router.navigate([url]);
     }
 }

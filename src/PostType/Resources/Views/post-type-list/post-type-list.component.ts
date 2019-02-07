@@ -62,6 +62,10 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         this.mainRouteParams = this.route.parent.parent.snapshot.params;
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+    }
+
+    ngOnInit(){
+        this.paginator._intl.itemsPerPageLabel = this.translate.instant('items-per-page');
 
         let loadLangs = this.store.select(state => state)
             .pipe(takeUntil(this._unsubscribeAll))
@@ -109,10 +113,6 @@ export class PostTypeListComponent implements OnInit, OnDestroy
                 return Observable.throw(error.message);
             })
             .subscribe();
-    }
-
-    ngOnInit(){
-
     }
 
     /** Whether the number of selected elements matches the total number of rows. */

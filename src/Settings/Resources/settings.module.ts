@@ -10,14 +10,12 @@ import { SettingsComponent } from './Views/settings/settings.component';
 import { AnalyticsComponent } from './Views/analytics/analytics.component';
 import { GeneralSettingsComponent } from './Views/general/general-settings.component';
 import { PermalinkComponent } from './Views/permalink/permalink.component';
-import { PostTypeListComponent } from './Views/post-types/post-type-list.component';
 
 @NgModule({
   declarations: [
       SettingsComponent,
       AnalyticsComponent,
       GeneralSettingsComponent,
-      PostTypeListComponent,
       PermalinkComponent
   ],
   imports: [

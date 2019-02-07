@@ -3,7 +3,7 @@ import { FuseNavigation } from '../@fuse/types';
 
 export interface SharedState {
     applicationMenuLinks: FuseNavigation[];
-    globalData: object;
+    globalData: any;
     cmsMenus: [];
     languages: any;
     pluginsConfigs: [];
@@ -80,6 +80,14 @@ export function sharedReducer(state = initialState, action: SharedActions.Shared
             return{
                 ...state,
                 languages: oldLanguagesM
+            };
+
+        case (SharedActions.SET_SITE_TITLE):
+            let updatedData = state.globalData;
+            updatedData['settings']['siteTitle'] = action.payload;
+            return {
+                ...state,
+                globalData: updatedData
             };
 
         default:

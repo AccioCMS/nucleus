@@ -88,7 +88,7 @@
                 <button mat-menu-item *ngFor="let lang of languages" (click)="setLanguage(lang)">
                     <span fxLayout="row" fxLayoutAlign="start center">
                         <!-- <img class="flag mr-16" [src]="'../../../../assets/icons/flags/'+lang.flag+'.png'"> -->
-                        <span class="iso" (click)="languageChanged(lang.id)">{{lang.title}}</span>
+                        <span class="iso">{{lang.title}}</span>
                     </span>
                 </button>
 

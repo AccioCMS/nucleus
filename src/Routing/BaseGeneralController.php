@@ -40,11 +40,14 @@ class BaseGeneralController extends MainController
      * @return array
      * @throws \Exception
      */
-    public function getBaseData(Request $request)
+    public function getBaseData(Request $request, $lang)
     {
         if(!\Auth::check()){
             return response()->json(['status' => false]);
         }
+
+        \App::setLocale($lang);
+
         // menu links for the application part
         $applicationMenuLinks = MenuLink::applicationMenuLinks();
         // menu links for the cms part
@@ -100,8 +103,8 @@ class BaseGeneralController extends MainController
             $labelItems[] = $item;
         }
 
-        //$request->session()->flush();
         return [
+            'locale' => app()->getLocale(),
             'status' => true,
             'languages' => $languages,
             'applicationMenuLinks' => $applicationMenuLinks,
@@ -114,4 +117,17 @@ class BaseGeneralController extends MainController
         ];
     }
 
+
+    public function updateLanguageData($lang){
+        if(!\Auth::check()){
+            return response()->json(['status' => false]);
+        }
+
+        $applicationMenuLinks = MenuLink::applicationMenuLinks();
+
+        return [
+            'status' => true,
+            'applicationMenuLinks' => $applicationMenuLinks,
+        ];
+    }
 }

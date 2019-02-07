@@ -4,6 +4,7 @@ import { merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FuseNavigationService } from '../../components/navigation/navigation.service';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector       : 'fuse-navigation',
@@ -30,7 +31,8 @@ export class FuseNavigationComponent implements OnInit
      */
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
-        private _fuseNavigationService: FuseNavigationService
+        private _fuseNavigationService: FuseNavigationService,
+        private store: Store<any>
     )
     {
         // Set the private defaults
@@ -47,15 +49,22 @@ export class FuseNavigationComponent implements OnInit
     ngOnInit(): void
     {
         // Load the navigation either from the input or from the service
-        this.navigation = [this.navigation || this._fuseNavigationService.getCurrentNavigation()];
-       
+        //this.navigation = [this.navigation || this._fuseNavigationService.getCurrentNavigation()];
+
+        this.navigation = [];
+
         // Subscribe to the current navigation changes
         this._fuseNavigationService.onNavigationChanged
-            .pipe(takeUntil(this._unsubscribeAll))
+            //.pipe(takeUntil(this._unsubscribeAll))
             .subscribe(() => {
 
                 // Load the navigation
-                this.navigation = this._fuseNavigationService.getCurrentNavigation();
+                this.navigation = [];
+                this.store.select(state => state).subscribe(
+                    data => (
+                        this.navigation = data['shared']['applicationMenuLinks']
+                    )
+                );
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();

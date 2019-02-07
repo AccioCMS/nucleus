@@ -323,7 +323,7 @@ class BasePostTypeController extends MainController
             $customFieldsArray = PostType::updateTable($request->slug, $request->fields, $request->hasCategories, $request->hasTags);
         }else{
             $slug = $request->slug;
-            if(isset($slug) && empty($slug)) {
+            if(!isset($slug) || empty($slug) || $slug == '') {
                 $slug = self::generateSlug($request->name, 'post_type', 'postTypeID', App::getLocale(), 0);
             }else{
                 $slug = self::generateSlug($request->slug, 'post_type', 'postTypeID', App::getLocale(), 0);

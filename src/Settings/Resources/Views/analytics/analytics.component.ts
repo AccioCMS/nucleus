@@ -2,9 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
-import { locale as english } from './i18n/en';
-import { locale as turkish } from './i18n/tr';
-
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -16,6 +13,8 @@ import { ActivatedRoute } from "@angular/router";
 
 import { Store } from "@ngrx/store";
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
 
 @Component({
     selector   : 'analytics',
@@ -26,7 +25,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy
 {
     private _unsubscribeAll: Subject<any>;
     analyticsForm: FormGroup;
-    breadcrumbs = ['Settings', 'Analytics'];
+    breadcrumbs = ['settings', 'analytics'];
     spinner: boolean = true;
     saveSpinner: boolean = false;
     mainRouteParams;
@@ -38,6 +37,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
+        private _labelService: LabelService,
         private _formBuilder: FormBuilder,
         private httpClient: HttpClient,
         public snackBar: MatSnackBar,
@@ -45,21 +45,43 @@ export class AnalyticsComponent implements OnInit, OnDestroy
         private route: ActivatedRoute
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+        this.mainRouteParams = this.route.parent.parent.parent.snapshot.params;
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
     }
 
     ngOnInit(){
-        this.mainRouteParams = this.route.parent.parent.parent.snapshot.params;
-
         this.analyticsForm = this._formBuilder.group({
             trackingCode : [''],
             useTagManager : [false],
             tagManager : [{value: '', disabled: true }]
         });
 
+        let loadLangs = this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    let labels = data['label']['settingsLabels'];
+                    if(labels.length > 0){
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(labels);
+                        this.getData();
+                    }else{
+                        this.getLabels('settings');
+                    }
+                }
+            );
+        loadLangs.unsubscribe();
+
+        this.onChanges();
+    }
+
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
+        this.getData();
+    }
+
+    getData(){
         this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/settings/get-settings')
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
@@ -81,9 +103,8 @@ export class AnalyticsComponent implements OnInit, OnDestroy
                 return Observable.throw(error.message);
             })
             .subscribe();
-
-        this.onChanges();
     }
+
 
     onSave(){
         this.store.dispatch(new SharedActions.SetIsLoading(true));

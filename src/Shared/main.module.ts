@@ -29,6 +29,7 @@ import { LabelModule } from '../Label/Resources/label.module';
 import { DashboardComponent } from "./App/Dashboard/daashboard.component";
 import { LoginComponent } from "../Auth/Resources/Views/login/login.component";
 import { NucleusComponent } from "./App/nucleus.component";
+import { UpdateLanguageRedirectComponent } from "./App/update-language-redirect/update-language-redirect.component";
 
 import { fuseConfig } from './app-fuse/fuse-config';
 import { SharedModule } from './shared.module';
@@ -54,13 +55,15 @@ const nucleusRoutes: Routes = [
         { path: 'post-type/tag', loadChildren: () => TagModule },
         { path: 'posts/:post_type', loadChildren: () => PostModule },
         { path: 'settings', loadChildren: () => SettingsModule },
-    ] }
+        { path: 'update-language', component: UpdateLanguageRedirectComponent },
+    ] },
 ];
 
 @NgModule({
     declarations: [
         NucleusComponent,
-        DashboardComponent
+        DashboardComponent,
+        UpdateLanguageRedirectComponent
     ],
     imports: [
         SharedModule,

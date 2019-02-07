@@ -76,9 +76,6 @@ export class NucleusComponent {
         // Set the main navigation as our current navigation
         this._fuseNavigationService.setCurrentNavigation('main');
 
-        // Add languages
-        //this._translateService.addLangs(['en', 'tr']);
-
         /**
          * ----------------------------------------------------------------------------------------------------
          * ngxTranslate Fix Start
@@ -123,11 +120,11 @@ export class NucleusComponent {
 
         //Check Session data
         let langauges = [];
-        this.httpClient.get('/admin/get-base-data')
+        this.httpClient.get('/'+this.routeParams['adminPrefix']+'/get-base-data/'+this.routeParams['lang'])
             .map(
                 (data) => {
                     if(data['status'] == false){
-                        this.router.navigate(['/admin/login']);
+                        this.router.navigate(['/'+this.routeParams['adminPrefix']+'/login']);
                     }else{
                         this.store.dispatch(new AuthActions.Signin(data['accessToken']));
                         this.store.dispatch(new SharedActions.SetLanguages(data['languages']));
@@ -148,8 +145,6 @@ export class NucleusComponent {
 
                         // Set the navigation translations
                         //this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
-
-                        // Use a language
                         this._translateService.use(this.routeParams['lang']);
 
                         this.spinner = false;
@@ -157,6 +152,7 @@ export class NucleusComponent {
                 }
             )
             .subscribe();
+
     }
 
     // -----------------------------------------------------------------------------------------------------

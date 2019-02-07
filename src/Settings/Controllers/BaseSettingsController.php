@@ -101,7 +101,7 @@ class BaseSettingsController extends MainController
 
         }
 
-        return $this->response('Settings are saved', 200);
+        return $this->response('settings-saved', 200);
     }
 
 

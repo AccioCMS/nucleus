@@ -2,10 +2,14 @@ import { Component, OnInit } from '@angular/core';
 
 import { FuseTranslationLoaderService } from '../../../../Shared/@fuse/services/translation-loader.service';
 
-import { locale as english } from './i18n/en';
-import { locale as turkish } from './i18n/tr';
+import { Store } from "@ngrx/store";
+import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
+import { LabelService } from "../../../../Label/Resources/label.service";
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {takeUntil} from "rxjs/operators";
+import { Subject } from "rxjs/index";
+
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
     selector   : 'settings',
@@ -14,7 +18,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class SettingsComponent implements OnInit
 {
-    exampleForm: FormGroup;
+    private _unsubscribeAll: Subject<any>;
+    mainRouteParams;
+
     /**
      * Constructor
      *
@@ -22,28 +28,34 @@ export class SettingsComponent implements OnInit
      */
     constructor(
         private _fuseTranslationLoaderService: FuseTranslationLoaderService,
-        private _formBuilder: FormBuilder
+        private _labelService: LabelService,
+        private store: Store<any>,
+        private router: Router,
+        private route: ActivatedRoute
     )
     {
-        this._fuseTranslationLoaderService.loadTranslations(english, turkish);
+        this.mainRouteParams = this.route.parent.parent.snapshot.params;
+        // Set the private defaults
+        this._unsubscribeAll = new Subject();
+    }
+
+    async getLabels(module: string){
+        await this._labelService.setLabelsByModule(this.mainRouteParams['adminPrefix'] , module);
     }
 
     ngOnInit(){
-        this.exampleForm = this._formBuilder.group({
-            company   : [
-                {
-                    value   : 'Google',
-                    disabled: true
-                }, Validators.required
-            ],
-            firstName : ['', Validators.required],
-            lastName  : ['', Validators.required],
-            address   : ['', Validators.required],
-            address2  : ['', Validators.required],
-            city      : ['', Validators.required],
-            state     : ['', Validators.required],
-            postalCode: ['', [Validators.required, Validators.maxLength(5)]],
-            country   : ['', Validators.required]
-        });
+        let loadLangs = this.store.select(state => state)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(
+                (data) => {
+                    let labels = data['label']['settingsLabels'];
+                    if(labels.length > 0){
+                        this._fuseTranslationLoaderService.loadTranslationsAccio(labels);
+                    }else{
+                        this.getLabels('settings');
+                    }
+                }
+            );
+        loadLangs.unsubscribe();
     }
 }

@@ -8,6 +8,7 @@ export interface LabelState {
     postLabels: [];
     categoryLabels: [];
     tagLabels: [];
+    languageLabels: [];
 }
 
 const initialState: LabelState = {
@@ -17,7 +18,8 @@ const initialState: LabelState = {
     userLabels: [],
     postLabels: [],
     categoryLabels: [],
-    tagLabels: []
+    tagLabels: [],
+    languageLabels: []
 }
 
 export function labelReducer(state = initialState, action: LabelActions.LabelActions){
@@ -63,6 +65,13 @@ export function labelReducer(state = initialState, action: LabelActions.LabelAct
                 ...state,
                 tagLabels: action.payload
             };
+
+        case (LabelActions.SET_LANGUAGE_LABELS):
+            return {
+                ...state,
+                languageLabels: action.payload
+            };
+
         default:
             return state;
     }
