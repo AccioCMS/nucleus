@@ -20,6 +20,7 @@ import { AccioDialogComponent } from "../../../../Shared/App/accio-dialog/accio-
 
 import { Store } from "@ngrx/store";
 import * as SharedActions from "../../../../Shared/Store/shared.actions";
+import { AccioRouteParamsService } from "../../../../Shared/Services/route-params.service";
 
 @Component({
     selector   : 'category-list',
@@ -55,27 +56,34 @@ export class CategoryListComponent implements OnInit, OnDestroy
         private route:ActivatedRoute,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
-        private store: Store<any>
+        private store: Store<any>,
+        private _accioRouteParamsService: AccioRouteParamsService
     )
     {
         this._fuseTranslationLoaderService.loadTranslations(english, turkish);
 
         // Set the private defaults
         this._unsubscribeAll = new Subject();
+
+        this.route.params
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(params => {
+                this.spinner = true;
+                this.ngOnInit();
+            });
     }
 
     ngOnInit(){
         this.mainRouteParams = this.route.parent.parent.snapshot.params;
 
-        let params = '?pageSize='+this.pageSize;
-
-        if (this.route.snapshot.queryParams['page']){
-            params += '&page='+this.route.snapshot.queryParams['page'];
+        if(this.route.snapshot.queryParams['pageSize']){
+            this.paginator.pageSize = this.route.snapshot.queryParams['pageSize'];
         }
-        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
-            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+        if(this.route.snapshot.queryParams['page']){
+            this.paginator.pageIndex = +this.route.snapshot.queryParams['page'] - 1;
         }
 
+        let params = this._accioRouteParamsService.getParamsString(this.pageSize);
         this.postTypeID = this.route.snapshot.params['id'];
         this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+''+params)
             .pipe(takeUntil(this._unsubscribeAll))
@@ -227,22 +235,10 @@ export class CategoryListComponent implements OnInit, OnDestroy
 
     customSort(event){
         this.loadingSpinner = true;
-        if (this.route.snapshot.queryParams['page']) {
-            this.router.navigate(['./'],
-                {
-                            relativeTo: this.route,
-                            queryParams: {
-                                page: this.route.snapshot.queryParams['page'],
-                                pageSize: this.route.snapshot.queryParams['page'] ? this.route.snapshot.queryParams['page'] : null,
-                                order: event['active'],
-                                type: event['direction']
-                            }
-                });
-        }else{
-            this.router.navigate(['./'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
-        }
 
-        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+'?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+        let allParams = this._accioRouteParamsService.customSortParams(event, this.paginator.pageSize);
+        this.router.navigate(['./'], { relativeTo: this.route, queryParams: allParams['queryParams'] });
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+''+allParams['stringParams'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -263,24 +259,10 @@ export class CategoryListComponent implements OnInit, OnDestroy
 
     onPaginateChange(event){
         this.loadingSpinner = true;
-        let params = '?pageSize='+this.paginator.pageSize+'&page='+(event.pageIndex + 1);
 
-        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
-            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
-            this.router.navigate(['./'],
-                {
-                        relativeTo: this.route,
-                        queryParams: {
-                            page: (event.pageIndex + 1),
-                            order: this.route.snapshot.queryParams['order'],
-                            type: this.route.snapshot.queryParams['type']
-                        }
-                });
-        }else{
-            this.router.navigate(['./'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
-        }
-
-        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+''+params)
+        let allParams = this._accioRouteParamsService.paginationParams(event, this.paginator.pageSize);
+        this.router.navigate(['./'], { relativeTo: this.route, queryParams: allParams['queryParams'] });
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/category/get-tree/'+this.postTypeID+''+allParams['stringParams'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

@@ -17,6 +17,8 @@ import * as SharedActions from "../../../../Store/shared.actions";
 import { Router, ActivatedRoute } from '@angular/router';
 import * as LabelActions from "../../../../../Label/Resources/Store/label.actions";
 
+import { PreviousRouteService } from '../../../../Services/previous-route.service';
+
 @Component({
     selector     : 'toolbar',
     templateUrl  : './toolbar.component.html',
@@ -53,7 +55,8 @@ export class ToolbarComponent implements OnInit, OnDestroy
         private httpClient: HttpClient,
         private store: Store<any>,
         private router:Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private previousRouteService: PreviousRouteService
     )
     {
         // Set the defaults
@@ -185,6 +188,7 @@ export class ToolbarComponent implements OnInit, OnDestroy
 
         let routeParams = this.route.snapshot.params;
 
+        //this.changeLang(lang);
         this.httpClient.get('/'+routeParams['adminPrefix']+'/update-language/'+lang.id)
             .map(
                 (data) => {
@@ -193,12 +197,9 @@ export class ToolbarComponent implements OnInit, OnDestroy
                     }else{
                         this.router.navigate(['/'+routeParams['adminPrefix']+'/login']);
                     }
+
                     this._translateService.use(lang.id);
-
-                    let url = this.router.url;
-                    url = url.replace(routeParams['lang'], lang.id);
-                    this.router.navigate(['/'+routeParams['adminPrefix']+'/'+lang.id+'/update-language'], {queryParams: {'url': url}});
-
+                    this.router.navigate(['/'+routeParams['adminPrefix']+'/'+lang.id+'/update-language/']);
                     this.store.dispatch(new SharedActions.SetIsLoading(false));
                 }
             )
@@ -219,5 +220,38 @@ export class ToolbarComponent implements OnInit, OnDestroy
                 }
             )
             .subscribe();
+    }
+
+    async changeLang(lang){
+        await this.loadLabels(lang);
+        this._translateService.use(lang.id);
+    }
+
+    loadLabels(lang){
+        let routeParams = this.route.snapshot.params;
+        this.httpClient.get('/'+routeParams['adminPrefix']+'/update-language/'+lang.id)
+            .toPromise()
+            .then(
+                (data) => {
+                    if(data['status'] == true){
+                        this.store.dispatch(new SharedActions.SetAppMenuLinks(data['applicationMenuLinks']));
+                    }else{
+                        this.router.navigate(['/'+routeParams['adminPrefix']+'/login']);
+                    }
+                    console.log('Set menu items');
+
+                    //this._translateService.use(lang.id);
+                    //this.router.navigate(['/'+routeParams['adminPrefix']+'/'+lang.id+'/update-language/']);
+
+                    let url = this.router.url;
+                    url = url.replace(routeParams['lang'], lang.id);
+                    this._translateService.use(lang.id);
+                    this.router.navigate([url]);
+                    console.log('Set menu items');
+
+                    this.store.dispatch(new SharedActions.SetIsLoading(false));
+
+                }
+            );
     }
 }

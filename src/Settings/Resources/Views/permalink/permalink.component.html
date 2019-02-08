@@ -18,7 +18,7 @@
     <form fxLayout="column" fxLayoutAlign="start" fxFlex="1 0 auto">
         <div *ngIf="!spinner" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" class="mb-20 p-16">
             <mat-tab-group fxFlex="100">
-                <mat-tab label="Post Articles">
+                <mat-tab label="{{ 'post-articles' | translate }}">
                     <div class="item-wrapper" *ngFor="let permalink of data['post_articles']; let i = index">
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <h2>{{ permalink.name | titlecase }}</h2>
@@ -52,7 +52,7 @@
                 </mat-tab>
 
 
-                <mat-tab label="Category">
+                <mat-tab label="{{ 'category' | translate }}">
                     <div class="item-wrapper" *ngFor="let permalink of data['category']; let i = index">
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <h2>{{ permalink.name | titlecase }}</h2>
@@ -85,7 +85,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Tag">
+                <mat-tab label="{{ 'tag' | translate }}">
                     <div class="item-wrapper" *ngFor="let permalink of data['tag']; let i = index">
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <h2>{{ permalink.name | titlecase }}</h2>
@@ -118,7 +118,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="User">
+                <mat-tab label="{{ 'user' | translate }}">
                     <div class="item-wrapper" *ngFor="let permalink of data['user']; let i = index">
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <h2>{{ permalink.name | titlecase }}</h2>
@@ -151,7 +151,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Search">
+                <mat-tab label="{{ 'search' | translate }}">
                     <div class="item-wrapper" *ngFor="let permalink of data['search']; let i = index">
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <h2>{{ permalink.name | titlecase }}</h2>
@@ -184,7 +184,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Base">
+                <mat-tab label="{{ 'base' | translate }}">
                     <div class="item-wrapper" *ngFor="let permalink of data['base']; let i = index">
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <h2>{{ permalink.name | titlecase }}</h2>
@@ -217,7 +217,7 @@
                     </div>
                 </mat-tab>
 
-                <mat-tab label="Post Pages">
+                <mat-tab label="{{ 'post-pages' | translate }}">
                     <div class="item-wrapper" *ngFor="let permalink of data['post_pages']; let i = index">
                         <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                             <h2>{{ permalink.name | titlecase }}</h2>

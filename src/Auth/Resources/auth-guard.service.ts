@@ -7,6 +7,7 @@ import { Injectable } from "@angular/core";
 
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from "rxjs/Rx";
 
 @Injectable()
 export class AuthGuard implements CanActivate{
@@ -18,30 +19,32 @@ export class AuthGuard implements CanActivate{
         private httpClient: HttpClient
     ){}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-        return this.store.select('auth')
-        .pipe(
-            take(1),
-            map((authState: fromAuth.State) => {
-                if(authState.authenticated){
-                    return true;
-                }else{
-                    this.httpClient.get('/test/auth')
-                    .map(
-                        (data) => {
-                            if(data['status'] == true){
-                                return true;
-                            }else{
-                                this.router.navigate(['/admin/login']);
-                                return false;
-                            }
-                        }
-                    )
-                    .subscribe();
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean{
+        let checkAuth = false;
+        this.store.select('auth')
+            .pipe(take(1))
+            .subscribe(
+                (authSate) => {
+                    if(authSate.authenticated){
+                        checkAuth = true;
+                    }
                 }
+            );
 
-                return true;
-            })
-        );
+        if(checkAuth){
+            return true;
+        }
+
+        return this.httpClient.get('/admin/get-base-data/en')
+            .map(
+                (response) => {
+                    if(response['status'] == true){
+                        return true;
+                    }else{
+                        this.router.navigate(['/admin/login']);
+                        return false;
+                    }
+                }
+            );
     }
 }

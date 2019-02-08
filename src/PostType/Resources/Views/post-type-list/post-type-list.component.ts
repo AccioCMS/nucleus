@@ -20,6 +20,7 @@ import * as SharedActions from "../../../../Shared/Store/shared.actions";
 
 import * as LabelActions from "../../../../Label/Resources/Store/label.actions";
 import { LabelService } from "../../../../Label/Resources/label.service";
+import { AccioRouteParamsService } from "../../../../Shared/Services/route-params.service";
 
 @Component({
     selector   : 'post-type-list',
@@ -56,7 +57,8 @@ export class PostTypeListComponent implements OnInit, OnDestroy
         private route:ActivatedRoute,
         public dialog: MatDialog,
         public snackBar: MatSnackBar,
-        private store: Store<any>
+        private store: Store<any>,
+        private _accioRouteParamsService: AccioRouteParamsService
     )
     {
         this.mainRouteParams = this.route.parent.parent.snapshot.params;
@@ -89,13 +91,15 @@ export class PostTypeListComponent implements OnInit, OnDestroy
     }
 
     getData(){
-        let params = '?pageSize='+this.pageSize;
-        if (this.route.snapshot.queryParams['page']){
-            params += '&page='+this.route.snapshot.queryParams['page'];
+        if(this.route.snapshot.queryParams['page']){
+            this.pageSize = this.route.snapshot.queryParams['pageSize'];
+            this.paginator.pageSize = this.pageSize;
         }
-        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
-            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
+        if(this.route.snapshot.queryParams['page']){
+            this.paginator.pageIndex = +this.route.snapshot.queryParams['page'] - 1;
         }
+
+        let params = this._accioRouteParamsService.getParamsString(this.pageSize);
         this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all'+params)
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
@@ -134,7 +138,6 @@ export class PostTypeListComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
-
                     if(response['code'] == 200){
                         let newData = this.dataSource.data;
                         newData.splice(index, 1);
@@ -247,9 +250,11 @@ export class PostTypeListComponent implements OnInit, OnDestroy
 
     customSort(event){
         this.loadingSpinner = true;
-        this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { order: event['active'], type: event['direction'] } });
 
-        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all?pageSize='+this.paginator.pageSize+'&order='+event['active']+'&type='+event['direction'])
+        let allParams = this._accioRouteParamsService.customSortParams(event, this.paginator.pageSize);
+        this.router.navigate(['../list'], { relativeTo: this.route, queryParams: allParams['queryParams'] });
+
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all'+allParams['stringParams'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {
@@ -270,23 +275,11 @@ export class PostTypeListComponent implements OnInit, OnDestroy
 
     onPaginateChange(event){
         this.loadingSpinner = true;
-        let params = '?pageSize='+this.paginator.pageSize+'&page='+(event.pageIndex + 1);
-        if (this.route.snapshot.queryParams['order'] && this.route.snapshot.queryParams['type']) {
-            params += '&order='+this.route.snapshot.queryParams['order']+'&type='+this.route.snapshot.queryParams['type'];
-            this.router.navigate(['./'],
-                {
-                    relativeTo: this.route,
-                    queryParams: {
-                        page: (event.pageIndex + 1),
-                        order: this.route.snapshot.queryParams['order'],
-                        type: this.route.snapshot.queryParams['type']
-                    }
-                });
-        }else{
-            this.router.navigate(['../list'], { relativeTo: this.route, queryParams: { page: (event.pageIndex + 1) } });
-        }
 
-        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all'+params)
+        let allParams = this._accioRouteParamsService.paginationParams(event, this.paginator.pageSize);
+        this.router.navigate(['../list'], { relativeTo: this.route, queryParams: allParams['queryParams'] });
+
+        this.httpClient.get('/'+this.mainRouteParams['adminPrefix']+'/'+this.mainRouteParams['lang']+'/json/post-type/get-all'+allParams['stringParams'])
             .pipe(takeUntil(this._unsubscribeAll))
             .map(
                 (response) => {

@@ -35,6 +35,7 @@ export class NucleusComponent {
     spinner: boolean = true;
     isLoading: boolean = false;
     routeParams;
+    activeLang: string;
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -118,11 +119,16 @@ export class NucleusComponent {
         // Set the private defaults
         this._unsubscribeAll = new Subject();
 
+        // Set the default language
+        this._translateService.setDefaultLang('en');
+
+        this.activeLang = this.route.snapshot.params['lang'];
         //Check Session data
         let langauges = [];
-        this.httpClient.get('/'+this.routeParams['adminPrefix']+'/get-base-data/'+this.routeParams['lang'])
+        this.httpClient.get('/'+this.routeParams['adminPrefix']+'/get-base-data/'+this.activeLang)
             .map(
                 (data) => {
+                    console.log('Nucleus component response');
                     if(data['status'] == false){
                         this.router.navigate(['/'+this.routeParams['adminPrefix']+'/login']);
                     }else{
@@ -132,27 +138,19 @@ export class NucleusComponent {
                         this.store.dispatch(new SharedActions.SetCmsMenus(data['cmsMenus']));
                         this.store.dispatch(new SharedActions.SetPluginConfigs(data['pluginsConfigs']));
                         this.store.dispatch(new SharedActions.SetAppMenuLinks(data['applicationMenuLinks']));
-
+                        this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
                         this.store.dispatch(new LabelActions.SetGeneralLabels(data['labels']));
 
                         this._fuseTranslationLoaderService.loadTranslationsAccio(data['labels']);
 
-                        this.store.dispatch(new AuthActions.SetAuthUser(data['auth']));
-
-
-                        // Set the default language
-                        this._translateService.setDefaultLang(this.routeParams['lang']);
-
                         // Set the navigation translations
-                        //this._fuseTranslationLoaderService.loadTranslations(navigationEnglish, navigationTurkish);
-                        this._translateService.use(this.routeParams['lang']);
+                        this._translateService.use(this.activeLang);
 
                         this.spinner = false;
                     }
                 }
             )
             .subscribe();
-
     }
 
     // -----------------------------------------------------------------------------------------------------

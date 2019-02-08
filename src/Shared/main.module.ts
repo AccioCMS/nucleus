@@ -43,19 +43,19 @@ import {AuthInterceptor} from "../Auth/Resources/auth.interceptor";
 const nucleusRoutes: Routes = [
     { path: 'admin/login', component: LoginComponent },
     { path: 'auth', loadChildren: () => AuthModule },
-    { path: ':adminPrefix/:lang', component: NucleusComponent, /*canActivate: [AuthGuard],*/ children: [
-        { path: '', component: DashboardComponent },
-        { path: 'fuse', loadChildren: () => SampleModule },
-        { path: 'user', loadChildren: () => UserModule },
-        { path: 'custom-fields', loadChildren: () => CustomFieldModule },
-        { path: 'language', loadChildren: () => LanguageModule },
-        { path: 'menu', loadChildren: () => MenuModule },
-        { path: 'post-type', loadChildren: () => PostTypeModule },
-        { path: 'post-type/category', loadChildren: () => CategoryModule },
-        { path: 'post-type/tag', loadChildren: () => TagModule },
-        { path: 'posts/:post_type', loadChildren: () => PostModule },
-        { path: 'settings', loadChildren: () => SettingsModule },
-        { path: 'update-language', component: UpdateLanguageRedirectComponent },
+    { path: ':adminPrefix/:lang', component: NucleusComponent, canActivate: [AuthGuard], children: [
+        { path: '', component: DashboardComponent , canActivate: [AuthGuard]},
+        { path: 'fuse', loadChildren: () => SampleModule, canActivate: [AuthGuard] },
+        { path: 'user', loadChildren: () => UserModule, canActivate: [AuthGuard] },
+        { path: 'custom-fields', loadChildren: () => CustomFieldModule, canActivate: [AuthGuard] },
+        { path: 'language', loadChildren: () => LanguageModule, canActivate: [AuthGuard] },
+        { path: 'menu', loadChildren: () => MenuModule, canActivate: [AuthGuard] },
+        { path: 'post-type', loadChildren: () => PostTypeModule, canActivate: [AuthGuard] },
+        { path: 'post-type/category', loadChildren: () => CategoryModule, canActivate: [AuthGuard] },
+        { path: 'post-type/tag', loadChildren: () => TagModule, canActivate: [AuthGuard] },
+        { path: 'posts/:post_type', loadChildren: () => PostModule, canActivate: [AuthGuard] },
+        { path: 'settings', loadChildren: () => SettingsModule, canActivate: [AuthGuard] },
+        { path: 'update-language', component: UpdateLanguageRedirectComponent, canActivate: [AuthGuard] },
     ] },
 ];
 

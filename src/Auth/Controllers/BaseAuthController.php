@@ -83,4 +83,12 @@ class BaseAuthController extends MainController
         return response()->json($request->user());
     }
 
+    public function checkAuth(){
+        if(\Auth::check){
+            return response()->json(['status' => true]);
+        }
+
+        return response()->json(['status' => false]);
+    }
+
 }
